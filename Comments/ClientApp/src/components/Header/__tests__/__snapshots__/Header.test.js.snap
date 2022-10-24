@@ -1,22 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Header  should display correctly when consulation has ended 1`] = `
-<Fragment>
+exports[`should display correctly when consulation has ended 1`] = `
+<div>
   <h1
-    className="page-header__heading mt--0"
+    class="page-header__heading mt--0"
     data-qa-sel="changeable-page-header"
   >
     My title has changed
   </h1>
   <div
-    className="mb--d"
+    class="mb--d"
   >
     <p
-      className="container container-full ml--0"
+      class="container container-full ml--0"
     >
       <span>
         <span
-          className="tag"
+          class="tag"
         >
           Closed for comments
         </span>
@@ -24,80 +24,50 @@ exports[`[ClientApp]  Header  should display correctly when consulation has ende
         This consultation 
         ended
          on 
-        <n
-          ago={false}
-          calendar={false}
-          date="1994-11-05T08:15:30-05:00"
-          decimal={false}
-          element={null}
-          filter={[Function]}
-          format="D MMMM YYYY"
-          fromNow={false}
-          interval={60000}
-          local={false}
-          onChange={[Function]}
-          titleFormat=""
-          toNow={false}
-          trim={false}
-          unit={null}
-          unix={false}
-          utc={false}
-          withTitle={false}
-        />
+        <time
+          datetime="784041330000"
+        >
+          5 November 1994
+        </time>
          at
          
-        <n
-          ago={false}
-          calendar={false}
-          date="1994-11-05T08:15:30-05:00"
-          decimal={false}
-          element={null}
-          filter={[Function]}
-          format="HH:mm"
-          fromNow={false}
-          interval={60000}
-          local={false}
-          onChange={[Function]}
-          titleFormat=""
-          toNow={false}
-          trim={false}
-          unit={null}
-          unix={false}
-          utc={false}
-          withTitle={false}
-        />
+        <time
+          datetime="784041330000"
+        >
+          13:15
+        </time>
       </span>
         
-      <Link
-        to="/leadinformation"
+      <a
+        href="/leadinformation"
       >
         Request commenting lead permission
-      </Link>
+      </a>
     </p>
   </div>
   <p>
     Subtitle 1
   </p>
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Header  should display correctly when consulation hasn't started 1`] = `
-<Fragment>
+exports[`should display correctly when consulation hasn't started 1`] = `
+<div>
   <h1
-    className="page-header__heading mt--0"
+    class="page-header__heading mt--0"
     data-qa-sel="changeable-page-header"
   >
     My title
   </h1>
   <div
-    className="mb--d"
+    class="mb--d"
   >
     <p
-      className="container container-full ml--0"
+      class="container container-full ml--0"
     >
       <span>
         <span
-          className="tag"
+          class="tag"
         >
           Not yet open for comments
         </span>
@@ -105,124 +75,79 @@ exports[`[ClientApp]  Header  should display correctly when consulation hasn't s
         This consultation 
         starts
          on 
-        <n
-          ago={false}
-          calendar={false}
-          date=""
-          decimal={false}
-          element={null}
-          filter={[Function]}
-          format="D MMMM YYYY"
-          fromNow={false}
-          interval={60000}
-          local={false}
-          onChange={[Function]}
-          titleFormat=""
-          toNow={false}
-          trim={false}
-          unit={null}
-          unix={false}
-          utc={false}
-          withTitle={false}
-        />
+        <time
+          datetime="1660032000000"
+        >
+          9 August 2022
+        </time>
          at
          
-        <n
-          ago={false}
-          calendar={false}
-          date=""
-          decimal={false}
-          element={null}
-          filter={[Function]}
-          format="HH:mm"
-          fromNow={false}
-          interval={60000}
-          local={false}
-          onChange={[Function]}
-          titleFormat=""
-          toNow={false}
-          trim={false}
-          unit={null}
-          unix={false}
-          utc={false}
-          withTitle={false}
-        />
+        <time
+          datetime="1660032000000"
+        >
+          09:00
+        </time>
       </span>
         
-      <Link
-        to="/leadinformation"
+      <a
+        href="/leadinformation"
       >
         Request commenting lead permission
-      </Link>
+      </a>
     </p>
   </div>
   <p>
     Subtitle 1
   </p>
-  <Alert
+  <div
+    class="alert alert--caution"
     role="alert"
-    type="caution"
   >
     <p>
       Subtitle 2
     </p>
-  </Alert>
-</Fragment>
+  </div>
+</div>
 `;
 
-exports[`[ClientApp]  Header  should display correctly when consulation is in progress 1`] = `
-<Fragment>
+exports[`should display correctly when consulation is in progress 1`] = `
+<div>
   <h1
-    className="page-header__heading mt--0"
+    class="page-header__heading mt--0"
     data-qa-sel="changeable-page-header"
   >
     My title
   </h1>
   <div
-    className="mb--d"
+    class="mb--d"
   >
     <p
-      className="container container-full ml--0"
+      class="container container-full ml--0"
     >
       <span>
         <span
-          className="tag tag--open"
+          class="tag tag--open"
         >
           Open for comments
         </span>
          Open until
          
-        <n
-          ago={false}
-          calendar={false}
-          date="1994-11-05T08:15:30-05:00"
-          decimal={false}
-          element={null}
-          filter={[Function]}
-          format="D MMMM YYYY"
-          fromNow={false}
-          interval={60000}
-          local={false}
-          onChange={[Function]}
-          titleFormat=""
-          toNow={false}
-          trim={false}
-          unit={null}
-          unix={false}
-          utc={false}
-          withTitle={false}
-        />
+        <time
+          datetime="784041330000"
+        >
+          5 November 1994
+        </time>
       </span>
         
-      <Link
-        to="/leadinformation"
+      <a
+        href="/leadinformation"
       >
         Request commenting lead permission
-      </Link>
+      </a>
     </p>
   </div>
   <p>
     Subtitle 1
   </p>
-</Fragment>
+</div>
 `;

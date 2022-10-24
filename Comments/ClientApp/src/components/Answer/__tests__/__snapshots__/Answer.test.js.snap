@@ -1,76 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Answer Component should match snapshot with answer 1`] = `
-<section
-  role="form"
->
-  <form
-    className="mb--0 mt--e"
-    onSubmit={[Function]}
+exports[`should match snapshot with answer 1`] = `
+<div>
+  <section
+    role="form"
   >
-    <div
-      className="form__group form__group--textarea mb--b"
+    <form
+      class="mb--0 mt--e"
     >
-      <label
-        className="form__label visually-hidden"
-        htmlFor="string"
-      />
-      <textarea
-        className="form__input form__input--textarea"
-        data-hj-whitelist={true}
-        data-qa-sel="Comment-text-area"
-        defaultValue="an updated answer"
-        disabled={false}
-        id="string"
-        onInput={[Function]}
-      />
-    </div>
-    <span
-      className="ml--0 mb--0 CommentBox__savedIndicator"
-    >
-      Saved
-    </span>
-    <button
-      className="btn mr--0 mb--0 right"
-      data-qa-sel="delete-comment-button"
-      onClick={[Function]}
-    >
-      Delete
-    </button>
-  </form>
-</section>
+      <div
+        class="form__group form__group--textarea mb--b"
+      >
+        <label
+          class="form__label visually-hidden"
+          for="string"
+        />
+        <textarea
+          class="form__input form__input--textarea"
+          data-hj-whitelist="true"
+          data-qa-sel="Comment-text-area"
+          id="string"
+        >
+          some answer text that's been updated
+        </textarea>
+      </div>
+      <span
+        class="ml--0 mb--0 CommentBox__savedIndicator"
+      >
+        Saved
+      </span>
+      <button
+        class="btn mr--0 mb--0 right"
+        data-qa-sel="delete-comment-button"
+      >
+        Delete
+      </button>
+    </form>
+  </section>
+</div>
 `;
 
-exports[`[ClientApp]  Answer Component should match snapshot without answer 1`] = `
-<section
-  role="form"
->
-  <form
-    className="mb--0 mt--e"
-    onSubmit={[Function]}
+exports[`should match snapshot without answer 1`] = `
+<div>
+  <section
+    role="form"
   >
-    <div
-      className="form__group form__group--textarea mb--b"
+    <form
+      class="mb--0 mt--e"
     >
-      <label
-        className="form__label visually-hidden"
-        htmlFor="string"
-      />
-      <textarea
-        className="form__input form__input--textarea"
-        data-hj-whitelist={true}
-        data-qa-sel="Comment-text-area"
-        defaultValue=""
-        disabled={false}
-        id="string"
-        onInput={[Function]}
-      />
-    </div>
-    <span
-      className="ml--0 mb--0 CommentBox__savedIndicator"
-    >
-      Saved
-    </span>
-  </form>
-</section>
+      <div
+        class="form__group form__group--textarea mb--b"
+      >
+        <label
+          class="form__label visually-hidden"
+          for="string"
+        />
+        <textarea
+          class="form__input form__input--textarea"
+          data-hj-whitelist="true"
+          data-qa-sel="Comment-text-area"
+          id="string"
+        />
+      </div>
+      <span
+        class="ml--0 mb--0 CommentBox__savedIndicator"
+      >
+        Saved
+      </span>
+    </form>
+  </section>
+</div>
 `;

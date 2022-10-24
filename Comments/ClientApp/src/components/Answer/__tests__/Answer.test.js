@@ -1,112 +1,56 @@
-/* global jest */
 import React from "react";
-import { mount } from "enzyme";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Answer } from "../Answer";
 import answerWithAnswer from "./answerWithAnswer.json";
 import answerWithoutAnswer from "./answerWithoutAnswer.json";
-import toJson from "enzyme-to-json";
 
-describe("[ClientApp] ", () => {
-	describe("Answer Component", () => {
-		const answerPropsWithAnswer = {
-			answer: answerWithAnswer,
-			readOnly: false,
-			saveHandler: jest.fn(),
-			deleteHandler: jest.fn(),
-			unique: "string",
-			updateUnsavedIds: jest.fn(),
-			questionType: {
-				type: "Text",
-			},
-		};
+const answerPropsWithAnswer = {
+	answer: answerWithAnswer,
+	readOnly: false,
+	saveHandler: jest.fn(),
+	deleteHandler: jest.fn(),
+	unique: "string",
+	updateUnsavedIds: jest.fn(),
+	questionType: {
+		type: "Text",
+	},
+};
 
-		const answerPropsWithoutAnswer = {
-			answer: answerWithoutAnswer,
-			readOnly: false,
-			saveHandler: jest.fn(),
-			deleteHandler: jest.fn(),
-			unique: "string",
-			updateUnsavedIds: jest.fn(),
-			questionType: {
-				type: "Text",
-			},
-		};
+const answerPropsWithoutAnswer = {
+	answer: answerWithoutAnswer,
+	readOnly: false,
+	saveHandler: jest.fn(),
+	deleteHandler: jest.fn(),
+	unique: "string",
+	updateUnsavedIds: jest.fn(),
+	questionType: {
+		type: "Text",
+	},
+};
 
-		it("sets text area with comment text correctly", async () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			expect(wrapper.find("textarea").length).toEqual(1);
-			expect(wrapper.find("textarea").props().defaultValue).toEqual(
-				"some answer text",
-			);
-		});
+it("sets text area with comment text correctly", async () => {
+	render(<Answer {...answerPropsWithAnswer} />);
+	expect(screen.getByDisplayValue("some answer text")).toBeInTheDocument();
+});
 
-		it("unsavedChanges function is fired correctly on text area change", () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			expect(wrapper.state().unsavedChanges).toEqual(false);
-			const textArea = wrapper.find("textarea");
-			textArea.simulate("input", {
-				target: {
-					value: "an updated answer",
-				},
-			});
-			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
-			expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith(
-				"22q",
-				true,
-			);
-		});
+it("unsavedChanges function is fired correctly on text area change", async () => {
+	render(<Answer {...answerPropsWithAnswer} />);
+	const textArea = screen.getByDisplayValue("some answer text");
+	const user = userEvent.setup();
+	textArea.focus();
+	await user.type(textArea, " that's been updated");
+	user.tab();
+	expect(screen.getByDisplayValue("some answer text that's been updated")).toBeInTheDocument();
+	expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith("22q", true);
+});
 
-		it("should update UnsavedChanges if lastupdateddate has changed", () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			wrapper.setState({ unsavedChanges: true });
-			const updatedProps = {
-				answer: {
-					answerId: answerWithoutAnswer.answerId,
-					answerText: "an updated answer",
-					lastModifiedDate: new Date("02/04/2018").toISOString(),
-				},
-			};
-			wrapper.setProps(updatedProps);
-			expect(wrapper.state().unsavedChanges).toEqual(false);
-		});
+it("should match snapshot with answer", () => {
+	const {container} = render(<Answer {...answerPropsWithAnswer} />);
+	expect(container).toMatchSnapshot();
+});
 
-		it("should not update UnsavedChanges if lastupdateddate has not changed", () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			wrapper.setState({ unsavedChanges: true });
-			wrapper.setProps(answerPropsWithAnswer);
-			expect(wrapper.state().unsavedChanges).toEqual(true);
-		});
-
-		it("updated comment text in state after new props received", () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			const updatedProps = {
-				answer: {
-					answerId: answerWithoutAnswer.answerId,
-					answerText: "an updated answer",
-				},
-			};
-			wrapper.setProps(updatedProps);
-			expect(wrapper.state().answer.answerText).toEqual("an updated answer");
-		});
-
-		it("should match snapshot with answer", () => {
-			const wrapper = mount(<Answer {...answerPropsWithAnswer} />);
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				}),
-			).toMatchSnapshot();
-		});
-
-		it("should match snapshot without answer", () => {
-			const wrapper = mount(<Answer {...answerPropsWithoutAnswer} />);
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				}),
-			).toMatchSnapshot();
-		});
-	});
+it("should match snapshot without answer", () => {
+	const {container} = render(<Answer {...answerPropsWithoutAnswer} />);
+	expect(container).toMatchSnapshot();
 });

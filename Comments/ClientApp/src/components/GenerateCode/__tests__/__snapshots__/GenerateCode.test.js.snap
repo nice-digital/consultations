@@ -1,110 +1,109 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GenerateCode should match snapshot with code having been generated 1`] = `
+exports[`should match snapshot with code having been generated 1`] = `
 <div>
-  <button
-    aria-controls="organisation-codes-111"
-    aria-expanded={true}
-    className="btn btn--inverse"
-    data-qa-sel="share-with-org-button"
-    id="share-organisation-111"
-    onClick={[Function]}
-    type="button"
-  >
-    Share with organisation 
-    <span
-      className="arrow-icon"
-    />
-  </button>
-  <div
-    className="panel organisation-codes mv--b"
-    id="organisation-codes-111"
-  >
-    <h2
-      className="h5"
+  <div>
+    <button
+      aria-controls="organisation-codes-111"
+      aria-expanded="true"
+      class="btn btn--inverse"
+      data-qa-sel="share-with-org-button"
+      id="share-organisation-111"
+      type="button"
     >
-      Generate a code to share the consultation
-    </h2>
+      Share with organisation 
+      <span
+        class="arrow-icon"
+      />
+    </button>
     <div
-      className="organisation-codes__row"
+      class="panel organisation-codes mv--b"
+      id="organisation-codes-111"
     >
-      <div
-        className="organisation-codes__name"
+      <h2
+        class="h5"
       >
-        <p>
-          Super Magic Club
-        </p>
-      </div>
+        Generate a code to share the consultation
+      </h2>
       <div
-        className="organisation-codes__generate pl--b"
+        class="organisation-codes__row"
       >
-        <span>
-          1234 5678 9123
-        </span>
-        <button
-          aria-live="polite"
-          className="btn btn--copied"
-          data-qa-sel="copy-code-button"
-          onClick={[Function]}
-          type="button"
+        <div
+          class="organisation-codes__name"
         >
-          Copy code
-        </button>
+          <p>
+            Super Magic Club
+          </p>
+        </div>
+        <div
+          class="organisation-codes__generate pl--b"
+        >
+          <span>
+            1234 5678 9123
+          </span>
+          <button
+            aria-live="polite"
+            class="btn btn--copied"
+            data-qa-sel="copy-code-button"
+            type="button"
+          >
+            Copy code
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`GenerateCode should match snapshot with no code having been generated 1`] = `
+exports[`should match snapshot with no code having been generated 1`] = `
 <div>
-  <button
-    aria-controls="organisation-codes-111"
-    aria-expanded={true}
-    className="btn btn--inverse"
-    data-qa-sel="share-with-org-button"
-    id="share-organisation-111"
-    onClick={[Function]}
-    type="button"
-  >
-    Share with organisation 
-    <span
-      className="arrow-icon"
-    />
-  </button>
-  <div
-    className="panel organisation-codes mv--b"
-    id="organisation-codes-111"
-  >
-    <h2
-      className="h5"
+  <div>
+    <button
+      aria-controls="organisation-codes-111"
+      aria-expanded="true"
+      class="btn btn--inverse"
+      data-qa-sel="share-with-org-button"
+      id="share-organisation-111"
+      type="button"
     >
-      Generate a code to share the consultation
-    </h2>
+      Share with organisation 
+      <span
+        class="arrow-icon"
+      />
+    </button>
     <div
-      className="organisation-codes__row"
+      class="panel organisation-codes mv--b"
+      id="organisation-codes-111"
     >
-      <div
-        className="organisation-codes__name"
+      <h2
+        class="h5"
       >
-        <p>
-          Super Magic Club
-        </p>
-      </div>
+        Generate a code to share the consultation
+      </h2>
       <div
-        className="organisation-codes__generate pl--b"
+        class="organisation-codes__row"
       >
-        <button
-          aria-live="polite"
-          className="btn"
-          data-qa-sel="generate-code-button"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
+        <div
+          class="organisation-codes__name"
         >
-          Generate
-        </button>
-        <span />
+          <p>
+            Super Magic Club
+          </p>
+        </div>
+        <div
+          class="organisation-codes__generate pl--b"
+        >
+          <button
+            aria-live="polite"
+            class="btn"
+            data-qa-sel="generate-code-button"
+            type="button"
+          >
+            Generate
+          </button>
+          <span />
+        </div>
       </div>
     </div>
   </div>

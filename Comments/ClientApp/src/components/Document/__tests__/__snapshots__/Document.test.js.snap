@@ -1,28 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Document Component should match snapshot with supplied data 1`] = `
-Array [
-  "",
+exports[`should match snapshot with supplied data 1`] = `
+<div>
   <aside
-    className="tutorial mt--0 pt--d pb--d"
+    class="tutorial mt--0 pt--d pb--d"
   >
     <div
-      className="container"
+      class="container"
     >
       <button
-        className="buttonAsLink"
-        onClick={[Function]}
+        class="buttonAsLink"
       >
         Hide how to comment
       </button>
       <div
-        className="grid"
+        class="grid"
       >
         <div
           data-g="12 sm:7"
         >
           <span
-            className="h1 pt--c"
+            class="h1 pt--c"
           >
             How to comment
           </span>
@@ -51,12 +49,12 @@ Array [
           data-g="12 sm:5"
         >
           <div
-            className="tutorial__video"
+            class="tutorial__video"
           >
             <iframe
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen={true}
-              frameBorder="0"
+              allowfullscreen=""
+              frameborder="0"
               src="https://www.youtube.com/embed/DILcZkxVPCY?rel=0"
               title="YouTube video player"
             />
@@ -64,12 +62,12 @@ Array [
         </div>
       </div>
     </div>
-  </aside>,
+  </aside>
   <div
-    className="container"
+    class="container"
   >
     <div
-      className="grid"
+      class="grid"
     >
       <div
         data-g="12"
@@ -78,172 +76,162 @@ Array [
           aria-label="Breadcrumbs"
         >
           <p
-            className="visually-hidden"
+            class="visually-hidden"
           >
             You are here:
           </p>
           <ol
-            className="breadcrumbs"
-            itemScope={true}
-            itemType="http://schema.org/BreadcrumbList"
+            class="breadcrumbs"
+            itemscope=""
+            itemtype="http://schema.org/BreadcrumbList"
           >
             <li
-              className="breadcrumbs__crumb"
-              itemProp="itemListElement"
-              itemScope={true}
-              itemType="http://schema.org/ListItem"
-              onClick={[Function]}
+              class="breadcrumbs__crumb"
+              itemprop="itemListElement"
+              itemscope=""
+              itemtype="http://schema.org/ListItem"
               role="presentation"
             >
               <a
                 href="/"
-                itemProp="item"
+                itemprop="item"
               >
                 <span
-                  itemProp="name"
+                  itemprop="name"
                 >
                   Home
                 </span>
               </a>
               <meta
-                content={0}
-                itemProp="position"
+                content="0"
+                itemprop="position"
               />
             </li>
             <li
-              className="breadcrumbs__crumb"
-              itemProp="itemListElement"
-              itemScope={true}
-              itemType="http://schema.org/ListItem"
-              onClick={[Function]}
+              class="breadcrumbs__crumb"
+              itemprop="itemListElement"
+              itemscope=""
+              itemtype="http://schema.org/ListItem"
               role="presentation"
             >
               <a
                 href="/guidance/indevelopment/gid-ta10232/consultation/"
-                itemProp="item"
+                itemprop="item"
               >
                 <span
-                  itemProp="name"
+                  itemprop="name"
                 >
                   Consultation title
                 </span>
               </a>
               <meta
-                content={1}
-                itemProp="position"
+                content="1"
+                itemprop="position"
               />
             </li>
           </ol>
         </nav>
         <main>
           <div
-            className="page-header"
+            class="page-header"
           >
-            Array [
-              Array [
-                <h1
-                  className="page-header__heading mt--0"
-                  data-qa-sel="changeable-page-header"
-                >
-                  Unstable angina and NSTEMI
-                </h1>,
-                <div
-                  className="mb--d"
-                >
-                  <p
-                    className="container container-full ml--0"
-                  >
-                    <span>
-                      <span
-                        className="tag tag--open"
-                      >
-                        Open for comments
-                      </span>
-                       Open until
-                       
-                      <time
-                        dateTime={"2029-05-31T16:00:00.000Z"}
-                      >
-                        31 May 2029
-                      </time>
-                    </span>
-                      
-                    <a
-                      href="/leadinformation"
-                      onClick={[Function]}
-                    >
-                      Request commenting lead permission
-                    </a>
-                  </p>
-                </div>,
-              ],
-              <div
-                aria-live="polite"
-                className="alert alert--info"
-                role="status"
+            <h1
+              class="page-header__heading mt--0"
+              data-qa-sel="changeable-page-header"
+            >
+              Unstable angina and NSTEMI
+            </h1>
+            <div
+              class="mb--d"
+            >
+              <p
+                class="container container-full ml--0"
               >
-                <p>
-                  We have updated this service so that members of the same organisation can now collaborate on a joint online response.
-                </p>
-                <p>
-                  Read our 
-                  <a
-                    href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response"
+                <span>
+                  <span
+                    class="tag tag--open"
                   >
-                    blog
-                  </a>
-                   to learn more.
-                </p>
-              </div>,
-            ]
+                    Open for comments
+                  </span>
+                   Open until
+                   
+                  <time
+                    datetime="1874937600000"
+                  >
+                    31 May 2029
+                  </time>
+                </span>
+                  
+                <a
+                  href="/leadinformation"
+                >
+                  Request commenting lead permission
+                </a>
+              </p>
+            </div>
+            <div
+              aria-live="polite"
+              class="alert alert--info"
+              role="status"
+            >
+              <p>
+                We have updated this service so that members of the same organisation can now collaborate on a joint online response.
+              </p>
+              <p>
+                Read our 
+                <a
+                  href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response"
+                >
+                  blog
+                </a>
+                 to learn more.
+              </p>
+            </div>
             <button
-              className="btn btn--cta"
+              class="btn btn--cta"
               data-gtm="comment-on-document-button"
               data-qa-sel="comment-on-consultation-document"
-              onClick={[Function]}
             >
               Comment on this document
             </button>
           </div>
           <button
-            className="screenreader-button"
-            onClick={[Function]}
+            class="screenreader-button"
           >
             Skip navigation
           </button>
           <div
-            className="grid"
+            class="grid"
           >
             <div
-              className="navigationColumn"
+              class="navigationColumn"
               data-g="12 md:3"
             >
               <nav
                 aria-label="Chapters in this document"
-                className="stacked-nav"
+                class="stacked-nav"
               >
                 <h2
-                  className="stacked-nav__root"
+                  class="stacked-nav__root"
                 >
                   Chapters in this document
                 </h2>
                 <ul
-                  className="stacked-nav__list"
+                  class="stacked-nav__list"
                 >
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
                       aria-current="page"
                       href="/1/1/introduction"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Introduction
@@ -252,19 +240,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/patient-centred-care"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Patient-centred care
@@ -273,19 +259,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/key-priorities-for-implementation"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Key priorities for implementation
@@ -294,19 +278,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/guidance"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           1 Guidance
@@ -315,19 +297,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/notes-on-the-scope-of-the-guidance"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           2 Notes on the scope of the guidance
@@ -336,19 +316,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/implementation"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           3 Implementation
@@ -357,19 +335,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/research-recommendations"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           4 Research recommendations
@@ -378,19 +354,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/other-versions-of-this-guideline"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           5 Other versions of this guideline
@@ -399,19 +373,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/related-nice-guidance"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           6 Related NICE guidance
@@ -420,19 +392,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/updating-the-guideline"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           7 Updating the guideline
@@ -441,19 +411,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Appendix A: The Guideline Development Group and NICE project team
@@ -462,19 +430,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/appendix-b-the-guideline-review-panel"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Appendix B: The Guideline Review Panel
@@ -483,19 +449,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/appendix-c-the-algorithm"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Appendix C: The algorithm
@@ -504,19 +468,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/changes-after-publication"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Changes after publication
@@ -525,19 +487,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/1/about-this-guideline"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           About this guideline
@@ -549,30 +509,28 @@ Array [
               </nav>
               <nav
                 aria-label="Other consultation documents you can comment on"
-                className="stacked-nav"
+                class="stacked-nav"
               >
                 <h2
-                  className="stacked-nav__root"
+                  class="stacked-nav__root"
                 >
                   Other consultation documents you can comment on
                 </h2>
                 <ul
-                  className="stacked-nav__list"
+                  class="stacked-nav__list"
                 >
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/2/overview"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Sinusitis (acute): antimicrobial prescribing
@@ -581,19 +539,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/3/product-intros-056fc427-7484-4d78-8d55-0070aaa12061-2-2docx"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Download Document
@@ -602,19 +558,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/4/messaging-service-restartdocx"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Download Document
@@ -623,19 +577,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/5/introduction"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Unstable angina and NSTEMI
@@ -644,19 +596,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/6/messaging-service-restartdocx"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Download Document
@@ -665,19 +615,17 @@ Array [
                     </a>
                   </li>
                   <li
-                    className="stacked-nav__list-item"
+                    class="stacked-nav__list-item"
                     data-qa-sel="nav-list-item"
                   >
                     <a
-                      aria-current={null}
                       href="/1/7/supervisor-self-service-nice-guide-2018docx"
-                      onClick={[Function]}
                     >
                       <span
-                        className="grid"
+                        class="grid"
                       >
                         <span
-                          className="pl--c"
+                          class="pl--c"
                           data-g="10"
                         >
                           Download Document
@@ -689,115 +637,97 @@ Array [
               </nav>
             </div>
             <div
-              className="inPageNavColumn"
+              class="inPageNavColumn"
               data-g="12 md:3 md:push:6"
             >
               <nav
                 aria-labelledby="inpagenav-title"
-                className="in-page-nav"
+                class="in-page-nav"
               >
                 <h2
-                  className="in-page-nav__title"
+                  class="in-page-nav__title"
                   id="inpagenav-title"
                 >
                   On this page
                 </h2>
                 <ol
-                  className="in-page-nav__list"
+                  class="in-page-nav__list"
                   role="menubar"
                 >
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#introduction"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       Introduction
                     </a>
                   </li>
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#provision-of-information"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       1.1 Provision of information
                     </a>
                   </li>
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#assessment-of-a-patients-risk-of-future-adverse-cardiovascular-events"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       1.2 Assessment of a patient's risk of future adverse cardiovascular events
                     </a>
                   </li>
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#antiplatelet-therapy"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       1.3 Antiplatelet therapy
                     </a>
                   </li>
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#antithrombin-therapy"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       1.4 Antithrombin therapy
                     </a>
                   </li>
                   <li
-                    className="in-page-nav__item"
-                    onClick={[Function]}
+                    class="in-page-nav__item"
                     role="presentation"
                   >
                     <a
                       aria-current="page"
-                      className="active"
+                      class="active"
                       href="/#management-strategies"
-                      onClick={[Function]}
                       role="menuitem"
-                      style={Object {}}
                     >
                       1.5 Management strategies
                     </a>
@@ -806,65 +736,55 @@ Array [
               </nav>
             </div>
             <div
-              className="documentColumn"
+              class="documentColumn"
               data-g="12 md:6 md:pull:3"
             >
               <div
                 aria-live="polite"
-                className="document-comment-container "
+                class="document-comment-container "
                 id="content-start"
               >
                 <div
-                  onMouseUp={[Function]}
                   role="presentation"
                 >
                   <div
-                    className="selection-container unselectable"
-                    style={
-                      Object {
-                        "display": "none",
-                        "left": undefined,
-                        "top": undefined,
-                      }
-                    }
+                    class="selection-container unselectable"
+                    style="display: none;"
                   >
                     <button
-                      className="btn"
-                      onClick={[Function]}
+                      class="btn"
                     >
                       <span
                         aria-hidden="true"
-                        className="icon icon--comment unselectable"
+                        class="icon icon--comment unselectable"
                       />
                         Comment
                     </button>
                   </div>
                   <div
-                    className="chapter"
+                    class="chapter"
                     title="Introduction"
                     xmlns="http://www.w3.org/1999/xhtml"
                   >
                     <h2
-                      className="title"
+                      class="title"
                     >
                       <button
-                        className="document-comment-container__commentButton"
+                        class="document-comment-container__commentButton"
                         data-gtm="button"
                         data-gtm-action="Clicked"
                         data-gtm-category="Consultation comments page"
                         data-gtm-label="Comment on chapter"
                         data-qa-sel="in-text-comment-button"
-                        data-sectionnumber={null}
-                        onClick={[Function]}
-                        tabIndex={0}
+                        tabindex="0"
                         title="Comment on chapter"
                       >
                         <span
                           aria-hidden="true"
-                          className="icon icon--comment"
+                          class="icon icon--comment"
                         />
                         <span
-                          className="visually-hidden"
+                          class="visually-hidden"
                         >
                           Comment on 
                           chapter
@@ -873,25 +793,21 @@ Array [
                         </span>
                       </button>
                       <a
-                        className="annotator-chapter"
+                        class="annotator-chapter"
                         data-heading-type="chapter"
                         id="introduction"
-                        style={
-                          Object {
-                            "position": "relative",
-                          }
-                        }
+                        style="position: relative;"
                         title=""
                         xmlns=""
                       >
                         Introduction 
                         <span
-                          className="annotator-adder"
+                          class="annotator-adder"
                         />
                       </a>
                     </h2>
                     <div
-                      className="informaltable"
+                      class="informaltable"
                     >
                       <table
                         border="1"
@@ -908,7 +824,7 @@ Array [
                               <p>
                                 This guideline updates and replaces recommendations for the early management of unstable angina and NSTEMI from NICE technology appraisal guidance 
                                 <a
-                                  className="link"
+                                  class="link"
                                   href="http://guidance.nice.org.uk/TA47"
                                   target="_top"
                                 >
@@ -916,7 +832,7 @@ Array [
                                 </a>
                                  and 
                                 <a
-                                  className="link"
+                                  class="link"
                                   href="http://guidance.nice.org.uk/TA80"
                                   target="_top"
                                 >
@@ -927,7 +843,7 @@ Array [
                               <p>
                                 Recommendation 1.3.6 has been replaced by recommendation 1.3.18 in 
                                 <a
-                                  className="link"
+                                  class="link"
                                   href="http://guidance.nice.org.uk/cg172"
                                   target="_top"
                                 >
@@ -941,7 +857,7 @@ Array [
                               <p>
                                 See 
                                 <a
-                                  className="link"
+                                  class="link"
                                   href="http://publications.nice.org.uk/unstable-angina-and-nstemi-cg94/changes-after-publication"
                                   target="_top"
                                 >
@@ -960,15 +876,13 @@ Array [
                         [
                         <a
                           aria-current="page"
-                          className="footnote active"
+                          class="footnote active"
                           data-identified-as="internal-link"
                           href="/#ftn.footnote_1"
                           id="footnote_1"
                           name="footnote_1"
-                          onClick={[Function]}
                           rel="internal"
-                          style={Object {}}
-                          tabIndex="0"
+                          tabindex="0"
                         >
                           1
                         </a>
@@ -988,7 +902,7 @@ Array [
                     <p>
                       Recommendations 1.3.4 to 1.3.8 update and replace recommendations for the early management of unstable angina and NSTEMI from '
                       <a
-                        className="link"
+                        class="link"
                         href="http://guidance.nice.org.uk/TA80"
                         target="_top"
                       >
@@ -999,7 +913,7 @@ Array [
                     <p>
                       Recommendations 1.3.9 to 1.3.11 update and replace recommendations for the early management of unstable angina and NSTEMI from '
                       <a
-                        className="link"
+                        class="link"
                         href="http://guidance.nice.org.uk/TA47"
                         target="_top"
                       >
@@ -1008,7 +922,7 @@ Array [
                       ', NICE technology appraisal guidance 47 (TA 47).
                     </p>
                     <div
-                      className="footnotes"
+                      class="footnotes"
                     >
                       <br />
                       <hr
@@ -1016,22 +930,20 @@ Array [
                         width="100"
                       />
                       <div
-                        className="footnote"
+                        class="footnote"
                       >
                         <p>
                           <sup>
                             [
                             <a
                               aria-current="page"
-                              className="para active"
+                              class="para active"
                               data-identified-as="internal-link"
                               href="/#footnote_1"
                               id="ftn.footnote_1"
                               name="ftn.footnote_1"
-                              onClick={[Function]}
                               rel="internal"
-                              style={Object {}}
-                              tabIndex="0"
+                              tabindex="0"
                             >
                               1
                             </a>
@@ -1039,7 +951,7 @@ Array [
                           </sup>
                            More information on 'Chest pain of recent onset' (
                           <a
-                            className="link"
+                            class="link"
                             href="http://www.nice.org.uk/guidance/CG95"
                             target="_top"
                           >
@@ -1057,6 +969,6 @@ Array [
         </main>
       </div>
     </div>
-  </div>,
-]
+  </div>
+</div>
 `;

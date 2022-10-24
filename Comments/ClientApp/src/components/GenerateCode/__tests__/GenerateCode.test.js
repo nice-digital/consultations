@@ -1,56 +1,48 @@
-/* eslint-env jest */
 import React from "react";
-import { mount, shallow } from "enzyme";
-import toJson from "enzyme-to-json";
-import { Button } from "@nice-digital/nds-button";
-
+import { render, screen, fireEvent } from "@testing-library/react";
 import { GenerateCode } from "../GenerateCode";
 
-describe("GenerateCode", () => {
+const fakePropsNoCode = {
+	organisationCodes: [{
+		canGenerateCollationCode: true,
+		collationCode: null,
+		organisationAuthorisationId: 0,
+		organisationId: 999,
+		organisationName: "Super Magic Club",
+	}],
+	consultationId: 111,
+};
 
-	const fakePropsNoCode = {
-		organisationCodes: [{
-			canGenerateCollationCode: true,
-			collationCode: null,
-			organisationAuthorisationId: 0,
-			organisationId: 999,
-			organisationName: "Super Magic Club",
-		}],
-		consultationId: 111,
-	};
+it("should match snapshot with no code having been generated", () => {
+	const {container} = render(<GenerateCode {...fakePropsNoCode} />);
+	const shareOrganisationButton = screen.getByRole("button", { name: "Share with organisation" });
+	fireEvent.click(shareOrganisationButton);
+	expect(container).toMatchSnapshot();
+});
 
+it("should match snapshot with code having been generated", () => {
 	let fakePropsCode = {
 		organisationCodes: [{...fakePropsNoCode.organisationCodes[0]}],
 		consultationId: 111,
 	};
-
 	fakePropsCode.organisationCodes[0].canGenerateCollationCode = false;
 	fakePropsCode.organisationCodes[0].collationCode = "1234 5678 9123";
+	const {container} = render(<GenerateCode {...fakePropsCode} />);
+	const shareOrganisationButton = screen.getByRole("button", { name: "Share with organisation" });
+	fireEvent.click(shareOrganisationButton);
+	expect(container).toMatchSnapshot();
+});
 
-	const shareOrganisationSelector = `button#share-organisation-${fakePropsNoCode.consultationId}`,
-		organisationCodesSelector = `#organisation-codes-${fakePropsNoCode.consultationId}`;
+it("shouldn't show the panel when first loaded", () => {
+	render(<GenerateCode {...fakePropsNoCode} />);
+	const organisationCodesHeading = screen.queryAllByRole("heading", { name: "Generate a code to share the consultation" });
+	expect(organisationCodesHeading.length).toBe(0);
+});
 
-	it("should match snapshot with no code having been generated", () => {
-		const wrapper = mount(<GenerateCode {...fakePropsNoCode} />);
-		wrapper.find(shareOrganisationSelector).simulate("click");
-		expect(toJson(wrapper, { noKey: true, mode: "deep" })).toMatchSnapshot();
-	});
-
-	it("should match snapshot with code having been generated", () => {
-		const wrapper = mount(<GenerateCode {...fakePropsCode} />);
-		wrapper.find(shareOrganisationSelector).simulate("click");
-		expect(toJson(wrapper, { noKey: true, mode: "deep" })).toMatchSnapshot();
-	});
-
-	it("shouldn't show the panel when first loaded", () => {
-		const wrapper = shallow(<GenerateCode {...fakePropsNoCode} />);
-		expect(wrapper.find(organisationCodesSelector).exists()).toBe(false);
-	});
-
-	it("should show panel when share button is clicked", () => {
-		const wrapper = shallow(<GenerateCode {...fakePropsNoCode} />);
-		wrapper.find(Button).simulate("click");
-		expect(wrapper.find(organisationCodesSelector).exists()).toBe(true);
-	});
-
+it("should show panel when share button is clicked", () => {
+	render(<GenerateCode {...fakePropsNoCode} />);
+	const shareOrganisationButton = screen.getByRole("button", { name: "Share with organisation" });
+	fireEvent.click(shareOrganisationButton);
+	const organisationCodesHeading = screen.queryAllByRole("heading", { name: "Generate a code to share the consultation" });
+	expect(organisationCodesHeading.length).toBe(1);
 });

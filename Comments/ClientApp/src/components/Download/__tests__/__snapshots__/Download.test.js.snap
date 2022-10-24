@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Download Component should match snapshot with supplied data 1`] = `
-<h1>
-  Loading...
-</h1>
+exports[`should match snapshot with supplied data 1`] = `
+<div>
+  <h1>
+    Loading...
+  </h1>
+</div>
 `;
