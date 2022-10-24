@@ -268,9 +268,9 @@ export class Review extends Component<PropsType, StateType> {
 			});
 	};
 
-	componentWillUnmount() {
-		this.unlisten();
-	}
+	// componentWillUnmount() {
+	// 	this.unlisten();
+	// }
 
 	componentDidMount() {
 		if (!this.state.hasInitialData) { // if this statement is true then we know we've come from another page
@@ -283,10 +283,11 @@ export class Review extends Component<PropsType, StateType> {
 			if (!this.state.path || path !== this.state.path) {
 				this.loadDataAndUpdateState();
 			}
+			this.unlisten();
 		});
 	}
 
-	unlisten = () => {};
+	//unlisten = () => {};
 
 	submitConsultation = () => {
 		const comments = this.state.comments;
