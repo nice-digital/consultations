@@ -294,10 +294,10 @@ export class SubmitResponseDialog extends Component {
 								</Alert>
 							}
 							{this.state.feedbackVisible &&
-							<SubmitResponseFeedback
-								{...this.props}
-								unsavedIdsQty={this.props.unsavedIds.length}
-							/>
+								<SubmitResponseFeedback
+									{...this.props}
+									unsavedIdsQty={this.props.unsavedIds.length}
+								/>
 							}
 							<button
 								className="btn btn--cta"

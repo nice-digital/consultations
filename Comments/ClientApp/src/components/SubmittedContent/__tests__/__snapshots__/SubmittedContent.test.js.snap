@@ -1,38 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the review page 1`] = `
-<Fragment>
+exports[`should match snapshot for individual commenters when displayed on the review page 1`] = `
+<div>
   <h2>
     Your response was submitted 
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -45,50 +30,35 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
     We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for individual commenters when displayed on the submitted page 1`] = `
-<Fragment>
+exports[`should match snapshot for individual commenters when displayed on the submitted page 1`] = `
+<div>
   <h2>
     Your response was submitted 
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
-      <Link
+      <a
         data-qa-sel="review-submitted-comments"
-        to="/1/review"
+        href="/1/review"
       >
         Review your response
-      </Link>
+      </a>
     </li>
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -101,43 +71,28 @@ exports[`[ClientApp]  Submitted page should match snapshot for individual commen
     We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the review page 1`] = `
-<Fragment>
+exports[`should match snapshot for organisation commenter when displayed on the review page 1`] = `
+<div>
   <h2>
     Your response was submitted 
     to My Org
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -154,51 +109,36 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
     NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation commenter when displayed on the submitted page 1`] = `
-<Fragment>
+exports[`should match snapshot for organisation commenter when displayed on the submitted page 1`] = `
+<div>
   <h2>
     Your response was submitted 
     to My Org
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
-      <Link
+      <a
         data-qa-sel="review-submitted-comments"
-        to="/1/review"
+        href="/1/review"
       >
         Review your response
-      </Link>
+      </a>
     </li>
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -215,42 +155,27 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation comm
     NICE's response to all the submissions received will be published on the website around the time the final guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page with responses from their org 1`] = `
-<Fragment>
+exports[`should match snapshot for organisation lead when displayed on the review page with responses from their org 1`] = `
+<div>
   <h2>
     Your response was submitted 
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -258,7 +183,6 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     <li>
       <a
         href="something/api/exportlead/1"
-        onClick={[Function]}
       >
         Download all responses from your organisation (Excel)
       </a>
@@ -271,42 +195,27 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the review page without any responses from their org 1`] = `
-<Fragment>
+exports[`should match snapshot for organisation lead when displayed on the review page without any responses from their org 1`] = `
+<div>
   <h2>
     Your response was submitted 
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -319,50 +228,35 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;
 
-exports[`[ClientApp]  Submitted page should match snapshot for organisation lead when displayed on the submitted page 1`] = `
-<Fragment>
+exports[`should match snapshot for organisation lead when displayed on the submitted page 1`] = `
+<div>
   <h2>
     Your response was submitted 
      on 
-    <n
-      ago={false}
-      calendar={false}
-      decimal={false}
-      element={null}
-      filter={[Function]}
-      format="D MMMM YYYY"
-      fromNow={false}
-      interval={60000}
-      local={false}
-      onChange={[Function]}
-      titleFormat=""
-      toNow={false}
-      trim={false}
-      unit={null}
-      unix={false}
-      utc={false}
-      withTitle={false}
-    />
+    <time
+      datetime="1660032000000"
+    >
+      9 August 2022
+    </time>
     .
   </h2>
   <ul
-    className="list list--unstyled"
+    class="list list--unstyled"
   >
     <li>
-      <Link
+      <a
         data-qa-sel="review-submitted-comments"
-        to="/1/review"
+        href="/1/review"
       >
         Review your response
-      </Link>
+      </a>
     </li>
     <li>
       <a
         href="something/api/exportexternal/1"
-        onClick={[Function]}
       >
         Download submitted response (Excel)
       </a>
@@ -370,7 +264,6 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     <li>
       <a
         href="something/api/exportlead/1"
-        onClick={[Function]}
       >
         Download all responses from your organisation (Excel)
       </a>
@@ -383,5 +276,5 @@ exports[`[ClientApp]  Submitted page should match snapshot for organisation lead
     We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
   </p>
   <hr />
-</Fragment>
+</div>
 `;

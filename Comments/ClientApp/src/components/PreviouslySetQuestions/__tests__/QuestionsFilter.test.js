@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QuestionsFilter } from "../QuestionsFilter";
 
-it("should fire the handleFilter function when a input is changed", () => {
+test("should fire the handleFilter function when a input is changed", () => {
 	const fakeProps = {
 		handleFilter: jest.fn(),
 		filter: {
