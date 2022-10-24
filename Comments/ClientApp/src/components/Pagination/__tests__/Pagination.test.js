@@ -1,7 +1,5 @@
-/* eslint-env jest */
 import React from "react";
-import { shallow, mount } from "enzyme";
-
+import { render, screen } from "@testing-library/react";
 import { Pagination } from "../Pagination";
 
 const paginationBaseFakeProps = {
@@ -20,42 +18,37 @@ const paginationNoneFakeProps = {
 	currentPage: 1,
 };
 
-describe("Pagination", () => {
+it("shows first page pager when there are 6 pages or more", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+	const pages = screen.queryAllByRole("listitem");
+	expect(pages[1]).toHaveClass("first");
+});
 
-	it("shows first page pager when there are 6 pages or more", () => {
-		const pagination = mount(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+it("shows last page pager when there are 6 pages or more", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+	const pages = screen.queryAllByRole("listitem");
+	expect(pages[pages.length - 2]).toHaveClass("last");
+});
 
-		expect(pagination.find(".first").exists()).toBe(true);
-	});
+it("shows previous page pager when there are multiple pages", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+	const pages = screen.queryAllByRole("listitem");
+	expect(pages[0]).toHaveClass("previous");
+});
 
-	it("shows last page pager when there are 6 pages or more", () => {
-		const pagination = mount(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+it("shows next page pager when there are multiple pages", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
+	const pages = screen.queryAllByRole("listitem");
+	expect(pages[pages.length - 1]).toHaveClass("next");
+});
 
-		expect(pagination.find(".last").exists()).toBe(true);
-	});
+it("hides pagers when all is selected in amount dropdown", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps}/>);
+	expect(screen.queryAllByRole("listitem").length).toBe(0);
+});
 
-	it("shows previous page pager when there are multiple pages", () => {
-		const pagination = mount(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
-
-		expect(pagination.find("[data-pager=\"previous\"]").exists()).toBe(true);
-	});
-
-	it("shows next page pager when there are multiple pages", () => {
-		const pagination = mount(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
-
-		expect(pagination.find("[data-pager=\"next\"]").exists()).toBe(true);
-	});
-
-	it("hides pagers when all is selected in amount dropdown", () => {
-		const pagination = shallow(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps}/>);
-
-		expect(pagination.find(".pagination").exists()).toBe(false);
-	});
-
-	it("shows correct value in amount dropdown", () => {
-		const pagination = shallow(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps} />);
-
-		expect(pagination.find("#itemsPerPage").prop("value")).toEqual(paginationNoneFakeProps.itemsPerPage);
-	});
-
+it("shows correct value in amount dropdown", () => {
+	render(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps} />);
+	const itemsPerPage = screen.getByRole("option", { name: "All" });
+	expect(itemsPerPage.selected).toBe(true);
 });

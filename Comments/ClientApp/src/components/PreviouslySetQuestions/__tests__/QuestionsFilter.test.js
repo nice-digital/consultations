@@ -1,50 +1,38 @@
-/* global jest */
-
 import React from "react";
-import { shallow } from "enzyme";
-import {QuestionsFilter} from "../QuestionsFilter";
-import toJson from "enzyme-to-json";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { QuestionsFilter } from "../QuestionsFilter";
 
-const fakeProps = {
-	handleFilter: jest.fn(),
-	filter: {
-		direcorate: true,
-	},
-};
+it("should fire the handleFilter function when a input is changed", () => {
+	const fakeProps = {
+		handleFilter: jest.fn(),
+		filter: {
+			direcorate: true,
+		},
+	};
+	render(<QuestionsFilter {...fakeProps}/>);
+	const radio1 = screen.getByLabelText("All Directorates");
+	fireEvent.click(radio1);
+	expect(fakeProps.handleFilter).toHaveBeenCalled();
+});
 
-const e = {};
+test("should match the snapshot when the filter is set to directorate", () => {
+	const fakeProps = {
+		handleFilter: jest.fn(),
+		filter: {
+			direcorate: true,
+		},
+	};
+	const {container} = render(<QuestionsFilter {...fakeProps} />);
+	expect(container).toMatchSnapshot();
+});
 
-describe("[ClientApp] ", () => {
-	describe("QuestionsFilter Component", () => {
-
-		it("should fire the handleFilter function when a input is changed", () => {
-			const wrapper = shallow(<QuestionsFilter {...fakeProps}/>);
-			const radio1 = wrapper.find("input#filterByRole--all");
-			radio1.simulate("change", {});
-			expect(fakeProps.handleFilter).toHaveBeenCalledWith(e, false);
-		});
-
-		it("should match the snapshot when the filter is set to directorate", () => {
-			const wrapper = shallow(<QuestionsFilter {...fakeProps} />);
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				}),
-			).toMatchSnapshot();
-		});
-
-		it("should match the snapshot when the filter is set to all", () => {
-			const localProps = Object.assign({}, fakeProps);
-			localProps.filter.directorate = false;
-			const wrapper = shallow(<QuestionsFilter {...localProps} />);
-			expect(
-				toJson(wrapper, {
-					noKey: true,
-					mode: "deep",
-				}),
-			).toMatchSnapshot();
-		});
-
-	});
+test("should match the snapshot when the filter is set to all", () => {
+	const fakeProps = {
+		handleFilter: jest.fn(),
+		filter: {
+			direcorate: false,
+		},
+	};
+	const {container} = render(<QuestionsFilter {...fakeProps} />);
+	expect(container).toMatchSnapshot();
 });

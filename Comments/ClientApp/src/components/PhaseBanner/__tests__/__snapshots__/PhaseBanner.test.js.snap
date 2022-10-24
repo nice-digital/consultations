@@ -1,42 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  PhaseBanner  Matches snapshot 1`] = `
-<div
-  className="container phase-banner-container"
->
+exports[`Matches snapshot 1`] = `
+<div>
   <div
-    className="grid"
+    class="container phase-banner-container"
   >
     <div
-      data-g="12"
+      class="grid"
     >
-      <aside
-        className="phase-banner mt--b"
+      <div
+        data-g="12"
       >
-        <span
-          className="phase-banner__tag"
+        <aside
+          class="phase-banner mt--b"
         >
           <span
-            className="tag tag--impact tag--beta"
+            class="phase-banner__tag"
           >
-            delta
+            <span
+              class="tag tag--impact tag--beta"
+            >
+              delta
+            </span>
           </span>
-        </span>
-        <span
-          className="phase-banner__label"
-        >
-          My Project
-           is in development, which means that some features may not work fully.
-           
-          <a
-            href="/get-involved/contact-us"
-            rel="noopener noreferrer"
-            target="_blank"
+          <span
+            class="phase-banner__label"
           >
-            Report an issue
-          </a>
-        </span>
-      </aside>
+            My Project
+             is in development, which means that some features may not work fully.
+             
+            <a
+              href="/get-involved/contact-us"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Report an issue
+            </a>
+          </span>
+        </aside>
+      </div>
     </div>
   </div>
 </div>

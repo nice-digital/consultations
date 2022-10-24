@@ -1,41 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  LoginBanner Component should match snapshot for code login only 1`] = `
-<div
-  className=" mt--0 mb--0 sign-in-banner"
-  data-qa-sel="sign-in-banner"
-  id="loginBanner"
->
+exports[`should match snapshot for code login only 1`] = `
+<div>
   <div
-    className="container"
+    class=" mt--0 mb--0 sign-in-banner"
+    data-qa-sel="sign-in-banner"
+    id="loginBanner"
   >
     <div
-      className="LoginBanner"
-      role="form"
+      class="container"
     >
       <div
-        className="input"
+        class="LoginBanner"
+        role="form"
       >
         <div
-          className="input limitWidth input__input"
+          class="input"
         >
-          <label
-            className="input__label"
-            htmlFor="orgCode-undefined"
+          <div
+            class="input limitWidth input__input"
           >
-            Enter your organisation code
-          </label>
-          <input
-            className="input__input"
-            data-qa-sel="OrganisationCodeLogin"
-            id="orgCode-undefined"
-            name="orgCode-undefined"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onKeyDown={[Function]}
-            type="text"
-            value=""
-          />
+            <label
+              class="input__label"
+              for="orgCode-undefined"
+            >
+              Enter your organisation code
+            </label>
+            <input
+              class="input__input"
+              data-qa-sel="OrganisationCodeLogin"
+              id="orgCode-undefined"
+              name="orgCode-undefined"
+              type="text"
+              value=""
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -43,101 +42,105 @@ exports[`[ClientApp]  LoginBanner Component should match snapshot for code login
 </div>
 `;
 
-exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login and in comments panel 1`] = `
-<div
-  className=" mt--0 mb--0 sign-in-banner"
-  data-qa-sel="sign-in-banner"
-  id="loginBanner"
->
+exports[`should match snapshot for idam login and in comments panel 1`] = `
+<div>
   <div
-    className="container"
+    class=" mt--0 mb--0 sign-in-banner"
+    data-qa-sel="sign-in-banner"
+    id="loginBanner"
   >
     <div
-      className="LoginBanner"
-      role="form"
+      class="container"
     >
-      <h3>
-        Some title
-      </h3>
-      <p
-        className=""
+      <div
+        class="LoginBanner"
+        role="form"
       >
-        <a
-          href="/signin-url"
-          title="Sign in to your NICE account"
+        <h3>
+          Some title
+        </h3>
+        <p
+          class=""
         >
-          Sign in to your NICE account
-        </a>
-         
-        to comment on this consultation
-        .
-         
-      </p>
-      <p
-        className=""
-      >
-        <a
-          href="/register-url"
-          title="Register for a NICE account"
+          <a
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in to your NICE account
+          </a>
+           
+          to comment on this consultation
+          .
+           
+        </p>
+        <p
+          class=""
         >
-          Register
-        </a>
-         
-        for a NICE account if you don't already have one.
-      </p>
+          <a
+            href="/register-url"
+            title="Register for a NICE account"
+          >
+            Register
+          </a>
+           
+          for a NICE account if you don't already have one.
+        </p>
+      </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`[ClientApp]  LoginBanner Component should match snapshot for idam login and not in comments panel 1`] = `
-<div
-  className="panel panel-white mt--0 mb--0 sign-in-banner"
-  data-qa-sel="sign-in-banner"
-  id="loginBanner"
->
+exports[`should match snapshot for idam login and not in comments panel 1`] = `
+<div>
   <div
-    className="container"
+    class="panel panel-white mt--0 mb--0 sign-in-banner"
+    data-qa-sel="sign-in-banner"
+    id="loginBanner"
   >
     <div
-      className="LoginBanner"
-      role="form"
+      class="container"
     >
-      <p
-        className="display--inline"
+      <div
+        class="LoginBanner"
+        role="form"
       >
-        <a
-          href="/signin-url"
-          title="Sign in to your NICE account"
+        <p
+          class="display--inline"
         >
-          Sign in to your NICE account
-        </a>
-         
-        signin text
-        .
-         
-      </p>
-      <p>
-        <a
-          className="btn"
-          href="/signin-url"
-          title="Sign in to your NICE account"
+          <a
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in to your NICE account
+          </a>
+           
+          signin text
+          .
+           
+        </p>
+        <p>
+          <a
+            class="btn"
+            href="/signin-url"
+            title="Sign in to your NICE account"
+          >
+            Sign in
+          </a>
+        </p>
+        <p
+          class="display--inline"
         >
-          Sign in
-        </a>
-      </p>
-      <p
-        className="display--inline"
-      >
-        <a
-          href="/register-url"
-          title="Register for a NICE account"
-        >
-          Register
-        </a>
-         
-        for a NICE account if you don't already have one.
-      </p>
+          <a
+            href="/register-url"
+            title="Register for a NICE account"
+          >
+            Register
+          </a>
+           
+          for a NICE account if you don't already have one.
+        </p>
+      </div>
     </div>
   </div>
 </div>

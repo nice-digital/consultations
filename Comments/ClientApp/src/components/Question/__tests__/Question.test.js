@@ -1,48 +1,29 @@
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import { Question } from "../Question";
 import questionWithAnswer from "./questionWithAnswer.json";
 import questionWithoutAnswer from "./questionWithoutAnswer.json";
-import toJson from "enzyme-to-json";
 
-describe("[ClientApp] ", () => {
-	describe("Question Component", () => {
-		const fakePropsWithAnswer = {
-			readOnly: false,
-			key: 1,
-			unique: "unique",
-			question: questionWithAnswer,
-			showAnswer: true,
-		};
+test("should match snapshot with answer", () => {
+	const fakePropsWithAnswer = {
+		readOnly: false,
+		key: 1,
+		unique: "unique",
+		question: questionWithAnswer,
+		showAnswer: true,
+	};
+	const {container} = render(<Question {...fakePropsWithAnswer} />);
+	expect(container).toMatchSnapshot();
+});
 
-		const fakePropsWithoutAnswer = {
-			readOnly: false,
-			key: 1,
-			unique: "unique",
-			question: questionWithoutAnswer,
-			showAnswer: false,
-		};
-
-		it("should match snapshot with answer", () => {
-			const wrapper = mount(
-				<Question {...fakePropsWithAnswer} />,
-			);
-
-			expect(toJson(wrapper, {
-				noKey: true,
-				mode: "deep",
-			})).toMatchSnapshot();
-		});
-
-		it("should match snapshot without answer", () => {
-			const wrapper = mount(
-				<Question {...fakePropsWithoutAnswer} />,
-			);
-
-			expect(toJson(wrapper, {
-				noKey: true,
-				mode: "deep",
-			})).toMatchSnapshot();
-		});
-	});
+test("should match snapshot without answer", () => {
+	const fakePropsWithoutAnswer = {
+		readOnly: false,
+		key: 1,
+		unique: "unique",
+		question: questionWithoutAnswer,
+		showAnswer: false,
+	};
+	const {container} = render(<Question {...fakePropsWithoutAnswer} />);
+	expect(container).toMatchSnapshot();
 });
