@@ -18,36 +18,36 @@ const paginationNoneFakeProps = {
 	currentPage: 1,
 };
 
-it("shows first page pager when there are 6 pages or more", () => {
+test("shows first page pager when there are 6 pages or more", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
 	const pages = screen.queryAllByRole("listitem");
 	expect(pages[1]).toHaveClass("first");
 });
 
-it("shows last page pager when there are 6 pages or more", () => {
+test("shows last page pager when there are 6 pages or more", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
 	const pages = screen.queryAllByRole("listitem");
 	expect(pages[pages.length - 2]).toHaveClass("last");
 });
 
-it("shows previous page pager when there are multiple pages", () => {
+test("shows previous page pager when there are multiple pages", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
 	const pages = screen.queryAllByRole("listitem");
 	expect(pages[0]).toHaveClass("previous");
 });
 
-it("shows next page pager when there are multiple pages", () => {
+test("shows next page pager when there are multiple pages", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
 	const pages = screen.queryAllByRole("listitem");
 	expect(pages[pages.length - 1]).toHaveClass("next");
 });
 
-it("hides pagers when all is selected in amount dropdown", () => {
+test("hides pagers when all is selected in amount dropdown", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps}/>);
 	expect(screen.queryAllByRole("listitem").length).toBe(0);
 });
 
-it("shows correct value in amount dropdown", () => {
+test("shows correct value in amount dropdown", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationNoneFakeProps} />);
 	const itemsPerPage = screen.getByRole("option", { name: "All" });
 	expect(itemsPerPage.selected).toBe(true);

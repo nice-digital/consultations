@@ -2,7 +2,7 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { FilterOption } from "../FilterOption";
 
-it("appends query string to href when checkbox is selected", () => {
+test("appends query string to href when checkbox is selected", () => {
 	const historyMock = { push: jest.fn() };
 	const optionModel = {
 		id: "oId",
@@ -15,7 +15,7 @@ it("appends query string to href when checkbox is selected", () => {
 	expect(historyMock.push).toHaveBeenCalledWith("/test?gId=oId");
 });
 
-it("removes query string from href when checkbox is unselected", () => {
+test("removes query string from href when checkbox is unselected", () => {
 	const historyMock = { push: jest.fn() };
 	const optionModel = {
 		id: "oId",
@@ -29,7 +29,7 @@ it("removes query string from href when checkbox is unselected", () => {
 });
 
 
-it("renders a checkbox wrapped in a label", () => {
+test("renders a checkbox wrapped in a label", () => {
 	const optionModel = {
 		id: "oId",
 		isSelected: false,
@@ -41,7 +41,7 @@ it("renders a checkbox wrapped in a label", () => {
 	expect(queryAllByRole("checkbox").length).toEqual(1);
 });
 
-it("label for attribute matches checkbox id", () => {
+test("label for attribute matches checkbox id", () => {
 	const optionModel = {
 		id: "oId",
 		isSelected: false,
@@ -53,7 +53,7 @@ it("label for attribute matches checkbox id", () => {
 	expect(label.getAttribute("for")).toEqual(input.getAttribute("id"));
 });
 
-it("label element text is option prop label", () => {
+test("label element text is option prop label", () => {
 	const optionModel = {
 		label: "Test",
 	};

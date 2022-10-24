@@ -13,14 +13,14 @@ const fakePropsNoCode = {
 	consultationId: 111,
 };
 
-it("should match snapshot with no code having been generated", () => {
+test("should match snapshot with no code having been generated", () => {
 	const {container} = render(<GenerateCode {...fakePropsNoCode} />);
 	const shareOrganisationButton = screen.getByRole("button", { name: "Share with organisation" });
 	fireEvent.click(shareOrganisationButton);
 	expect(container).toMatchSnapshot();
 });
 
-it("should match snapshot with code having been generated", () => {
+test("should match snapshot with code having been generated", () => {
 	let fakePropsCode = {
 		organisationCodes: [{...fakePropsNoCode.organisationCodes[0]}],
 		consultationId: 111,
@@ -33,13 +33,13 @@ it("should match snapshot with code having been generated", () => {
 	expect(container).toMatchSnapshot();
 });
 
-it("shouldn't show the panel when first loaded", () => {
+test("shouldn't show the panel when first loaded", () => {
 	render(<GenerateCode {...fakePropsNoCode} />);
 	const organisationCodesHeading = screen.queryAllByRole("heading", { name: "Generate a code to share the consultation" });
 	expect(organisationCodesHeading.length).toBe(0);
 });
 
-it("should show panel when share button is clicked", () => {
+test("should show panel when share button is clicked", () => {
 	render(<GenerateCode {...fakePropsNoCode} />);
 	const shareOrganisationButton = screen.getByRole("button", { name: "Share with organisation" });
 	fireEvent.click(shareOrganisationButton);

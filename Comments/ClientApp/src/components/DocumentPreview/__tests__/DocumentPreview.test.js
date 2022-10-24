@@ -39,7 +39,7 @@ const fakeProps = {
 	},
 };
 
-it("should match snapshot with supplied data", () => {
+test("should match snapshot with supplied data", () => {
 	const mock = new MockAdapter(axios);
 	let documentsPromise = new Promise(resolve => {
 		mock
@@ -82,7 +82,7 @@ it("should match snapshot with supplied data", () => {
 	});
 });
 
-it("getPreviewDocumentChapterLinks method", () => {
+test("getPreviewDocumentChapterLinks method", () => {
 	const documentPreview = new DocumentPreview();
 	expect(
 		documentPreview.getPreviewDocumentChapterLinks(1, "draftappendicesa-tcleandocx", PreviewDocumentsData, "this is my title", "GID-1234", 1)).toHaveProperty("links", [

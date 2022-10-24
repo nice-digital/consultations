@@ -29,12 +29,12 @@ const answerPropsWithoutAnswer = {
 	},
 };
 
-it("sets text area with comment text correctly", async () => {
+test("sets text area with comment text correctly", async () => {
 	render(<Answer {...answerPropsWithAnswer} />);
 	expect(screen.getByDisplayValue("some answer text")).toBeInTheDocument();
 });
 
-it("unsavedChanges function is fired correctly on text area change", async () => {
+test("unsavedChanges function is fired correctly on text area change", async () => {
 	render(<Answer {...answerPropsWithAnswer} />);
 	const textArea = screen.getByDisplayValue("some answer text");
 	const user = userEvent.setup();
@@ -45,12 +45,12 @@ it("unsavedChanges function is fired correctly on text area change", async () =>
 	expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith("22q", true);
 });
 
-it("should match snapshot with answer", () => {
+test("should match snapshot with answer", () => {
 	const {container} = render(<Answer {...answerPropsWithAnswer} />);
 	expect(container).toMatchSnapshot();
 });
 
-it("should match snapshot without answer", () => {
+test("should match snapshot without answer", () => {
 	const {container} = render(<Answer {...answerPropsWithoutAnswer} />);
 	expect(container).toMatchSnapshot();
 });

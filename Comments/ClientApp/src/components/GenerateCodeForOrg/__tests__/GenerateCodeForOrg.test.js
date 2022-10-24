@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { GenerateCodeForOrg } from "../../GenerateCodeForOrg/GenerateCodeForOrg";
 
-it("should show generate button when no code has been generated", () => {
+test("should show generate button when no code has been generated", () => {
 	const fakePropsNoCode = {
 		canGenerateCollationCode: true,
 		collationCode: null,
@@ -15,7 +15,7 @@ it("should show generate button when no code has been generated", () => {
 	expect(screen.getByRole("button", { name: "Generate" })).toBeInTheDocument();
 });
 
-it("should show the copy button when a code has been generated", () => {
+test("should show the copy button when a code has been generated", () => {
 	const fakePropsCode = {
 		canGenerateCollationCode: false,
 		collationCode: "1234 5678 9123",
@@ -28,7 +28,7 @@ it("should show the copy button when a code has been generated", () => {
 	expect(screen.getByRole("button", { name: "Copy code" })).toBeInTheDocument();
 });
 
-it("should show copied text after the code has been copied", () => {
+test("should show copied text after the code has been copied", () => {
 	const windowPrompt = window.prompt;
   	window.prompt = jest.fn();
 	const fakePropsCode = {

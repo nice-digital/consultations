@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { Header } from "../Header";
 
-it("should display correctly when consulation hasn't started", () => {
+test("should display correctly when consulation hasn't started", () => {
 	const dateNow = Date.now;
 	Date.now = jest.fn(() => new Date(Date.UTC(2022, 7, 9, 8)).valueOf());
 	const FakeProps = {
@@ -21,7 +21,7 @@ it("should display correctly when consulation hasn't started", () => {
 	Date.now = dateNow;
 });
 
-it("should display correctly when consulation is in progress", () => {
+test("should display correctly when consulation is in progress", () => {
 	const FakeProps = {
 		title: "My title",
 		subtitle1: "Subtitle 1",
@@ -35,7 +35,7 @@ it("should display correctly when consulation is in progress", () => {
 	expect(container).toMatchSnapshot();
 });
 
-it("should display correctly when consulation has ended", () => {
+test("should display correctly when consulation has ended", () => {
 	const FakeProps = {
 		title: "My title has changed",
 		subtitle1: "Subtitle 1",

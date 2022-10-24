@@ -50,12 +50,12 @@ afterEach(() => {
 	mock.reset();
 });
 
-it("should match snapshot for idam login and not in comments panel", async () => {
+test("should match snapshot for idam login and not in comments panel", async () => {
 	const {container} =  render(<LoginBanner {...fakeProps} />, contextWrapper);
 	expect(container).toMatchSnapshot();
 });
 
-it("should match snapshot for idam login and in comments panel", async () => {
+test("should match snapshot for idam login and in comments panel", async () => {
 	fakeProps.isInCommentsPanel = true;
 	fakeProps.title = "Some title";
 	fakeProps.signInButton = false;
@@ -64,7 +64,7 @@ it("should match snapshot for idam login and in comments panel", async () => {
 	expect(container).toMatchSnapshot();
 });
 
-it("should match snapshot for code login only", async () => {
+test("should match snapshot for code login only", async () => {
 	fakeProps.allowOrganisationCodeLogin = true;
 	fakeProps.codeLoginOnly = true;
 	fakeProps.title = null;
@@ -72,7 +72,7 @@ it("should match snapshot for code login only", async () => {
 	expect(container).toMatchSnapshot();
 });
 
-it("organisation code should be prepopulated from querystring", async () => {
+test("organisation code should be prepopulated from querystring", async () => {
 	const expectedOrganisationCode = "123412341234";
 	const updatedProps = Object.assign(fakeProps, {location: {pathname: "/1/1/introduction", search:`?code=${expectedOrganisationCode}`}});
 	render(<LoginBanner {...updatedProps} />, contextWrapper);

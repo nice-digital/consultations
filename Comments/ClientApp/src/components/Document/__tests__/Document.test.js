@@ -63,7 +63,7 @@ const documents = [
 	},
 ];
 
-it("should match snapshot with supplied data", () => {
+test("should match snapshot with supplied data", () => {
 	const mock = new MockAdapter(axios);
 	let documentsPromise = new Promise(resolve => {
 		mock
@@ -108,7 +108,7 @@ it("should match snapshot with supplied data", () => {
 	});
 });
 
-it("should not contain tutorial if the consultation does not support comments", () => {
+test("should not contain tutorial if the consultation does not support comments", () => {
 	const mock = new MockAdapter(axios);
 	let documentsPromise = new Promise(resolve => {
 		mock
@@ -152,14 +152,14 @@ it("should not contain tutorial if the consultation does not support comments", 
 	});
 });
 
-it("getDocumentChapterLinks method", () => {
+test("getDocumentChapterLinks method", () => {
 	const document = new Document();
 	expect(
 		document.getDocumentChapterLinks(1, "introduction", 1, DocumentsData, "A title for the nav"),
 	).toHaveProperty("links", [{"current": true, "isReactRoute": true, "label": "Introduction", "url": "/1/1/introduction"}, {"current": false, "isReactRoute": true, "label": "Patient-centred care", "url": "/1/1/patient-centred-care"}, {"current": false, "isReactRoute": true, "label": "Key priorities for implementation", "url": "/1/1/key-priorities-for-implementation"}, {"current": false, "isReactRoute": true, "label": "1 Guidance", "url": "/1/1/guidance"}, {"current": false, "isReactRoute": true, "label": "2 Notes on the scope of the guidance", "url": "/1/1/notes-on-the-scope-of-the-guidance"}, {"current": false, "isReactRoute": true, "label": "3 Implementation", "url": "/1/1/implementation"}, {"current": false, "isReactRoute": true, "label": "4 Research recommendations", "url": "/1/1/research-recommendations"}, {"current": false, "isReactRoute": true, "label": "5 Other versions of this guideline", "url": "/1/1/other-versions-of-this-guideline"}, {"current": false, "isReactRoute": true, "label": "6 Related NICE guidance", "url": "/1/1/related-nice-guidance"}, {"current": false, "isReactRoute": true, "label": "7 Updating the guideline", "url": "/1/1/updating-the-guideline"}, {"current": false, "isReactRoute": true, "label": "Appendix A: The Guideline Development Group and NICE project team", "url": "/1/1/appendix-a-the-guideline-development-group-and-nice-project-team"}, {"current": false, "isReactRoute": true, "label": "Appendix B: The Guideline Review Panel", "url": "/1/1/appendix-b-the-guideline-review-panel"}, {"current": false, "isReactRoute": true, "label": "Appendix C: The algorithm", "url": "/1/1/appendix-c-the-algorithm"}, {"current": false, "isReactRoute": true, "label": "Changes after publication", "url": "/1/1/changes-after-publication"}, {"current": false, "isReactRoute": true, "label": "About this guideline", "url": "/1/1/about-this-guideline"}]);
 });
 
-it("getDocumentLinks for Commentable documents", () => {
+test("getDocumentLinks for Commentable documents", () => {
 	const document = new Document();
 	expect(
 		document.getDocumentLinks(true, "This is the title", documents, 1, 1),
@@ -179,7 +179,7 @@ it("getDocumentLinks for Commentable documents", () => {
 	]);
 });
 
-it("getDocumentLinks for Supporting documents", () => {
+test("getDocumentLinks for Supporting documents", () => {
 	const document = new Document();
 	expect(
 		document.getDocumentLinks(false, "This is the title", documents, 1, 1),
@@ -199,7 +199,7 @@ it("getDocumentLinks for Supporting documents", () => {
 	]);
 });
 
-it("should not caution that guidance is draft if the consultation is open", () => {
+test("should not caution that guidance is draft if the consultation is open", () => {
 	const mock = new MockAdapter(axios);
 	let documentsPromise = new Promise(resolve => {
 		mock

@@ -19,7 +19,7 @@ test("shows first menu screen when first loaded", () => {
 	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
 });
 
-it("shows second menu screen when organisation option has been selected", () => {
+test("shows second menu screen when organisation option has been selected", () => {
 	render(
 		<UserContext.Provider value={{}}>
 			<LoginPanel { ...loginPanelFakeProps } />
@@ -32,7 +32,7 @@ it("shows second menu screen when organisation option has been selected", () => 
 	expect(screen.getByRole("heading", { name: "Do you have a code from your organisation?" })).toBeInTheDocument();
 });
 
-it("shows login when individual option has been selected", () => {
+test("shows login when individual option has been selected", () => {
 	render(
 		<UserContext.Provider value={{}}>
 			<MemoryRouter>
@@ -47,7 +47,7 @@ it("shows login when individual option has been selected", () => {
 	expect(screen.getByRole("heading", { name: "Make or review comments as an individual" })).toBeInTheDocument();
 });
 
-it("shows second screen and organisation code text box when 'user has code' is selected", () => {
+test("shows second screen and organisation code text box when 'user has code' is selected", () => {
 	render(
 		<UserContext.Provider value={{}}>
 			<MemoryRouter>
@@ -65,7 +65,7 @@ it("shows second screen and organisation code text box when 'user has code' is s
 	expect(screen.getByLabelText("Enter your organisation code")).toBeInTheDocument();
 });
 
-it("goes back to previous screen when back has been clicked", () => {
+test("goes back to previous screen when back has been clicked", () => {
 	render(
 		<UserContext.Provider value={{}}>
 			<MemoryRouter>
@@ -84,7 +84,7 @@ it("goes back to previous screen when back has been clicked", () => {
 	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
 });
 
-it("clears radio buttons after navigating back to previous screen", () => {
+test("clears radio buttons after navigating back to previous screen", () => {
 	render(
 		<UserContext.Provider value={{}}>
 			<MemoryRouter>
@@ -107,7 +107,7 @@ it("clears radio buttons after navigating back to previous screen", () => {
 	});
 });
 
-it("should match the snapshot after first loading up", () => {
+test("should match the snapshot after first loading up", () => {
 	const {container} = render(
 		<UserContext.Provider value={{}}>
 			<MemoryRouter>
