@@ -110,10 +110,10 @@ export class CommentBox extends Component<PropsType, StateType> {
 								Comment on {commentOn}, {quote}
 							</label>
 							{commenterEmail &&
-							<p className="CommentBox__commentBy mb--0">Comment by: {commenterEmail}</p>
+								<p className="CommentBox__commentBy mb--0">Comment by: {commenterEmail}</p>
 							}
 							{unsavedChanges &&
-							<p className="CommentBox__validationMessage" role="alert">You have unsaved changes</p>
+								<p className="CommentBox__validationMessage" role="alert">You have unsaved changes</p>
 							}
 							<textarea
 								data-hj-whitelist
