@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, render, screen, waitForElementToBeRemoved, within } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter } from "react-router";
@@ -78,30 +78,34 @@ test("should render a single consultation question", async () => {
 test("should render a marker with the correct quantity of questions", async () => {
 	const localProps = Object.assign({}, fakeProps);
 	localProps.match.params.documentId = "consultation";
-	render(
+	const {container} = render(
 		<MemoryRouter>
 			<Questions {...localProps}/>
 		</MemoryRouter>,
 	);
 	await waitForElementToBeRemoved(() => screen.getByText("Loading...", { selector: "h1" }));
-	const stackedNavMarker = screen.queryAllByText("(1)", { selector: "span.text-right"});
+	const currentMarkerContainer = Array.from(container.querySelectorAll("[aria-current='page']"));
+	const { queryAllByText } = within(currentMarkerContainer[0]);
+	const stackedNavMarker = queryAllByText("(1)", { selector: "span.text-right"});
 	expect(stackedNavMarker.length).toBeGreaterThan(0);
 });
 
 test("should increment the question count marker when the add question button is clicked ", async () => {
 	const localProps = Object.assign({}, fakeProps);
 	localProps.match.params.documentId = "consultation";
-	render(
+	const {container} = render(
 		<MemoryRouter>
 			<Questions {...localProps}/>
 		</MemoryRouter>,
 	);
 	await waitForElementToBeRemoved(() => screen.getByText("Loading...", { selector: "h1" }));
-	const stackedNavMarker = screen.queryAllByText("(1)", { selector: "span.text-right"});
+	const currentMarkerContainer = Array.from(container.querySelectorAll("[aria-current='page']"));
+	const { queryAllByText } = within(currentMarkerContainer[0]);
+	const stackedNavMarker = queryAllByText("(1)", { selector: "span.text-right"});
 	expect(stackedNavMarker.length).toBeGreaterThan(0);
 	const addQuestionButton = screen.getByRole("button", { name: "Add an open question" });
 	fireEvent.click(addQuestionButton);
-	expect(screen.queryAllByText("(2)", { selector: "span.text-right"}).length).toBeGreaterThan(0);
+	expect(queryAllByText("(2)", { selector: "span.text-right"}).length).toBeGreaterThan(0);
 });
 
 test("get consultation level questions", () => {
