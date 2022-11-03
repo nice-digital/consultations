@@ -31,17 +31,17 @@ const answerPropsWithoutAnswer = {
 
 test("sets text area with comment text correctly", async () => {
 	render(<Answer {...answerPropsWithAnswer} />);
-	expect(screen.getByDisplayValue("some answer text")).toBeInTheDocument();
+	expect(screen.getByDisplayValue("some answer text-")).toBeInTheDocument();
 });
 
 test("unsavedChanges function is fired correctly on text area change", async () => {
 	render(<Answer {...answerPropsWithAnswer} />);
-	const textArea = screen.getByDisplayValue("some answer text");
+	const textArea = screen.getByDisplayValue("some answer text-");
 	const user = userEvent.setup();
 	textArea.focus();
-	await user.type(textArea, " that's been updated");
+	await user.type(textArea, "that's been updated");
 	user.tab();
-	expect(screen.getByDisplayValue("some answer text that's been updated")).toBeInTheDocument();
+	expect(screen.getByDisplayValue("some answer text-that's been updated")).toBeInTheDocument();
 	expect(answerPropsWithAnswer.updateUnsavedIds).toHaveBeenCalledWith("22q", true);
 });
 

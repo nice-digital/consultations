@@ -21,7 +21,7 @@ exports[`should match snapshot with answer 1`] = `
           data-qa-sel="Comment-text-area"
           id="string"
         >
-          some answer text that's been updated
+          some answer text-that's been updated
         </textarea>
       </div>
       <span
