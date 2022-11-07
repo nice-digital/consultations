@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { LiveAnnouncer } from "react-aria-live";
+import { createMemoryHistory } from "history";
 import { queryStringToObject } from "../../../helpers/utils";
 import { Review } from "../Review";
 import ConsultationData from "./Consultation.json";
@@ -35,12 +36,6 @@ const fakeProps = {
 	location: {
 		pathname: "/1/review",
 		search: "?sourceURI=consultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1",
-	},
-	history:{
-		location:{
-			search: "",
-		},
-		listen: function(){},
 	},
 	basename: "/consultations",
 };
@@ -76,6 +71,7 @@ test("should hit the endpoints successfully", async () => {
 test("should hit the submit endpoint successfully", async () => {
 	window.alert = jest.fn();
 	const mock = new MockAdapter(axios);
+	const history = createMemoryHistory("/1/review");
 	let commentsReviewPromise = new Promise(resolve => {
 		mock
 			.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -95,14 +91,13 @@ test("should hit the submit endpoint successfully", async () => {
 	mock
 		.onPost("/consultations/api/Submit")
 		.reply(200, CommentsReviewData);
-	//.networkError();
 	mock
 		.onPost("/consultations/api/Logging?logLevel=Warning")
 		.reply(200);
 	render(
 		<MemoryRouter>
 			<LiveAnnouncer>
-				<Review {...fakeProps} />
+				<Review {...fakeProps} history={history} />
 			</LiveAnnouncer>
 		</MemoryRouter>,
 	);
@@ -114,12 +109,13 @@ test("should hit the submit endpoint successfully", async () => {
 		fireEvent.click(submitConsultation);
 		const submitConsultationSure = await screen.findByRole("button", { name: "Yes submit my response" });
 		fireEvent.click(submitConsultationSure);
-		//expect(window.alert).toHaveBeenCalledTimes(0);
+		expect(window.alert).toHaveBeenCalledTimes(0);
 	});
 });
 
 test("should match snapshot with supplied data pre-submission", () => {
 	const mock = new MockAdapter(axios);
+	const history = createMemoryHistory("/1/review");
 	let commentsReviewPromise = new Promise(resolve => {
 		mock
 			.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -139,7 +135,7 @@ test("should match snapshot with supplied data pre-submission", () => {
 	const {container} = render(
 		<MemoryRouter>
 			<LiveAnnouncer>
-				<Review {...fakeProps} />
+				<Review {...fakeProps} history={history} />
 			</LiveAnnouncer>
 		</MemoryRouter>,
 	);
@@ -157,6 +153,7 @@ test("should match snapshot with supplied data post-submission", () => {
 	const mock = new MockAdapter(axios);
 	const localConsultationData = Object.assign({},ConsultationData);
 	localConsultationData.consultationState.submittedDate = "2019-07-23T13:50:40.7043147";
+	const history = createMemoryHistory("/1/review");
 	let commentsReviewPromise = new Promise(resolve => {
 		mock
 			.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -176,7 +173,7 @@ test("should match snapshot with supplied data post-submission", () => {
 	const {container} = render(
 		<MemoryRouter>
 			<LiveAnnouncer>
-				<Review {...fakeProps} />
+				<Review {...fakeProps} history={history} />
 			</LiveAnnouncer>
 		</MemoryRouter>,
 	);

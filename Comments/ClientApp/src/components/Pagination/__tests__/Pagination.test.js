@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { Pagination } from "../Pagination";
 
 const paginationBaseFakeProps = {
@@ -20,8 +20,10 @@ const paginationNoneFakeProps = {
 
 test("shows first page pager when there are 6 pages or more", () => {
 	render(<Pagination {...paginationBaseFakeProps} {...paginationLargeFakeProps} />);
-	const pages = screen.queryAllByRole("listitem");
-	expect(pages[1]).toHaveClass("first");
+	const firstPageListItem = screen.queryAllByRole("listitem")[1];
+	const { getByText } = within(firstPageListItem);
+	const firstPageListItemLink = getByText("1", { selector: "a" });
+	expect(firstPageListItemLink.getAttribute("aria-label")).toEqual("Go to first page");
 });
 
 test("shows last page pager when there are 6 pages or more", () => {

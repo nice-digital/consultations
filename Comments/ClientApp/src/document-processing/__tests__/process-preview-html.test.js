@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { processPreviewHtml } from "../process-preview-html";
 
 const consoleErrorReset = console.error;
@@ -14,22 +14,25 @@ test("doesn't render a comment button if there's no comment in the markup", () =
 			{processPreviewHtml("<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>")}
 		</div>,
 	);
-	expect(container.getElementsByClassName("ConversionError").length).toEqual(0);
+	const noConversionError = screen.queryAllByRole("list").length === 0;
+	expect(noConversionError).toEqual(true);
 });
 
 test("renders a comment box if the markup contains a preview error comment", () => {
 	console.error = jest.fn();
-	const {container} = render(
+	render(
 		<div>
 			{processPreviewHtml("<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>")}
 		</div>,
 	);
-	expect(container.getElementsByClassName("ConversionError").length).toEqual(1);
+	const softReturnConversionError = screen.queryAllByRole("listitem");
+	expect(softReturnConversionError.length).toEqual(1);
+	expect(softReturnConversionError[0].textContent).toEqual("Soft return used in paragraph");
 });
 
 test("renders the correct number of error markers for the type of errors supplied", () => {
 	console.error = jest.fn();
-	const {container} = render(
+	render(
 		<div>
 			{processPreviewHtml(
 				`<div>
@@ -57,10 +60,9 @@ test("renders the correct number of error markers for the type of errors supplie
 			)}
 		</div>,
 	);
-	expect(container.getElementsByClassName("ConversionError").length).toEqual(4);
-	expect(container.querySelectorAll(".ConversionError.ConversionError--W").length).toEqual(1);
-	expect(container.querySelectorAll(".ConversionError.ConversionError--E").length).toEqual(1);
-	expect(container.querySelectorAll(".ConversionError.ConversionError--I").length).toEqual(2);
+	expect(screen.queryAllByText("You have been warned!", { selector: "li" }).length).toEqual(1);
+	expect(screen.queryAllByText("There's an error!", { selector: "li" }).length).toEqual(1);
+	expect(screen.queryAllByText("You have been informed!", { selector: "li" }).length).toEqual(2);
 });
 
 test("renders a comment box of the appropriate styling depending on the type of error", () => {

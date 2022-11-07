@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { LiveAnnouncer } from "react-aria-live";
+import { createMemoryHistory } from "history";
 import { Review } from "../Review";
 import ConsultationData from "./Consultation.json";
 import CommentsReviewData from "./CommentsReview.json";
@@ -35,12 +36,6 @@ const fakeProps = {
 		pathname: "/1/review",
 		search: "?sourceURI=consultations%3A%2F%2F.%2Fconsultation%2F1%2Fdocument%2F1",
 	},
-	history:{
-		location:{
-			search: "",
-		},
-		listen: function(){},
-	},
 	basename: "/consultations",
 };
 
@@ -50,6 +45,7 @@ afterEach(() => {
 
 test("should match snapshot when viewing as an organisation commenter (pre-submission)", () => {
 	const mock = new MockAdapter(axios);
+	const history = createMemoryHistory("/1/review");
 	let commentsReviewPromise = new Promise(resolve => {
 		mock
 			.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -69,7 +65,7 @@ test("should match snapshot when viewing as an organisation commenter (pre-submi
 	const {container} = render(
 		<MemoryRouter>
 			<LiveAnnouncer>
-				<Review {...fakeProps} />
+				<Review {...fakeProps} history={history} />
 			</LiveAnnouncer>
 		</MemoryRouter>,
 	);
@@ -86,6 +82,7 @@ test("should match snapshot when viewing as an organisation commenter (post-subm
 	const mock = new MockAdapter(axios);
 	const localConsultationData = Object.assign({},ConsultationData);
 	localConsultationData.consultationState.submittedDate = "2019-07-23T13:50:40.7043147";
+	const history = createMemoryHistory("/1/review");
 	let commentsReviewPromise = new Promise(resolve => {
 		mock
 			.onGet("/consultations/api/CommentsForReview?relativeURL=%2F1%2Freview")
@@ -105,7 +102,7 @@ test("should match snapshot when viewing as an organisation commenter (post-subm
 	const {container} = render(
 		<MemoryRouter>
 			<LiveAnnouncer>
-				<Review {...fakeProps} />
+				<Review {...fakeProps} history={history} />
 			</LiveAnnouncer>
 		</MemoryRouter>,
 	);
