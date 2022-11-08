@@ -171,8 +171,8 @@ export const MyToolTip = (props = ToolTipPropsType) => {
 	const { position, visible, onButtonClick } = props;
 	var contentMenuStyle = {
 		display: visible ? "block" : "none",
-		left: position.x || "auto",
-		top: position.y || "auto",
+		left: position.x,
+		top: position.y,
 	};
 	return (
 		<div className="selection-container unselectable" style={contentMenuStyle}>
