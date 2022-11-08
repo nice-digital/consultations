@@ -115,7 +115,7 @@ export const canUseDOM = (): boolean => (
 
 const whichChild = (elem) => {
 	let i = 0;
-	while ((elem == elem.previousSibling) != null) ++i;
+	while ((elem = elem.previousSibling) != null) ++i;
 	return i;
 };
 
