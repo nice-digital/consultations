@@ -1,70 +1,59 @@
 import React from "react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { mount } from "enzyme";
-
 import { StackedNav } from "../StackedNav";
 
-describe("[ClientApp] ", () => {
-	describe("StackedNav ", () => {
-		const props = {
-			links: {
-				title: "Root Label",
-				links: [
-					{
-						label: "Sub Link 1 Label",
-						url: "sub-link-1-url",
-						current: true,
-						isReactRoute: true,
-					},
-					{
-						label: "Sub Link 2 Label",
-						url: "sub-link-2-url",
-						isReactRoute: true,
-					},
-					{
-						label: "Sub Link 3 Label",
-						url: "sub-link-3-url",
-						isReactRoute: true,
-					},
-					{
-						label: "External Link",
-						url: "https://external-link.com",
-						isReactRoute: false,
-					},
-				],
+const props = {
+	links: {
+		title: "Root Label",
+		links: [
+			{
+				label: "Sub Link 1 Label",
+				url: "sub-link-1-url",
+				current: true,
+				isReactRoute: true,
 			},
-		};
+			{
+				label: "Sub Link 2 Label",
+				url: "sub-link-2-url",
+				isReactRoute: true,
+			},
+			{
+				label: "Sub Link 3 Label",
+				url: "sub-link-3-url",
+				isReactRoute: true,
+			},
+			{
+				label: "External Link",
+				url: "https://external-link.com",
+				isReactRoute: false,
+			},
+		],
+	},
+};
 
-		let wrapper;
+test("should render a H2 with text that matches the supplied title", () => {
+	render(<MemoryRouter><StackedNav {...props} /></MemoryRouter>);
+	const titleHeading = screen.getByText("Root Label", { selector: "h2" });
+	expect(titleHeading).toBeInTheDocument();
+});
 
-		beforeEach(() => {
-			wrapper = mount(
-				<MemoryRouter>
-					<StackedNav {...props} />
-				</MemoryRouter>,
-			);
-		});
+test("should render the number of links supplied in props with anchors that match", () => {
+	render(<MemoryRouter><StackedNav {...props} /></MemoryRouter>);
+	const el = screen.queryAllByRole("link");
+	expect(el.length).toEqual(4);
+	expect(el[0]).toHaveAttribute("href", "/sub-link-1-url");
+	expect(el[2].textContent).toBe("Sub Link 3 Label");
+});
 
-		it("should render a H2 with text that matches the supplied title", () => {
-			const el = wrapper.find("h2");
-			expect(el.text()).toEqual("Root Label");
-		});
+test("should render a link with aria-current attribute set if link is current", () => {
+	render(<MemoryRouter><StackedNav {...props} /></MemoryRouter>);
+	const el = screen.queryAllByRole("link");
+	expect(el[0].getAttribute("aria-current")).toEqual("page");
+});
 
-		it("should render the number of links supplied in props with anchors that match", () => {
-			const el = wrapper.find("ul li a");
-			expect(el.length).toEqual(4);
-			expect(el.first().prop("href")).toEqual("/sub-link-1-url");
-			expect(el.at(2).text()).toEqual("Sub Link 3 Label");
-		});
-
-		it("should render a link with aria-current attribute set if link is current", () => {
-			const el = wrapper.find("ul li a").first();
-			expect(el.prop("aria-current")).toEqual("page");
-		});
-
-		it("should render a standard anchor tag if the destination contains http", () => {
-			const el = wrapper.find("ul li a");
-			expect(el.last().prop("target")).toEqual("_blank");
-		});
-	});
+test("should render a standard anchor tag if the destination contains http", () => {
+	render(<MemoryRouter><StackedNav {...props} /></MemoryRouter>);
+	const el = screen.queryAllByRole("link");
+	expect(el[el.length - 1].getAttribute("target")).toEqual("_blank");
 });

@@ -1,43 +1,40 @@
-/* eslint-env jest */
-
-import { processPreviewHtml } from "../process-preview-html";
 import React from "react";
-import { mount } from "enzyme";
+import { render, screen } from "@testing-library/react";
+import { processPreviewHtml } from "../process-preview-html";
 
-describe("[ClientApp]", () => {
-	describe("Render Preview HTML", () => {
+const consoleErrorReset = console.error;
 
-		function setupHtml(html) {
-			return {
-				wrapper: mount(
-					<div>{processPreviewHtml(html)}</div>,
-				),
-			};
-		}
+beforeEach(() => {
+	console.error = consoleErrorReset;
+});
 
-		const consoleErrorReset = console.error;
+test("doesn't render a comment button if there's no comment in the markup", () => {
+	const {container} = render(
+		<div>
+			{processPreviewHtml("<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>")}
+		</div>,
+	);
+	const noConversionError = screen.queryAllByRole("list").length === 0;
+	expect(noConversionError).toEqual(true);
+});
 
-		beforeEach(() => {
-			console.error = consoleErrorReset;
-		});
+test("renders a comment box if the markup contains a preview error comment", () => {
+	console.error = jest.fn();
+	render(
+		<div>
+			{processPreviewHtml("<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>")}
+		</div>,
+	);
+	const softReturnConversionError = screen.queryAllByRole("listitem");
+	expect(softReturnConversionError.length).toEqual(1);
+	expect(softReturnConversionError[0].textContent).toEqual("Soft return used in paragraph");
+});
 
-		it("doesn't render a comment button if there's no comment in the markup", () => {
-			const instance = setupHtml(
-				"<p><a href='#'>Hey!</a> Ain't no comment anywhere <span>here</span></p>",
-			);
-			expect(instance.wrapper.find("div.ConversionError").length).toEqual(0);
-		});
-
-		it("renders a comment box if the markup contains a preview error comment", () => {
-			console.error = jest.fn();
-			const instance = setupHtml(
-				"<div><p>Here is a paragraph <!--[I] - Information: Soft return used in paragraph--></p></div>",
-			);
-			expect(instance.wrapper.find("div.ConversionError").length).toEqual(1);
-		});
-
-		it("renders the correct number of error markers for the type of errors supplied", () => {
-			const instance = setupHtml(
+test("renders the correct number of error markers for the type of errors supplied", () => {
+	console.error = jest.fn();
+	render(
+		<div>
+			{processPreviewHtml(
 				`<div>
 					<p>Here is a paragraph <!--[I] - Information: You have been informed! --></p>
 					<div>
@@ -59,18 +56,20 @@ describe("[ClientApp]", () => {
 						</tr>
 						</tbody>
 					</table>
-
 				</div>`,
-			);
+			)}
+		</div>,
+	);
+	expect(screen.queryAllByText("You have been warned!", { selector: "li" }).length).toEqual(1);
+	expect(screen.queryAllByText("There's an error!", { selector: "li" }).length).toEqual(1);
+	expect(screen.queryAllByText("You have been informed!", { selector: "li" }).length).toEqual(2);
+});
 
-			expect(instance.wrapper.find("div.ConversionError").length).toEqual(4);
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--W").length).toEqual(1);
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--E").length).toEqual(1);
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--I").length).toEqual(2);
-		});
-
-		it("renders a comment box of the appropriate styling depending on the type of error", () => {
-			const instance = setupHtml(
+test("renders a comment box of the appropriate styling depending on the type of error", () => {
+	console.error = jest.fn();
+	const {container} = render(
+		<div>
+			{processPreviewHtml(
 				`<div>
 					<p>Here is a paragraph <!--[I] - Information: You have been informed! --></p>
 					<div>
@@ -94,21 +93,10 @@ describe("[ClientApp]", () => {
 					</table>
 
 				</div>`,
-			);
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--W ul li").text()).toEqual("You have been warned!");
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--E ul li").text()).toEqual("There's an error!");
-			expect(instance.wrapper.find("div.ConversionError.ConversionError--I ul li").text()).toEqual("You have been informed!");
-		});
-
-		// it("should show the detail of the error when clicked by adding a class to make it visible", () => {
-		// 	const instance = setupHtml(
-		// 		"<p>Here is a paragraph <!--[I] - Information: You have been informed! --></p>"
-		// 	);
-		// 	const wrapper = instance.wrapper;
-		// 	expect(wrapper).toMatchSnapshot();
-		// 	wrapper.find("button.ConversionError__Button").simulate("click");
-		// 	expect(wrapper).toMatchSnapshot();
-		// });
-
-	});
+			)}
+		</div>,
+	);
+	expect(container.querySelectorAll(".ConversionError.ConversionError--W ul li")[0].textContent).toEqual("You have been warned!");
+	expect(container.querySelectorAll(".ConversionError.ConversionError--E ul li")[0].textContent).toEqual("There's an error!");
+	expect(container.querySelectorAll(".ConversionError.ConversionError--I ul li")[0].textContent).toEqual("You have been informed!");
 });

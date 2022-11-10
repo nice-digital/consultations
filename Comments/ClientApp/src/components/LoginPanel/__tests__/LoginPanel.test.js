@@ -1,9 +1,6 @@
-/* eslint-env jest */
 import React from "react";
-import { mount } from "enzyme";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import toJson from "enzyme-to-json";
-
 import { UserContext } from "../../../context/UserContext";
 import { LoginPanel } from "../LoginPanel";
 
@@ -13,149 +10,110 @@ const loginPanelFakeProps = {
 	},
 };
 
-describe("LoginPanel", () => {
-	let contextWrapper = null;
+test("shows first menu screen when first loaded", () => {
+	render(
+		<UserContext.Provider value={{}}>
+			<LoginPanel {...loginPanelFakeProps} />
+		</UserContext.Provider>,
+	);
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+});
 
-	beforeEach(() => {
-		contextWrapper = {
-			wrappingComponent: UserContext.Provider,
-			wrappingComponentProps: {
-				value: {},
-			},
-		};
-	});
+test("shows second menu screen when organisation option has been selected", () => {
+	render(
+		<UserContext.Provider value={{}}>
+			<LoginPanel { ...loginPanelFakeProps } />
+		</UserContext.Provider>,
+	);
+	const radioButton = screen.getByLabelText("As part of an organisation");
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	fireEvent.click(radioButton);
+	expect(screen.queryAllByRole("heading", { name: "How are you taking part in this consultation?" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "Do you have a code from your organisation?" })).toBeInTheDocument();
+});
 
-	it("shows first menu screen when first loaded", () => {
-		const wrapper = mount(<LoginPanel { ...loginPanelFakeProps } />, contextWrapper);
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-	});
-
-	it("shows second menu screen when organisation option has been selected", () => {
-		const wrapper = mount(<LoginPanel { ...loginPanelFakeProps } />, contextWrapper);
-		const radioButton = wrapper.find("#respondingAsOrg--organisation");
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		radioButton.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(false);
-		expect(wrapper.find("#loginPanelScreen2").exists()).toBe(true);
-	});
-
-	it("shows login when individual option has been selected", () => {
-		const wrapper = mount(
+test("shows login when individual option has been selected", () => {
+	render(
+		<UserContext.Provider value={{}}>
 			<MemoryRouter>
 				<LoginPanel { ...loginPanelFakeProps } />
-			</MemoryRouter>,
-			contextWrapper,
-		);
-		const radioButton = wrapper.find("#respondingAsOrg--individual");
+			</MemoryRouter>
+		</UserContext.Provider>,
+	);
+	const radioButton = screen.getByLabelText("As an individual");
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	fireEvent.click(radioButton);
+	expect(screen.queryAllByRole("heading", { name: "How are you taking part in this consultation?" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "Make or review comments as an individual" })).toBeInTheDocument();
+});
 
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		radioButton.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(false);
-		expect(wrapper.find("#loginBanner").exists()).toBe(true);
-		expect(wrapper.find("h3").text()).toEqual("Make or review comments as an individual");
-	});
-
-	it("shows second screen and organisation code text box when 'user has code' is selected", () => {
-		const wrapper = mount(
+test("shows second screen and organisation code text box when 'user has code' is selected", () => {
+	render(
+		<UserContext.Provider value={{}}>
 			<MemoryRouter>
 				<LoginPanel { ...loginPanelFakeProps } />
-			</MemoryRouter>,
-			contextWrapper,
-		);
-		const radioButton = wrapper.find("#respondingAsOrg--organisation");
+			</MemoryRouter>
+		</UserContext.Provider>,
+	);
+	const radioButton = screen.getByLabelText("As part of an organisation");
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	fireEvent.click(radioButton);
+	expect(screen.queryAllByRole("heading", { name: "How are you taking part in this consultation?" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "Do you have a code from your organisation?" })).toBeInTheDocument();
+	const radioButton2 = screen.getByLabelText("Yes, I have a code provided by my organisation");
+	fireEvent.click(radioButton2);
+	expect(screen.getByLabelText("Enter your organisation code")).toBeInTheDocument();
+});
 
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		radioButton.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(false);
-		expect(wrapper.find("#loginPanelScreen2").exists()).toBe(true);
-
-		const radioButton2 = wrapper.find("#respondingAsOrgType--code");
-
-		radioButton2.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen2").exists()).toBe(true);
-		expect(wrapper.find("#loginBanner").exists()).toBe(true);
-		expect(wrapper.find(".input__label").text()).toEqual("Enter your organisation code");
-	});
-
-	it("goes back to previous screen when back has been clicked", () => {
-		const wrapper = mount(
+test("goes back to previous screen when back has been clicked", () => {
+	render(
+		<UserContext.Provider value={{}}>
 			<MemoryRouter>
 				<LoginPanel { ...loginPanelFakeProps } />
-			</MemoryRouter>,
-			contextWrapper,
-		);
-		const radioButton = wrapper.find("#respondingAsOrg--individual");
+			</MemoryRouter>
+		</UserContext.Provider>,
+	);
+	const radioButton = screen.getByLabelText("As an individual");
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	fireEvent.click(radioButton);
+	expect(screen.queryAllByRole("heading", { name: "How are you taking part in this consultation?" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "Make or review comments as an individual" })).toBeInTheDocument();
+	const backButton = screen.getByText(/Back/i, { selector: "button" });
+	fireEvent.click(backButton);
+	expect(screen.queryAllByRole("heading", { name: "Make or review comments as an individual" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+});
 
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		radioButton.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(false);
-		expect(wrapper.find("#loginBanner").exists()).toBe(true);
-
-		const backButton = wrapper.find("#loginPanelBackButton");
-
-		backButton.simulate("click");
-		wrapper.update();
-
-		expect(wrapper.find("#loginBanner").exists()).toBe(false);
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-	});
-
-	it("clears radio buttons after navigating back to previous screen", () => {
-		const wrapper = mount(
+test("clears radio buttons after navigating back to previous screen", () => {
+	render(
+		<UserContext.Provider value={{}}>
 			<MemoryRouter>
 				<LoginPanel { ...loginPanelFakeProps } />
-			</MemoryRouter>,
-			contextWrapper,
-		);
-		const radioButton = wrapper.find("#respondingAsOrg--individual");
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		radioButton.simulate("change");
-		wrapper.update();
-
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(false);
-		expect(wrapper.find("#loginBanner").exists()).toBe(true);
-
-		const backButton = wrapper.find("#loginPanelBackButton");
-
-		backButton.simulate("click");
-		wrapper.update();
-
-		expect(wrapper.find("#loginBanner").exists()).toBe(false);
-		expect(wrapper.find("#loginPanelScreen1").exists()).toBe(true);
-
-		const allRadioButtons = wrapper.find({ type: "radio" });
-
-		allRadioButtons.forEach(node => {
-			expect(node.props().checked).toEqual(false);
-    	});
+			</MemoryRouter>
+		</UserContext.Provider>,
+	);
+	const radioButton = screen.getByLabelText("As an individual");
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	fireEvent.click(radioButton);
+	expect(screen.queryAllByRole("heading", { name: "How are you taking part in this consultation?" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "Make or review comments as an individual" })).toBeInTheDocument();
+	const backButton = screen.getByText(/Back/i, { selector: "button" });
+	fireEvent.click(backButton);
+	expect(screen.queryAllByRole("heading", { name: "Make or review comments as an individual" }).length).toBe(0);
+	expect(screen.getByRole("heading", { name: "How are you taking part in this consultation?" })).toBeInTheDocument();
+	const allRadioButtons = screen.queryAllByRole("radio");
+	allRadioButtons.map(node => {
+		expect(node.checked).toEqual(false);
 	});
+});
 
-	it("should match the snapshot after first loading up", () => {
-		const wrapper = mount(
+test("should match the snapshot after first loading up", () => {
+	const {container} = render(
+		<UserContext.Provider value={{}}>
 			<MemoryRouter>
 				<LoginPanel { ...loginPanelFakeProps } />
-			</MemoryRouter>,
-			contextWrapper,
-		);
-		wrapper.update();
-		expect(toJson(wrapper, { noKey: true, mode: "deep" })).toMatchSnapshot();
-	});
+			</MemoryRouter>
+		</UserContext.Provider>,
+	);
+	expect(container).toMatchSnapshot();
 });

@@ -1,13 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Submitted page should match snapshot with supplied data 1`] = `
-Array [
-  "",
+exports[`should match snapshot with supplied data 1`] = `
+<div>
   <div
-    className="container"
+    class="container"
   >
     <div
-      className="grid"
+      class="grid"
     >
       <div
         data-g="12"
@@ -16,192 +15,180 @@ Array [
           aria-label="Breadcrumbs"
         >
           <p
-            className="visually-hidden"
+            class="visually-hidden"
           >
             You are here:
           </p>
           <ol
-            className="breadcrumbs"
-            itemScope={true}
-            itemType="http://schema.org/BreadcrumbList"
+            class="breadcrumbs"
+            itemscope=""
+            itemtype="http://schema.org/BreadcrumbList"
           >
             <li
-              className="breadcrumbs__crumb"
-              itemProp="itemListElement"
-              itemScope={true}
-              itemType="http://schema.org/ListItem"
-              onClick={[Function]}
+              class="breadcrumbs__crumb"
+              itemprop="itemListElement"
+              itemscope=""
+              itemtype="http://schema.org/ListItem"
               role="presentation"
             >
               <a
                 href="/"
-                itemProp="item"
+                itemprop="item"
               >
                 <span
-                  itemProp="name"
+                  itemprop="name"
                 >
                   Home
                 </span>
               </a>
               <meta
-                content={0}
-                itemProp="position"
+                content="0"
+                itemprop="position"
               />
             </li>
             <li
-              className="breadcrumbs__crumb"
-              itemProp="itemListElement"
-              itemScope={true}
-              itemType="http://schema.org/ListItem"
-              onClick={[Function]}
+              class="breadcrumbs__crumb"
+              itemprop="itemListElement"
+              itemscope=""
+              itemtype="http://schema.org/ListItem"
               role="presentation"
             >
               <a
                 href="/guidance/indevelopment/gid-ta10232/consultation/"
-                itemProp="item"
+                itemprop="item"
               >
                 <span
-                  itemProp="name"
+                  itemprop="name"
                 >
                   Consultation title
                 </span>
               </a>
               <meta
-                content={1}
-                itemProp="position"
+                content="1"
+                itemprop="position"
               />
             </li>
             <li
-              className="breadcrumbs__crumb"
-              itemProp="itemListElement"
-              itemScope={true}
-              itemType="http://schema.org/ListItem"
-              onClick={[Function]}
+              class="breadcrumbs__crumb"
+              itemprop="itemListElement"
+              itemscope=""
+              itemtype="http://schema.org/ListItem"
               role="presentation"
             >
               <a
                 href="/consultations/1/1/introduction"
-                itemProp="item"
+                itemprop="item"
               >
                 <span
-                  itemProp="name"
+                  itemprop="name"
                 >
                   Consultation documents
                 </span>
               </a>
               <meta
-                content={2}
-                itemProp="position"
+                content="2"
+                itemprop="position"
               />
             </li>
           </ol>
         </nav>
         <main>
           <div
-            className="page-header"
+            class="page-header"
           >
-            Array [
-              <h1
-                className="page-header__heading mt--0"
-                data-qa-sel="changeable-page-header"
+            <h1
+              class="page-header__heading mt--0"
+              data-qa-sel="changeable-page-header"
+            >
+              Response submitted
+            </h1>
+            <div
+              class="mb--d"
+            >
+              <p
+                class="container container-full ml--0"
               >
-                Response submitted
-              </h1>,
-              <div
-                className="mb--d"
-              >
-                <p
-                  className="container container-full ml--0"
-                >
-                  <span>
-                    <span
-                      className="tag tag--open"
-                    >
-                      Open for comments
-                    </span>
-                     Open until
-                     
-                    <time
-                      dateTime={"2029-05-31T16:00:00.000Z"}
-                    >
-                      31 May 2029
-                    </time>
+                <span>
+                  <span
+                    class="tag tag--open"
+                  >
+                    Open for comments
                   </span>
-                    
-                  <a
-                    href="/leadinformation"
-                    onClick={[Function]}
-                  >
-                    Request commenting lead permission
-                  </a>
-                </p>
-              </div>,
-            ]
-            Array [
-              Array [
-                <h2>
-                  Your response was submitted 
-                   on 
+                   Open until
+                   
                   <time
-                    dateTime={"2019-07-15T13:24:18.473Z"}
+                    datetime="1874937600000"
                   >
-                    15 July 2019
+                    31 May 2029
                   </time>
-                  .
-                </h2>,
-                <ul
-                  className="list list--unstyled"
-                >
-                  <li>
-                    <a
-                      data-qa-sel="review-submitted-comments"
-                      href="/1/review"
-                      onClick={[Function]}
-                    >
-                      Review your response
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="undefined/api/exportexternal/1"
-                      onClick={[Function]}
-                    >
-                      Download submitted response (Excel)
-                    </a>
-                  </li>
-                </ul>,
-                <h2>
-                  What happens next?
-                </h2>,
-                <p>
-                  We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
-                </p>,
-                <hr />,
-              ],
-              <h2>
-                Help us improve our online commenting service
-              </h2>,
-              <p>
-                This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving it.
-              </p>,
-              <p>
-                Answer our short, anonymous survey (4 questions, 2 minutes).
-              </p>,
-              <p>
+                </span>
+                  
                 <a
-                  className="btn btn--cta"
-                  href="https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  href="/leadinformation"
                 >
-                  Answer the survey
+                  Request commenting lead permission
                 </a>
-              </p>,
-            ]
+              </p>
+            </div>
+            <h2>
+              Your response was submitted 
+               on 
+              <time
+                datetime="1563197058473"
+              >
+                15 July 2019
+              </time>
+              .
+            </h2>
+            <ul
+              class="list list--unstyled"
+            >
+              <li>
+                <a
+                  data-qa-sel="review-submitted-comments"
+                  href="/1/review"
+                >
+                  Review your response
+                </a>
+              </li>
+              <li>
+                <a
+                  href="undefined/api/exportexternal/1"
+                >
+                  Download submitted response (Excel)
+                </a>
+              </li>
+            </ul>
+            <h2>
+              What happens next?
+            </h2>
+            <p>
+              We will review all the submissions received for this consultation. Our response will be published on the website around the time the guidance is published.
+            </p>
+            <hr />
+            <h2>
+              Help us improve our online commenting service
+            </h2>
+            <p>
+              This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving it.
+            </p>
+            <p>
+              Answer our short, anonymous survey (4 questions, 2 minutes).
+            </p>
+            <p>
+              <a
+                class="btn btn--cta"
+                href="https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Answer the survey
+              </a>
+            </p>
           </div>
         </main>
       </div>
     </div>
-  </div>,
-]
+  </div>
+</div>
 `;

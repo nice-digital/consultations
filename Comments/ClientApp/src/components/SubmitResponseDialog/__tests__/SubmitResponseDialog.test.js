@@ -1,243 +1,199 @@
-/* global jest */
-
 import React from "react";
-import { shallow } from "enzyme";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SubmitResponseDialog } from "../SubmitResponseDialog";
 import questionsWithAnswer from "../../SubmitResponseFeedback/__tests__/questionsWithAnswer.json";
 import questionsWithMultipleAnswers from "../../SubmitResponseFeedback/__tests__/questionsWithMultipleAnswers.json";
 
-describe("[ClientApp] ", () => {
-	describe("Submit response dialog", () => {
+const fakeProps = {
+	isAuthorised: true,
+	submittedDate: null,
+	validToSubmit: true,
+	submitConsultation: jest.fn(),
+	fieldsChangeHandler: jest.fn(),
+	organisationName: "",
+	tobaccoDisclosure: "",
+	hasTobaccoLinks: "no",
+	respondingAsOrganisation: "no",
+	unsavedIds: [],
+	questions: questionsWithAnswer,
+};
 
-		const fakeProps = {
-			isAuthorised: true,
-			submittedDate: null,
-			validToSubmit: true,
-			submitConsultation: jest.fn(),
-			fieldsChangeHandler: jest.fn(),
-			organisationName: "",
-			tobaccoDisclosure: "",
-			hasTobaccoLinks: "no",
-			respondingAsOrganisation: "no",
-			unsavedIds: [],
-			questions: questionsWithAnswer,
-		};
+test("should fire parent change handler if the input values change", () => {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.respondingAsOrganisation = true;
+	render(<SubmitResponseDialog {...localProps} />);
+	const orgNameInput = screen.getByLabelText("Enter the name of your organisation");
+	fireEvent.change(orgNameInput, {target: {value: "Hi!"}});
+	expect(localProps.fieldsChangeHandler).toHaveBeenCalled();
+});
 
-		it("should fire parent change handler if the input values change", () => {
-			const localProps = fakeProps;
-			localProps.respondingAsOrganisation = true;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			wrapper.find("input#organisationName").simulate("change", {target: {value: "h"}});
-			wrapper.find("input#organisationName").simulate("change", {target: {value: "i"}});
-			wrapper.find("input#organisationName").simulate("change", {target: {value: "!"}});
-			expect(localProps.fieldsChangeHandler.mock.calls[2][0].target.value).toBe("!");
-			expect(localProps.fieldsChangeHandler.mock.calls.length).toEqual(3);
-		});
+test("should not reveal text input unless radio button 'yes' is selected", async () => {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.respondingAsOrganisation = false;
+	const {rerender} = render(<SubmitResponseDialog {...localProps} />);
+	const orgNameInput = screen.queryAllByLabelText("Enter the name of your organisation");
+	expect(orgNameInput.length).toEqual(0);
+	localProps.respondingAsOrganisation = "yes";
+	rerender(<SubmitResponseDialog {...localProps} />);
+	expect(screen.getByLabelText("Enter the name of your organisation")).toBeInTheDocument();
+});
 
-		it("should not reveal text input unless radio button 'yes' is selected", () => {
-			const localProps = fakeProps;
-			localProps.respondingAsOrganisation = false;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("input#organisationName").length).toEqual(0);
-			localProps.respondingAsOrganisation = "yes";
-			const newWrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(newWrapper.find("input#organisationName").length).toEqual(1);
-		});
+test("should not reveal organisation questions if the user is a lead for an organisation", () => {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.isLead = true;
+	render(<SubmitResponseDialog {...localProps} />);
+	expect(screen.queryAllByLabelText("Yes", { selector: "[name='respondingAsOrganisation']" }).length).toEqual(0);
+});
 
-		it("should not reveal organisation questions if the user is a lead for an organisation", () => {
-			const localProps = fakeProps;
-			localProps.isLead = true;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("input#respondingAsOrganisation--true").length).toEqual(0);
-		});
+test("should not allow submission if the mandatory questions have not been answered 1", async () => {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = null; // not answered at all
+	localProps.respondingAsOrganisation = null; // not answered at all
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+});
 
-		it("should not allow submission if the mandatory questions have not been answered 1", () => {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = null; // not answered at all
-			localProps.respondingAsOrganisation = null; // not answered at all
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
+test("should not allow submission if the mandatory questions have not been answered 2", async ()=> {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = false;
+	localProps.respondingAsOrganisation = null; // not answered at all
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+});
 
-		it("should not allow submission if the manadatory questions have not been answered 2", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = false;
-			localProps.respondingAsOrganisation = null; // not answered at all
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
+test("should not allow submission if the mandatory questions have not been answered 3", async ()=> {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = null; // not answered at all
+	localProps.respondingAsOrganisation = false;
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+});
 
-		it("should not allow submission if the manadatory questions have not been answered 3", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = null; // not answered at all
-			localProps.respondingAsOrganisation = false;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
+test("should allow submission if the mandatory questions have been answered 1", async ()=> {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = false;
+	localProps.respondingAsOrganisation = false;
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	const submitResponseFeedback = screen.queryAllByText("You can't submit your response yet");
+	expect(submitResponseFeedback.length).toEqual(0);
+});
 
-		it("should allow submission if the manadatory questions have been answered 1", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = false;
-			localProps.respondingAsOrganisation = false;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-		});
+test("should allow submission if the mandatory questions have been answered 2", async ()=> {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = true;
+	localProps.respondingAsOrganisation = false;
+	localProps.tobaccoDisclosure = "test";
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	const submitResponseFeedback = screen.queryAllByText("You can't submit your response yet");
+	expect(submitResponseFeedback.length).toEqual(0);
+});
 
-		it("should allow submission if the manadatory questions have been answered 2", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = true;
-			localProps.respondingAsOrganisation = false;
-			localProps.tobaccoDisclosure = "test";
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-		});
+test("should allow submission if the mandatory questions have been answered 3", async ()=> {
+	const localProps = Object.assign({}, fakeProps);
+	localProps.validToSubmit = true;
+	localProps.hasTobaccoLinks = false;
+	localProps.respondingAsOrganisation = true;
+	localProps.organisationName = "test";
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	const submitResponseFeedback = screen.queryAllByText("You can't submit your response yet");
+	expect(submitResponseFeedback.length).toEqual(0);
+});
 
-		it("should allow submission if the manadatory questions have been answered 3", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = false;
-			localProps.respondingAsOrganisation = true;
-			localProps.organisationName = "test";
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-		});
+test("should fire parent submit function when the submit button is clicked", async () => {
+	const localProps = {
+		isAuthorised: true,
+		submittedDate: null,
+		validToSubmit: true,
+		organisationName: "",
+		tobaccoDisclosure: "",
+		hasTobaccoLinks: false,
+		respondingAsOrganisation: false,
+		submitConsultation: jest.fn(),
+		fieldsChangeHandler: jest.fn(),
+		unsavedIds: [],
+		questions: questionsWithAnswer,
+	};
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	expect(localProps.submitConsultation).toHaveBeenCalled();
+});
 
-		it("should not allow submission if the manadatory questions have not been answered 7", ()=> {
-			const localProps = fakeProps;
-			localProps.validToSubmit = true;
-			localProps.hasTobaccoLinks = false;
-			localProps.respondingAsOrganisation = true;
-			localProps.organisationName = "";
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
+test("should not fire parent submit function when the submit button is clicked, if form is in invalid state, and should instead show the feedback panel", async () => {
+	const localProps = {
+		isAuthorised: true,
+		submittedDate: null,
+		validToSubmit: false,
+		submitConsultation: jest.fn(),
+		fieldsChangeHandler: jest.fn(),
+		organisationName: "",
+		tobaccoDisclosure: "",
+		hasTobaccoLinks: "no",
+		respondingAsOrganisation: "no",
+		unsavedIds: [],
+		questions: questionsWithAnswer,
+	};
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+	expect(localProps.submitConsultation).toHaveBeenCalledTimes(0);
+});
 
-		it("should fire parent submit function when the submit button is clicked", () => {
-			const localProps = {
-				isAuthorised: true,
-				submittedDate: null,
-				validToSubmit: true,
-				organisationName: "",
-				tobaccoDisclosure: "",
-				hasTobaccoLinks: false,
-				respondingAsOrganisation: false,
-				submitConsultation: jest.fn(),
-				unsavedIds: [],
-				questions: questionsWithAnswer,
-			};
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-		});
+test("should prevent submission if there are currently unsaved changes to any comments or answers", async () => {
+	const localProps = fakeProps;
+	localProps.unsavedIds = ["1001q","2002c"];
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+});
 
-		it("should not fire parent submit function when the submit button is clicked, if form is in invalid state, and should instead show the feedback panel", () => {
-			const localProps = fakeProps;
-			localProps.validToSubmit = false;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
+test("should prevent submission if there are too many answers to a question", async () => {
+	const localProps = fakeProps;
+	localProps.questions = questionsWithMultipleAnswers;
+	render(<SubmitResponseDialog {...localProps} />);
+	fireEvent.click(screen.getByRole("button", { name: "Submit my response" }));
+	await waitFor(() => screen.getByRole("button", { name: "Yes submit my response" }));
+	fireEvent.click(screen.getByRole("button", { name: "Yes submit my response" }));
+	await waitFor(() => screen.getByText("You can't submit your response yet"));
+	expect(screen.getByText("You can't submit your response yet")).toBeInTheDocument();
+});
 
-		it("should prevent submission if there are currently unsaved changes to any comments or answers",() => {
-			const localProps = fakeProps;
-			localProps.unsavedIds = ["1001q","2002c"];
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
-
-		it("should prevent submission if there are too many answers to a question",() => {
-			const localProps = fakeProps;
-			localProps.questions = questionsWithMultipleAnswers;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.state().feedbackVisible).toEqual(false);
-			expect(wrapper.state().showSubmitWarning).toEqual(false);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().showSubmitWarning).toEqual(true);
-			wrapper.find("#submitButton").simulate("click");
-			wrapper.update();
-			expect(wrapper.state().feedbackVisible).toEqual(true);
-		});
-
-		it("should not display a submit button if the current user isn't authorised", () => {
-			const localProps = fakeProps;
-			localProps.isAuthorised = false;
-			const wrapper = shallow(<SubmitResponseDialog {...localProps} />);
-			expect(wrapper.find("button").length).toEqual(0);
-		});
-
-	});
+test("should not display a submit button if the current user isn't authorised", () => {
+	const localProps = fakeProps;
+	localProps.isAuthorised = false;
+	render(<SubmitResponseDialog {...localProps} />);
+	expect(screen.queryAllByRole("button").length).toEqual(0);
 });

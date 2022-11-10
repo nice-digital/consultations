@@ -1,102 +1,63 @@
-/* eslint-env jest */
 import React from "react";
-import { shallow } from "enzyme";
-
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { FilterOption } from "../FilterOption";
 
-describe("[Consultations]", () => {
-	describe("FilterOption", () => {
+test("appends query string to href when checkbox is selected", () => {
+	const historyMock = { push: jest.fn() };
+	const optionModel = {
+		id: "oId",
+		isSelected: false,
+	};
+	render(<FilterOption groupId="gId" option={optionModel} path="/test" history={historyMock} />);
+	const checkbox = screen.getByRole("checkbox");
+	fireEvent.click(checkbox);
+	expect(checkbox.checked).toEqual(true);
+	expect(historyMock.push).toHaveBeenCalledWith("/test?gId=oId");
+});
 
-		describe("getHref", () => {
-			it("appends query string to href when checkbox is selected", () => {
-				const optionModel = {
-					id: "oId",
-					isSelected: true,
-				};
-				const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} path="/test" />);
-				expect(filterOption.instance().getHref()).toEqual("/test?gId=oId");
-			});
+test("removes query string from href when checkbox is unselected", () => {
+	const historyMock = { push: jest.fn() };
+	const optionModel = {
+		id: "oId",
+		isSelected: true,
+	};
+	render(<FilterOption groupId="gId" option={optionModel} path="/test?gId=oId" history={historyMock} />);
+	const checkbox = screen.getByRole("checkbox");
+	fireEvent.click(checkbox);
+	expect(checkbox.checked).toEqual(false);
+	expect(historyMock.push).toHaveBeenCalledWith("/test");
+});
 
-			it("removes query string from href when checkbox is unselected", () => {
-				const optionModel = {
-					id: "oId",
-					isSelected: false,
-				};
-				const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} path="/test?gId=oId" />);
-				expect(filterOption.instance().getHref()).toEqual("/test");
-			});
-		});
 
-		it("renders a checkbox wrapped in a label", () => {
-			const optionModel = {
-				id: "oId",
-				isSelected: false,
-				label: "Test",
-			};
-			const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} />);
-			expect(filterOption.is("label")).toEqual(true);
-			expect(filterOption.find("label input").length).toEqual(1);
-		});
+test("renders a checkbox wrapped in a label", () => {
+	const optionModel = {
+		id: "oId",
+		isSelected: false,
+		label: "Test",
+	};
+	render(<FilterOption groupId="gId" option={optionModel} />);
+	const filterOption = screen.getByText("Test", { selector: "label" });
+	const { queryAllByRole } = within(filterOption);
+	expect(queryAllByRole("checkbox").length).toEqual(1);
+});
 
-		it("label for attribute matches checkbox id", () => {
-			const optionModel = {
-				id: "oId",
-				isSelected: false,
-				label: "Test",
-			};
-			const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} />);
-			const label = filterOption.find("label");
-			const input = filterOption.find("input");
-			expect(label.prop("htmlFor")).toEqual(input.prop("id"));
-		});
+test("label for attribute matches checkbox id", () => {
+	const optionModel = {
+		id: "oId",
+		isSelected: false,
+		label: "Test",
+	};
+	render(<FilterOption groupId="gId" option={optionModel} />);
+	const label = screen.getByText("Test", { selector: "label" });
+	const input = screen.getByRole("checkbox");
+	expect(label.getAttribute("for")).toEqual(input.getAttribute("id"));
+});
 
-		it("passes correct props to checkbox", () => {
-			const optionModel = {
-				id: "oId",
-				isSelected: true,
-				label: "Test option",
-			};
-			const filterOption = shallow(<FilterOption groupId="gId" groupName="Test group" option={optionModel} />);
-			const input = filterOption.find("input");
-
-			const expectedProps = {
-				type: "checkbox",
-				id: "filter_gId_oId",
-				name: "gId",
-				value: "oId",
-				checked: true,
-				"aria-controls": "results-info-count",
-				title: "Test group - Test option",
-				className: "gtm-topic-list-filter-deselect",
-				onChange: filterOption.instance().handleCheckboxChange,
-			};
-
-			expect(input.props()).toEqual(expectedProps);
-		});
-
-		it("label element text is option prop label", () => {
-			const optionModel = {
-				label: "Test",
-			};
-			const filterOption = shallow(<FilterOption option={optionModel} />);
-			const label = filterOption.find("label");
-			expect(label.text()).toEqual("Test");
-		});
-
-		it("pushes history state when checkbox is changed", () => {
-			const optionModel = {
-				id: "oId",
-				isSelected: false,
-			};
-			const history = { push: jest.fn() };
-			const event = { preventDefault: jest.fn() };
-
-			const filterOption = shallow(<FilterOption groupId="gId" option={optionModel} history={history} path="/test?a=b" />);
-
-			filterOption.find("input").simulate("change", event);
-
-			expect(history.push).toHaveBeenCalledWith(filterOption.instance().getHref());
-		});
-
-	});
+test("label element text is option prop label", () => {
+	const optionModel = {
+		label: "Test",
+	};
+	render(<FilterOption option={optionModel} />);
+	const label = screen.getByText("Test", { selector: "label" });
+	expect(label).toBeInTheDocument();
 });

@@ -3,7 +3,7 @@ import { objectToQueryString, nextTick, replaceFormat, isHttpLink } from "../uti
 describe("[ClientApp] ", () => {
 	describe("Utils ", () => {
 		describe("objectToQueryString", () => {
-			it("should take an object and create a query string", () => {
+			test("should take an object and create a query string", () => {
 				expect(objectToQueryString({
 					value1: "aValue",
 					value2: "anotherValue",
@@ -20,7 +20,7 @@ describe("[ClientApp] ", () => {
 		});
 
 		describe("nextTick", () => {
-			it("should return a resolved promise object", (done) => {
+			test("should return a resolved promise object", (done) => {
 				expect(nextTick().then( () => done() ).catch( () => done.fail()));
 			});
 		});
@@ -30,25 +30,25 @@ describe("[ClientApp] ", () => {
 			const stringWithOneReplaceableValue = "/consultations/api/comment/{0}";
 			const stringWithTwoReplaceableValues = "/consultations/api/comment/{0}/{1}";
 
-			it("should return string unchanged with null passed", () => {
+			test("should return string unchanged with null passed", () => {
 				expect(replaceFormat(stringWithNoReplaceableValues, null)).toEqual(stringWithNoReplaceableValues);
 			});
-			it("should return string unchanged with undefined passed", () => {
+			test("should return string unchanged with undefined passed", () => {
 				expect(replaceFormat(stringWithNoReplaceableValues, undefined)).toEqual(stringWithNoReplaceableValues);
 			});
-			it("should return string unchanged with object passed", () => {
+			test("should return string unchanged with object passed", () => {
 				expect(replaceFormat(stringWithNoReplaceableValues, {notvalid: true})).toEqual(stringWithNoReplaceableValues);
 			});
-			it("should return replaced string with one value passed", () => {
+			test("should return replaced string with one value passed", () => {
 				expect(replaceFormat(stringWithOneReplaceableValue, [100])).toEqual("/consultations/api/comment/100");
 			});
-			it("should return replaced string with two values passed", () => {
+			test("should return replaced string with two values passed", () => {
 				expect(replaceFormat(stringWithTwoReplaceableValues, [1001, 2002])).toEqual("/consultations/api/comment/1001/2002");
 			});
 		});
 
 		describe("isHttpLink", () => {
-			it("should return true if the string supplied begins with 'http'", () => {
+			test("should return true if the string supplied begins with 'http'", () => {
 				expect(isHttpLink("/an/internal/link")).toEqual(false);
 				expect(isHttpLink("http://external.com")).toEqual(true);
 				expect(isHttpLink("https://external.com")).toEqual(true);

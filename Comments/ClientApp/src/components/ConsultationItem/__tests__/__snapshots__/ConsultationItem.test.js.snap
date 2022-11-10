@@ -1,130 +1,131 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Download Component should match snapshot with supplied data 1`] = `
-<li
-  className="ConsultationItem"
->
-  <article
-    className="card"
+exports[`should match snapshot with supplied data 1`] = `
+<div>
+  <li
+    class="ConsultationItem"
   >
-    <header
-      className="card__header"
+    <article
+      class="card"
     >
-      <h3
-        className="card__heading"
+      <header
+        class="card__header"
       >
-        <a
-          href="/123/1/introduction"
-          onClick={[Function]}
+        <h3
+          class="card__heading"
         >
-          Consultation Title
-        </a>
-      </h3>
-    </header>
-    <dl
-      className="card__metadata"
-    >
-      <div
-        className="card__metadatum"
-      >
-        <dt
-          className="visually-hidden"
-        >
-          Consultation state
-        </dt>
-        <dd>
-          <span
-            className="tag tag--open"
+          <a
+            href="/123/1/introduction"
           >
-            Open
-          </span>
-        </dd>
-      </div>
-      <div
-        className="card__metadatum"
+            Consultation Title
+          </a>
+        </h3>
+      </header>
+      <dl
+        class="card__metadata"
       >
-        15
-         
-        responses
-         from your organisation
-      </div>
-      <div>
         <div
-          className="card__metadatum"
+          class="card__metadatum"
         >
           <dt
-            className="visually-hidden"
+            class="visually-hidden"
           >
-            Project ID
-          </dt>
-          <dd
-            title="Consultation ID 123"
-          >
-            TA-123
-          </dd>
-        </div>
-        <div
-          className="card__metadatum"
-        >
-          <dt
-            className="visually-hidden"
-          >
-            Product type name
+            Consultation state
           </dt>
           <dd>
-            TA
-          </dd>
-        </div>
-        <div
-          className="card__metadatum"
-        >
-          <dd>
-            Closes on
-             
-            <strong>
-              <time
-                dateTime={"2059-12-17T03:24:00.000Z"}
-              >
-                17 December 2059
-              </time>
-            </strong>
-          </dd>
-        </div>
-        <div
-          className="card__metadatum"
-        >
-          <dd>
-            <a
-              href="fdfd/api/Export/123"
-              rel="noopener noreferrer"
-              target="_blank"
+            <span
+              class="tag tag--open"
             >
-              Download 
-              <strong>
-                1
-              </strong>
-               response
-            </a>
+              Open
+            </span>
           </dd>
         </div>
+        <div
+          class="card__metadatum"
+        >
+          15
+           
+          responses
+           from your organisation
+        </div>
+        <div>
+          <div
+            class="card__metadatum"
+          >
+            <dt
+              class="visually-hidden"
+            >
+              Project ID
+            </dt>
+            <dd
+              title="Consultation ID 123"
+            >
+              TA-123
+            </dd>
+          </div>
+          <div
+            class="card__metadatum"
+          >
+            <dt
+              class="visually-hidden"
+            >
+              Product type name
+            </dt>
+            <dd>
+              TA
+            </dd>
+          </div>
+          <div
+            class="card__metadatum"
+          >
+            <dd>
+              Closes on
+               
+              <strong>
+                <time
+                  datetime="2838857040000"
+                >
+                  17 December 2059
+                </time>
+              </strong>
+            </dd>
+          </div>
+          <div
+            class="card__metadatum"
+          >
+            <dd>
+              <a
+                href="fdfd/api/Export/123"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Download 
+                <strong>
+                  1
+                </strong>
+                 response
+                
+              </a>
+            </dd>
+          </div>
+        </div>
+      </dl>
+      <div>
+        <button
+          aria-controls="organisation-codes-123"
+          aria-expanded="false"
+          class="btn btn--inverse"
+          data-qa-sel="share-with-org-button"
+          id="share-organisation-123"
+          type="button"
+        >
+          Share with organisation 
+          <span
+            class="arrow-icon"
+          />
+        </button>
       </div>
-    </dl>
-    <div>
-      <button
-        aria-controls="organisation-codes-123"
-        aria-expanded={false}
-        className="btn btn--inverse"
-        data-qa-sel="share-with-org-button"
-        id="share-organisation-123"
-        onClick={[Function]}
-        type="button"
-      >
-        Share with organisation 
-        <span
-          className="arrow-icon"
-        />
-      </button>
-    </div>
-  </article>
-</li>
+    </article>
+  </li>
+</div>
 `;

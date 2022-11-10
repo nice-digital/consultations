@@ -1,150 +1,146 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  QuestionsFilter Component should match the snapshot when the filter is set to all 1`] = `
-<div
-  className="panel mb--d"
->
+exports[`should match the snapshot when the filter is set to all 1`] = `
+<div>
   <div
-    className="form__group form__group--text"
+    class="panel mb--d"
   >
-    <label
-      className="form__label"
-      htmlFor="textFilter"
-    >
-      <b>
-        Filter by question text
-      </b>
-    </label>
-    <input
-      className="form__input"
-      id="textFilter"
-      onChange={[Function]}
-      tabIndex={0}
-    />
-  </div>
-  <div
-    role="radiogroup"
-  >
-    <label
-      className="form__label"
-      htmlFor="filterByRole"
-    >
-      <b>
-        Filter by directorate
-      </b>
-    </label>
     <div
-      className="form__group form__group--radio form__group--inline"
+      class="form__group form__group--text"
     >
-      <input
-        checked={false}
-        className="form__radio"
-        id="filterByRole--mine"
-        name="filterByRole"
-        onChange={[Function]}
-        type="radio"
-        value={true}
-      />
       <label
-        className="form__label form__label--radio"
-        htmlFor="filterByRole--mine"
+        class="form__label"
+        for="textFilter"
       >
-        My Directorate
+        <b>
+          Filter by question text
+        </b>
       </label>
+      <input
+        class="form__input"
+        id="textFilter"
+        tabindex="0"
+        value=""
+      />
     </div>
     <div
-      className="form__group form__group--radio form__group--inline"
+      role="radiogroup"
     >
-      <input
-        checked={true}
-        className="form__radio"
-        id="filterByRole--all"
-        name="filterByRole"
-        onChange={[Function]}
-        type="radio"
-        value={false}
-      />
       <label
-        className="form__label form__label--radio"
-        htmlFor="filterByRole--all"
+        class="form__label"
+        for="filterByRole"
       >
-        All Directorates
+        <b>
+          Filter by directorate
+        </b>
       </label>
+      <div
+        class="form__group form__group--radio form__group--inline"
+      >
+        <input
+          class="form__radio"
+          id="filterByRole--mine"
+          name="filterByRole"
+          type="radio"
+          value="true"
+        />
+        <label
+          class="form__label form__label--radio"
+          for="filterByRole--mine"
+        >
+          My Directorate
+        </label>
+      </div>
+      <div
+        class="form__group form__group--radio form__group--inline"
+      >
+        <input
+          class="form__radio"
+          id="filterByRole--all"
+          name="filterByRole"
+          type="radio"
+          value="false"
+        />
+        <label
+          class="form__label form__label--radio"
+          for="filterByRole--all"
+        >
+          All Directorates
+        </label>
+      </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`[ClientApp]  QuestionsFilter Component should match the snapshot when the filter is set to directorate 1`] = `
-<div
-  className="panel mb--d"
->
+exports[`should match the snapshot when the filter is set to directorate 1`] = `
+<div>
   <div
-    className="form__group form__group--text"
+    class="panel mb--d"
   >
-    <label
-      className="form__label"
-      htmlFor="textFilter"
-    >
-      <b>
-        Filter by question text
-      </b>
-    </label>
-    <input
-      className="form__input"
-      id="textFilter"
-      onChange={[Function]}
-      tabIndex={0}
-    />
-  </div>
-  <div
-    role="radiogroup"
-  >
-    <label
-      className="form__label"
-      htmlFor="filterByRole"
-    >
-      <b>
-        Filter by directorate
-      </b>
-    </label>
     <div
-      className="form__group form__group--radio form__group--inline"
+      class="form__group form__group--text"
     >
-      <input
-        checked={false}
-        className="form__radio"
-        id="filterByRole--mine"
-        name="filterByRole"
-        onChange={[Function]}
-        type="radio"
-        value={true}
-      />
       <label
-        className="form__label form__label--radio"
-        htmlFor="filterByRole--mine"
+        class="form__label"
+        for="textFilter"
       >
-        My Directorate
+        <b>
+          Filter by question text
+        </b>
       </label>
+      <input
+        class="form__input"
+        id="textFilter"
+        tabindex="0"
+        value=""
+      />
     </div>
     <div
-      className="form__group form__group--radio form__group--inline"
+      role="radiogroup"
     >
-      <input
-        checked={false}
-        className="form__radio"
-        id="filterByRole--all"
-        name="filterByRole"
-        onChange={[Function]}
-        type="radio"
-        value={false}
-      />
       <label
-        className="form__label form__label--radio"
-        htmlFor="filterByRole--all"
+        class="form__label"
+        for="filterByRole"
       >
-        All Directorates
+        <b>
+          Filter by directorate
+        </b>
       </label>
+      <div
+        class="form__group form__group--radio form__group--inline"
+      >
+        <input
+          class="form__radio"
+          id="filterByRole--mine"
+          name="filterByRole"
+          type="radio"
+          value="true"
+        />
+        <label
+          class="form__label form__label--radio"
+          for="filterByRole--mine"
+        >
+          My Directorate
+        </label>
+      </div>
+      <div
+        class="form__group form__group--radio form__group--inline"
+      >
+        <input
+          class="form__radio"
+          id="filterByRole--all"
+          name="filterByRole"
+          type="radio"
+          value="false"
+        />
+        <label
+          class="form__label form__label--radio"
+          for="filterByRole--all"
+        >
+          All Directorates
+        </label>
+      </div>
     </div>
   </div>
 </div>

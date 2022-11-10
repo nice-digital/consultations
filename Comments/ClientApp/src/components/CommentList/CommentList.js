@@ -523,7 +523,7 @@ export class CommentList extends Component<PropsType, StateType> {
 														id="js-create-question-pdf"
 														className="btn btn--primary"
 														onClick={() => this.handleClick("createQuestionPDF")}>
-													Download questions (PDF)
+														Download questions (PDF)
 													</button>
 													{contextValue.isAuthorised ?
 														<p className="mt--0">Please answer the following questions</p>

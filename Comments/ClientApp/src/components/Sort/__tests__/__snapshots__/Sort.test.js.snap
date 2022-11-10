@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match the snapshot with supplied data 1`] = `
+<div>
+  <span
+    aria-hidden="true"
+  >
+    Sort by: 
+  </span>
+  <a
+    class="gtm-topic-list-sort-link"
+    href="test-path?Sort=DocumentAsc"
+  >
+    <span
+      class="visually-hidden"
+    >
+      Sort by
+    </span>
+     
+    Document order
+  </a>
+  <span
+    aria-label="or"
+  >
+     | 
+  </span>
+  <a
+    class="gtm-topic-list-sort-link"
+    href="test-path?Sort=DateDesc"
+  >
+    <span
+      class="visually-hidden"
+    >
+      Sort by
+    </span>
+     
+    Date
+  </a>
+</div>
+`;

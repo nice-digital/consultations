@@ -1,12 +1,8 @@
-/* eslint-env jest */
 import React from "react";
-import { mount, shallow } from "enzyme";
-import { Button } from "@nice-digital/nds-button";
-
+import { render, screen, fireEvent } from "@testing-library/react";
 import { GenerateCodeForOrg } from "../../GenerateCodeForOrg/GenerateCodeForOrg";
 
-describe("GenerateCodeForOrg", () => {
-
+test("should show generate button when no code has been generated", () => {
 	const fakePropsNoCode = {
 		canGenerateCollationCode: true,
 		collationCode: null,
@@ -15,27 +11,37 @@ describe("GenerateCodeForOrg", () => {
 		organisationName: "Super Magic Club",
 		consultationId: 111,
 	};
+	render(<GenerateCodeForOrg {...fakePropsNoCode} />);
+	expect(screen.getByRole("button", { name: "Generate" })).toBeInTheDocument();
+});
 
-	let fakePropsCode = {...fakePropsNoCode, consultationId: 111};
+test("should show the copy button when a code has been generated", () => {
+	const fakePropsCode = {
+		canGenerateCollationCode: false,
+		collationCode: "1234 5678 9123",
+		organisationAuthorisationId: 0,
+		organisationId: 999,
+		organisationName: "Super Magic Club",
+		consultationId: 111,
+	};
+	render(<GenerateCodeForOrg {...fakePropsCode} />);
+	expect(screen.getByRole("button", { name: "Copy code" })).toBeInTheDocument();
+});
 
-	fakePropsCode.canGenerateCollationCode = false;
-	fakePropsCode.collationCode = "1234 5678 9123";
-
-	it("should show generate button when no code has been generated", () => {
-		const wrapper = mount(<GenerateCodeForOrg {...fakePropsNoCode} />);
-		expect(wrapper.find(Button).render().text()).toEqual("Generate");
-	});
-
-	it("should show the copy button when a code has been generated", () => {
-		const wrapper = shallow(<GenerateCodeForOrg {...fakePropsCode} />);
-		expect(wrapper.find("button").text()).toEqual("Copy code");
-	});
-
-	it("should show copied text after the code has been copied", () => {
-		const wrapper = mount(<GenerateCodeForOrg {...fakePropsCode} />);
-		const instance = wrapper.instance();
-		instance.showCopiedLabel();
-		expect(wrapper.find("button").text()).toEqual("Copied");
-	});
-
+test("should show copied text after the code has been copied", () => {
+	const windowPrompt = window.prompt;
+  	window.prompt = jest.fn();
+	const fakePropsCode = {
+		canGenerateCollationCode: false,
+		collationCode: "1234 5678 9123",
+		organisationAuthorisationId: 0,
+		organisationId: 999,
+		organisationName: "Super Magic Club",
+		consultationId: 111,
+	};
+	render(<GenerateCodeForOrg {...fakePropsCode} />);
+	fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
+	const copySuccess = screen.getByRole("button", { name: "Copied" });
+	expect(copySuccess).toBeInTheDocument();
+	window.prompt = windowPrompt;
 });

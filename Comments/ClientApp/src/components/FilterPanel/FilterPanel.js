@@ -44,11 +44,11 @@ export class FilterPanel extends Component<PropsType, StateType> {
 							filterGroup={filterGroup}/>,
 					)}
 					{!this.state.canUseDOM &&
-					<button
-						type="submit"
-						className="btn filter-panel__submit">
-						Apply filters
-					</button>
+						<button
+							type="submit"
+							className="btn filter-panel__submit">
+							Apply filters
+						</button>
 					}
 				</div>
 			</div>

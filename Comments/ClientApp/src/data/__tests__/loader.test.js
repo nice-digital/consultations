@@ -9,7 +9,7 @@ describe("[ClientApp] ", () => {
 	describe("loader.js", () => {
 		describe("generateUrl function", () => {
 
-			it("should produce a string that only passes endpoint if it doesn't match a shortcut", () => {
+			test("should produce a string that only passes endpoint if it doesn't match a shortcut", () => {
 				const url = loader.generateUrl(
 					"myEndpoint",
 					"baseUrl",
@@ -24,7 +24,7 @@ describe("[ClientApp] ", () => {
 					.toEqual("myEndpoint");
 			});
 
-			it("should produce a string that contains replaced value in endpoint", () => {
+			test("should produce a string that contains replaced value in endpoint", () => {
 				const url = loader.generateUrl(
 					"editcomment",
 					"consultations",
@@ -34,7 +34,7 @@ describe("[ClientApp] ", () => {
 					.toEqual("consultations/api/Comment/1");
 			});
 
-			it("should produce a string that ends on a query of the supplied parameters", () => {
+			test("should produce a string that ends on a query of the supplied parameters", () => {
 				const url  = loader.generateUrl(
 					"chapter",
 					"testing",
@@ -49,7 +49,7 @@ describe("[ClientApp] ", () => {
 					.toEqual("testing/api/Chapter?value1=value1&value2=2&value3=");
 			});
 
-			it("should only return an appended query string if the parameters are supplied", () => {
+			test("should only return an appended query string if the parameters are supplied", () => {
 				const url  = loader.generateUrl(
 					"chapter",
 				);
@@ -69,7 +69,7 @@ describe("[ClientApp] ", () => {
 				},
 			];
 
-			it("axios should be called with the generated url", () => {
+			test("axios should be called with the generated url", () => {
 				expect.assertions(1);
 				mock.onAny().reply(200, {});
 				return loader.load(...options).then(response => {

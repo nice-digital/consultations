@@ -1,55 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[ClientApp]  Question Component should match snapshot with answer 1`] = `
-<li
-  className="CommentBox"
->
-  <h4
-    className="CommentBox__title mt--0 mb--0"
-    data-qa-sel="comment-box-title"
+exports[`should match snapshot with answer 1`] = `
+<div>
+  <li
+    class="CommentBox"
   >
-    Question on 
-    <span
-      className="text-lowercase"
+    <h4
+      class="CommentBox__title mt--0 mb--0"
+      data-qa-sel="comment-box-title"
     >
-      Consultation
-    </span>
-  </h4>
-  <div
-    className="font-weight-bold markdown mt--d mb--d"
-  >
-    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-  </div>
-  <section
-    role="form"
-  >
-    <form
-      className="mb--0 mt--e"
-      onSubmit={[Function]}
-    />
-  </section>
-</li>
+      Question on 
+      <span
+        class="text-lowercase"
+      >
+        Consultation
+      </span>
+    </h4>
+    <div
+      class="font-weight-bold markdown mt--d mb--d"
+    >
+      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+    </div>
+    <section
+      role="form"
+    >
+      <form
+        class="mb--0 mt--e"
+      />
+    </section>
+  </li>
+</div>
 `;
 
-exports[`[ClientApp]  Question Component should match snapshot without answer 1`] = `
-<li
-  className="CommentBox"
->
-  <h4
-    className="CommentBox__title mt--0 mb--0"
-    data-qa-sel="comment-box-title"
+exports[`should match snapshot without answer 1`] = `
+<div>
+  <li
+    class="CommentBox"
   >
-    Question on 
-    <span
-      className="text-lowercase"
+    <h4
+      class="CommentBox__title mt--0 mb--0"
+      data-qa-sel="comment-box-title"
     >
-      Consultation
-    </span>
-  </h4>
-  <div
-    className="font-weight-bold markdown mt--d mb--d"
-  >
-    Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
-  </div>
-</li>
+      Question on 
+      <span
+        class="text-lowercase"
+      >
+        Consultation
+      </span>
+    </h4>
+    <div
+      class="font-weight-bold markdown mt--d mb--d"
+    >
+      Which areas will have the biggest impact on practice and be challenging to implement? Please say for whom and why.
+    </div>
+  </li>
+</div>
 `;
