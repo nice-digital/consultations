@@ -73,14 +73,14 @@ namespace Comments.Services
             if (model.InitialPageView) //set defaults here for the filters - this code might be called by the SSR or by the client-side.
 			{
 				//if unset (by querystring) set the default for the contribution filter. - the filter should be enabled (HasContributed), for regular users (i.e. not admins or team users) and the user has contributed to any.
-				if (model.Contribution == null)
-				{
-					var userHasCommentedOrAnswered = sourceURIsCommentedOrAnswered.Any();
-					if ((!isAdminUser && !isTeamUser) && userHasCommentedOrAnswered)
-					{
-						model.Contribution = new List<ContributionStatus> {ContributionStatus.HasContributed};
-					}
-				}
+				//if (model.Contribution == null)
+				//{
+				//	var userHasCommentedOrAnswered = sourceURIsCommentedOrAnswered.Any();
+				//	if ((!isAdminUser && !isTeamUser) && userHasCommentedOrAnswered)
+				//	{
+				//		model.Contribution = new List<ContributionStatus> {ContributionStatus.HasContributed};
+				//	}
+				//}
 
 				//if unset (by querystring) set the default for the team filter - only for team users. if a user has admin and team rights, then admin overrules team and the filter will be unset.
 				if (model.Team == null && isTeamUser)
