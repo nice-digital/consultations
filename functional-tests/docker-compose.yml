@@ -42,10 +42,10 @@ services:
       - ./:/tests
       - /tests/node_modules
       - ./errorShots:/tests/errorShots
-    links:
-      - hub
-      - nginx
-      - comments
+    # links:
+      # - hub
+      # - nginx
+      # - comments
     environment:
       - TEAMCITY_VERSION
       - ACCOUNTS_EMAIL
@@ -71,10 +71,10 @@ services:
   comments:
     container_name: functional-tests_comments_1
     build: ./../Comments/
-    links:
-      - database
-      - redis
-      - api
+    # links:
+      # - database
+      # - redis
+    # - api
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -145,8 +145,8 @@ services:
     ports:
       - 80:80
       - 443:443
-    links:
-      - comments
+    # links:
+      # - comments
     networks:
       default:
         aliases:

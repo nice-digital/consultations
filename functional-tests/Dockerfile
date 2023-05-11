@@ -32,8 +32,8 @@ RUN curl -SL "$WAITFORIT_DOWNLOAD_URL" --output waitforit.tar.gz \
 
 WORKDIR /tests
 
-COPY package.json /tests
-COPY package-lock.json /tests
+COPY ./package.json /tests
+COPY ./package-lock.json /tests
 
 RUN npm ci --no-audit --quiet
 
