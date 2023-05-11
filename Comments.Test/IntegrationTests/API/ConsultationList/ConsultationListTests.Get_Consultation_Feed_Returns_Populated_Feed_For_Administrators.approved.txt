@@ -92,7 +92,7 @@
             "options":[
                 {
                     "id":"HasContributed",
-                    "label":"Your responses",
+                    "label":"My consultations",
                     "isSelected":false,
                     "filteredResultCount":0,
                     "unfilteredResultCount":2
