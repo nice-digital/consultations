@@ -39,7 +39,7 @@ services:
     container_name: functional-tests_tests_1
     build: .
     volumes:
-      - ./:/tests
+      # - ./:/tests:rw,z
       - /tests/node_modules
       - ./errorShots:/tests/errorShots
     # links:
@@ -139,9 +139,10 @@ services:
 
   nginx:
     container_name: functional-tests_nginx_1
-    image: nginx:latest
-    volumes:
-      - ./docker_ssl_proxy:/etc/nginx
+    build: ./docker_ssl_proxy
+    # image: nginx:latest
+    # volumes:
+      # - ./docker_ssl_proxy:/etc/nginx:z
     ports:
       - 80:80
       - 443:443
@@ -154,13 +155,14 @@ services:
 
   redis:
     container_name: functional-tests_redis_1
-    image: "redis:alpine3.15"
-    volumes:
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    build: ./redis
+    # image: "redis:alpine3.15"
+    # volumes:
+      # - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:z
     #command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    # command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     #command: ["redis-server", "--bind", "redis", "--port", "6379"]
 
 
@@ -173,7 +175,7 @@ services:
     environment:
       - HTTP_PORT
     volumes:
-      - ./../Indev.MockApi:/data
+      # - ./../Indev.MockApi:/data:z
       - /data/node_modules
     command: npm start
     networks:
