@@ -11,7 +11,7 @@ export function nodeIsInternalLink(node) {
 }
 
 export function nodeIsSubsection(node) {
-	return node.name === "p" && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
+	return (node.name === "p" || node.name === "article") && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
 }
 
 export function nodeIsTypeText(node) {
