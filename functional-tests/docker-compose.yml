@@ -71,10 +71,10 @@ services:
   comments:
     container_name: functional-tests_comments_1
     build: ./../Comments/
-    # links:
-      # - database
-      # - redis
-    # - api
+    depends_on:
+      - database
+      - redis
+      - api
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -146,8 +146,8 @@ services:
     ports:
       - 80:80
       - 443:443
-    # links:
-      # - comments
+    depends_on:
+      - comments
     networks:
       default:
         aliases:
