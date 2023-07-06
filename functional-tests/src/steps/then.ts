@@ -67,7 +67,7 @@ Then(/^I expect the first pagination option is "([^"]*)"$/,	validateFirstLinkInP
 
 Then(/^I expect all results are displayed$/, validateDownloadPageAllResults);
 
-Then(/^I expect the your responses filter to be selected by default$/,	validateResponsesFilterChecked);
+Then(/^I expect my consultations filter not to be selected by default$/,	validateResponsesFilterChecked);
 
 Then(/^I enter code user emailaddress "([A-Z0-9_]+)"$/, enterEmailaddress);
 

@@ -33,6 +33,8 @@ import { openQuestionPanel } from "../support/action/openQuestionPanel";
 import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButtonIntoView";
 import { selectValueFromDropdown } from "../support/action/selectFromDropdownByIndex";
 import { CodeLogin } from "../support/action/CodeLogin";
+import { selectMyConsultationFilter } from "../support/action/selectMyConsultationFilter";
+
 
 // E.g. When I click on text "Title here" in ".ancestor"
 When(/^I add the comment "([^"]*)"$/, enterComment);
@@ -88,3 +90,6 @@ When(/^I log into consultation with copied organisation code$/, CodeLogin);
 When(/^I click send your response to your organisation button$/,	clickSendYourResponseToYourOrganisationButton);
 
 When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);
+
+When(/^I select my consultations filter$/, selectMyConsultationFilter);
+

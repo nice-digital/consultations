@@ -32,7 +32,7 @@ namespace Comments.Test.Infrastructure
 					{
 						Id = "Contribution", Title = "Contribution filter group", Options = new List<FilterOption>()
 						{
-							new FilterOption("HasContributed", "Your responses")
+							new FilterOption("HasContributed", "My consultations")
 						}
 					}
 				},

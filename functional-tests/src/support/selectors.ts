@@ -51,6 +51,6 @@ export default {
 		firstPager: toQAselAndChild("pagination-section", 1),
 		secondPager: toQAselAndChild("pagination-section", 2),
 		nextPager: "body .pagination__pager.next",
-		yourResponsesFilter: "body .gtm-topic-list-filter-deselect",
+		myConsultationsFilter: "#filter_Contribution_HasContributed",
 	},
 };
