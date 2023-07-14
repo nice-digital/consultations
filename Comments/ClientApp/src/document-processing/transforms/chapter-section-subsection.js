@@ -10,7 +10,9 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 	let quote =  node.children.filter(nodeIsTypeText)[0].data;
 
 	if (nodeIsSubsection(node)) {
-		quote = node.children.filter(nodeIsSpanTag)[0].children.filter(nodeIsTypeText)[0].data;
+		quote = node.children.filter(nodeIsSpanTag);
+		quote = quote.length ? quote : node.children.filter(nodeIsNewArticleHeading);
+		quote = quote[0].children.filter(nodeIsTypeText)[0].data;
 		commentOn = "subsection";
 	}
 
@@ -83,9 +85,15 @@ function nodeIsParagraphNumber(node) {
 	return node.name === "span" && node.attribs && node.attribs["class"] === "paragraph-number";
 }
 
+function nodeIsNewArticleHeading(node) {
+	const nodeIsHeading = /h[1-6]/g.test(node.name);
+	return nodeIsHeading;
+}
+
 //subsection - paragraph element, with section number in a child span with class "paragraph-number"
 export const getSectionNumberFromParagraph = (node) => {
-	const paragraphNode = node.children.filter(nodeIsParagraphNumber);
+	let paragraphNode = node.children.filter(nodeIsParagraphNumber);
+	paragraphNode = paragraphNode.length ? paragraphNode : node.children.filter(nodeIsNewArticleHeading);
 	if (paragraphNode !== null && paragraphNode[0].children != null){
 		return paragraphNode[0].children[0].data.trim();
 	}
