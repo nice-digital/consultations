@@ -126,6 +126,8 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 9. The app will run in IIS Express on http://localhost:52679/
 10. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
 11. Run `npm test` in a separate window to run client side tests in watch mode
+12. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+13. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identity.nice.org.uk/ and give youself Administrator access to Consultations.
 
 ### Gotchas
 - `spa.UseReactDevelopmentServer` can be slow so try using `spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");` instead within [Startup.cs](Comments/Startup.cs).
