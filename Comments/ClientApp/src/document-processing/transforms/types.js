@@ -1,5 +1,5 @@
 export function nodeIsChapter(node){
-	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "chapter";
+	return (node.name === "a" || node.name === "h2") && node.attribs && node.attribs["data-heading-type"] === "chapter";
 }
 
 export function nodeIsSection(node) {
