@@ -1,9 +1,11 @@
 export function nodeIsChapter(node){
-	return (node.name === "a" || node.name === "h2") && node.attribs && node.attribs["data-heading-type"] === "chapter";
+	const isHeading = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.name);
+	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "chapter";
 }
 
 export function nodeIsSection(node) {
-	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "section";
+	const isHeading = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.name);
+	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "section";
 }
 
 export function nodeIsInternalLink(node) {
