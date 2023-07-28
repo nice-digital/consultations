@@ -9141,6 +9141,40 @@
         "OrigProjectReference": null,
         "AreasOfInterestList": [],
         "Hidden": false
+      },
+      {
+        "_links": {
+          "self": [
+            {
+              "href": "/consultation-comments/2207"
+            }
+          ]
+        },
+        "ETag": null,
+        "Reference": "GID-TA11176",
+        "Title": "Martin's new Project test 1967",
+        "ConsultationName": "Draft guidance",
+        "StartDate": "2023-07-05T00:00:00",
+        "EndDate": "2057-09-27T17:00:00",
+        "ConsultationType": "Draft guidance",
+        "ResourceTitleId": "html-content-7",
+        "ProjectType": "TA",
+        "TechnologyType": null,
+        "ProductTypeName": "Technology appraisal guidance",
+        "ShowExpressionOfInterestSubmissionQuestion": false,
+        "DevelopedAs": null,
+        "RelevantTo": null,
+        "ConsultationId": 2207,
+        "Process": "TA",
+        "HasDocumentsWhichAllowConsultationComments": true,
+        "IsCHTE": true,
+        "AllowedRole": "CHTETeam",
+        "FirstConvertedDocumentId": 1,
+        "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
+        "PartiallyUpdatedProjectReference": null,
+        "OrigProjectReference": null,
+        "AreasOfInterestList": [],
+        "Hidden": false
       }
     ]
   },
@@ -13653,6 +13687,218 @@
       "OrigProjectReference": null,
       "AreasOfInterestList": [],
       "Hidden": false
+    },
+    {
+      "_links": { "self": [{ "href": "/consultation-comments/2207" }] },
+      "_embedded": {
+        "nice.indev:comment-document-list": {
+          "_links": { "self": [{}] },
+          "_embedded": {
+            "nice.indev:comment-document": {
+              "_links": { "self": [{}] },
+              "_embedded": {
+                "nice.indev:comment-document-chapter-info": [
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/recommendations"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "1 Recommendations",
+                    "Slug": "recommendations",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  },
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/information-about-acalabrutinib"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "2 Information about acalabrutinib",
+                    "Slug": "information-about-acalabrutinib",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  },
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/committee-discussion"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "3 Committee discussion",
+                    "Slug": "committee-discussion",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  },
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/implementation"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "4 Implementation",
+                    "Slug": "implementation",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  },
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/proposed-date-for-review-of-guidance"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "5 Proposed date for review of guidance",
+                    "Slug": "proposed-date-for-review-of-guidance",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  },
+                  {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/consultation-comments/2207/document/1/chapter-slug/appraisal-committee-members-and-nice-project-team"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Title": "6 Appraisal committee members and NICE project team",
+                    "Slug": "appraisal-committee-members-and-nice-project-team",
+                    "ConsultationId": 2207,
+                    "ConsultationDocumentId": 1
+                  }
+                ]
+              },
+              "ETag": null,
+              "Title": null,
+              "ConsultationDocumentId": 1
+            }
+          },
+          "ETag": null
+        },
+        "nice.indev:resource-list": {
+          "_links": { "self": [{}] },
+          "_embedded": {
+            "nice.indev:resource": [
+              {
+                "_links": { "self": [{}] },
+                "_embedded": {
+                  "nice.indev:file": {
+                    "_links": {
+                      "self": [
+                        {
+                          "href": "/guidance/GID-TA11176/consultation/html-content-7"
+                        },
+                        {
+                          "href": "/guidance/GID-TA11176/documents/html-content-7"
+                        }
+                      ]
+                    },
+                    "ETag": null,
+                    "Id": "2a14acbf-1ee7-4aba-8af6-3ff8c869cd07",
+                    "MimeType": "text/html",
+                    "FileName": "HtmlContent",
+                    "Length": 175,
+                    "Hash": "94A2C35AFA113B8B4961920F508F7820F9ED8E71",
+                    "Name": "default",
+                    "Reference": "GID-TA11176",
+                    "ResourceTitleId": "html-content-7",
+                    "ConsultationDocumentId": 0
+                  }
+                },
+                "ETag": null,
+                "Title": "Draft guidance",
+                "Level": 1,
+                "PublishedDate": "2023-07-27T09:59:00",
+                "ExternalUrl": null,
+                "ShowInDocList": true,
+                "TextOnly": false,
+                "ConsultationId": 2207,
+                "ConsultationDocumentId": 0,
+                "IsCurrentViewableConsultationMarkup": true,
+                "ConvertedDocument": false,
+                "SupportsComments": false
+              },
+              {
+                "_links": { "self": [{}] },
+                "_embedded": {
+                  "nice.indev:file": {
+                    "_links": {
+                      "self": [
+                        { "href": "/guidance/GID-TA11176/documents/97-13" }
+                      ]
+                    },
+                    "ETag": null,
+                    "Id": "9ef27277-dd29-4701-9c57-73d6099f238b",
+                    "MimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "FileName": "ID1613 acalabrutinib draft ACD v1.0 to PM [noACIC].docx",
+                    "Length": 62914,
+                    "Hash": "9BB8790F81DD730391B79C4675AF4DA69821977A",
+                    "Name": "default",
+                    "Reference": "GID-TA11176",
+                    "ResourceTitleId": "97-13",
+                    "ConsultationDocumentId": 1
+                  }
+                },
+                "ETag": null,
+                "Title": "Appraisal consultation document (online commenting)",
+                "Level": 1,
+                "PublishedDate": "2023-07-27T09:59:00",
+                "ExternalUrl": null,
+                "ShowInDocList": true,
+                "TextOnly": false,
+                "ConsultationId": 2207,
+                "ConsultationDocumentId": 1,
+                "IsCurrentViewableConsultationMarkup": false,
+                "ConvertedDocument": true,
+                "SupportsComments": true
+              }
+            ]
+          },
+          "ETag": null,
+          "HasResources": true
+        }
+      },
+      "ETag": "01000000-0000-00B2-0000-000000000006",
+      "Reference": "GID-TA11176",
+      "Title": "Martin's new Project test 1967",
+      "ConsultationName": "Draft guidance",
+      "StartDate": "2023-07-05T00:00:00",
+      "EndDate": "2057-09-27T17:00:00",
+      "ConsultationType": "Draft guidance",
+      "ResourceTitleId": "html-content-7",
+      "ProjectType": "TA",
+      "TechnologyType": null,
+      "ProductTypeName": "Technology appraisal guidance",
+      "ShowExpressionOfInterestSubmissionQuestion": false,
+      "DevelopedAs": null,
+      "RelevantTo": null,
+      "ConsultationId": 2207,
+      "Process": "TA",
+      "HasDocumentsWhichAllowConsultationComments": true,
+      "IsCHTE": true,
+      "AllowedRole": "CHTETeam",
+      "FirstConvertedDocumentId": 1,
+      "FirstChapterSlugOfFirstConvertedDocument": "recommendations",
+      "PartiallyUpdatedProjectReference": null,
+      "OrigProjectReference": null,
+      "AreasOfInterestList": [],
+      "Hidden": false
     }
   ],
   "chapters": [
@@ -13896,6 +14142,22 @@
       "Title": "2 Information about risdiplam",
       "Slug": "information-about-risdiplam",
       "ConsultationId": 406,
+      "ConsultationDocumentId": 1
+    },
+    {
+      "_links": {
+        "self": [
+          {
+            "href": "/consultation-comments/2207/document/1/chapter-slug/recommendations"
+          }
+        ]
+      },
+      "ETag": "01000000-0000-00B2-0000-000000000006",
+      "Content": "<div class=\"chapter\" title=\"1 Recommendations\" id=\"2207-1-1-recommendations\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n  <h2 class=\"title\" id=\"recommendations\">1 Recommendations</h2>\r\n  <article id=\"2207-1-1.1\" class=\"numbered-paragraph annotator-numbered-paragraph recommendation\" data-heading-type=\"numbered-paragraph\">\r\n    <h3 class=\"recommendation__number\">1.1</h3>\r\n    <div class=\"recommendation__body\">\r\n      <p>Acalabrutinib is recommended as an option for untreated chronic lymphocytic leukaemia (CLL) in adults, only if:</p>\r\n      <ul class=\"itemizedlist indented\">\r\n        <li class=\"listitem\">\r\n          <p>they have a 17p deletion or TP53 mutation and</p>\r\n        </li>\r\n        <li class=\"listitem\">\r\n          <p>the company provides it according to the commercial arrangement (see section 2).</p>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </article>\r\n  <article id=\"2207-1-1.2\" class=\"numbered-paragraph annotator-numbered-paragraph recommendation\" data-heading-type=\"numbered-paragraph\">\r\n    <h3 class=\"recommendation__number\">1.2</h3>\r\n    <div class=\"recommendation__body\">\r\n      <p>Acalabrutinib is recommended as an option for treating CLL in adults who have had at least 1 previous treatment, only if:</p>\r\n      <ul class=\"itemizedlist indented\">\r\n        <li class=\"listitem\">\r\n          <p>ibrutinib is their only suitable treatment option, and</p>\r\n        </li>\r\n        <li class=\"listitem\">\r\n          <p>the company provides it according to the commercial arrangement (see section 2).</p>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </article>\r\n  <article id=\"2207-1-1.3\" class=\"numbered-paragraph annotator-numbered-paragraph recommendation\" data-heading-type=\"numbered-paragraph\">\r\n    <h3 class=\"recommendation__number\">1.3</h3>\r\n    <div class=\"recommendation__body\">\r\n      <p>These recommendations are not intended to affect treatment with acalabrutinib that was started in the NHS before this guidance was published. People having treatment outside these recommendations may continue without change to the funding arrangements in place for them before this guidance was published, until they and their NHS clinician consider it appropriate to stop.</p>\r\n    </div>\r\n  </article>\r\n  <p>\r\n    <strong>Why the committee made these recommendations</strong>\r\n  </p>\r\n  <p>People with untreated CLL and a 17p deletion or TP53 mutation usually have ibrutinib. For this group, acalabrutinib has not been directly compared with ibrutinib in a clinical trial, and the results of an indirect comparison are uncertain. The company assumed that acalabrutinib is equally effective as ibrutinib in a cost-minimisation analysis. Despite the uncertainties, acalabrutinib is likely to be cost-saving compared with ibrutinib. So acalabrutinib is recommended for routine use in the NHS for this group.</p>\r\n  <p>People with untreated CLL without a 17p deletion or TP53 mutation usually have fludarabine, cyclophosphamide and rituximab (FCR) or bendamustine plus rituximab (BR). If FCR or BR is unsuitable, chlorambucil plus obinutuzumab is offered instead. For the group when FCR or BR is unsuitable, clinical trial evidence shows that CLL treated with acalabrutinib therapy takes longer to progress than CLL treated with chlorambucil plus obinutuzumab. However, the overall survival benefit is uncertain. The cost-effectiveness estimates are higher than what NICE normally considers acceptable, so acalabrutinib cannot be recommended for routine use in the NHS for this group. Acalabrutinib does not meet the criteria to be included in the Cancer Drugs Fund.</p>\r\n  <p>People with previously treated CLL whose disease has relapsed or does not respond to treatment usually have ibrutinib or venetoclax plus rituximab. For this group, acalabrutinib has not been directly compared with ibrutinib or with venetoclax plus rituximab in a clinical trial. The results of an indirect comparison with ibrutinib are uncertain. The company assumed that acalabrutinib was equally effective as ibrutinib in the cost-minimisation analyses presented which resulted in acalabrutinib being less costly than ibrutinib. Despite the uncertainty, acalabrutinib is likely to be cost-saving compared with ibrutinib. So acalabrutinib is recommended for routine use in the NHS for people with previously treated CLL. However, because the company did not present any analyses comparing acalabrutinib with venetoclax plus rituximab, it is only recommended if ibrutinib is their only suitable treatment option.</p>\r\n</div>",
+      "Sections": [],
+      "Title": "1 Recommendations",
+      "Slug": "recommendations",
+      "ConsultationId": 2207,
       "ConsultationDocumentId": 1
     }
   ]
