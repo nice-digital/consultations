@@ -155,31 +155,16 @@ export class Submitted extends Component<PropsType, StateType> {
 														allowOrganisationCodeLogin={false}
 														orgFieldName="submitted"
 													/> :
-													<>
-														<SubmittedContent
-															organisationName={contextValue.organisationName}
-															isOrganisationCommenter={contextValue.isOrganisationCommenter}
-															isLead={contextValue.isLead}
-															consultationState={this.state.consultationData.consultationState}
-															consultationId={this.props.match.params.consultationId}
-															basename={this.props.basename}
-															isSubmitted={true}
-															linkToReviewPage={true}
-														/>
-
-														<h2>Help us improve our online commenting service</h2>
-														<p>This is the first time we have used our new online commenting software. We'd really like to hear your feedback so that we can keep improving
-															it.</p>
-														<p>Answer our short, anonymous survey (4 questions, 2 minutes).</p>
-														<p>
-															<a className="btn btn--cta"
-																href="https://surveys.hotjar.com/62df646f-8edb-4c03-8275-3ec8a75d0214"
-																target="_blank"
-																rel="noopener noreferrer">
-																Answer the survey
-															</a>
-														</p>
-													</>
+													<SubmittedContent
+														organisationName={contextValue.organisationName}
+														isOrganisationCommenter={contextValue.isOrganisationCommenter}
+														isLead={contextValue.isLead}
+														consultationState={this.state.consultationData.consultationState}
+														consultationId={this.props.match.params.consultationId}
+														basename={this.props.basename}
+														isSubmitted={true}
+														linkToReviewPage={true}
+													/>
 											);
 										}}
 									</UserContext.Consumer>
