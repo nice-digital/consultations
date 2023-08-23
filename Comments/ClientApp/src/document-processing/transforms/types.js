@@ -1,10 +1,18 @@
+export function nodeIsParagraphNumber(node) {
+	return node.name === "span" && node.attribs && node.attribs["class"] === "paragraph-number";
+}
+
+export function nodeIsNewArticleHeading(node) {
+	return /h[1-6]/g.test(node.name);
+}
+
 export function nodeIsChapter(node){
-	const isHeading = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.name);
+	const isHeading = nodeIsNewArticleHeading(node);
 	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "chapter";
 }
 
 export function nodeIsSection(node) {
-	const isHeading = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.name);
+	const isHeading = nodeIsNewArticleHeading(node);
 	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "section";
 }
 
