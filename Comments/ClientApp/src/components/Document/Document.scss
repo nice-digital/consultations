@@ -32,14 +32,36 @@
       color: inherit;
     }
   }
-  .itemizedlist.indented,
-  .numbered-paragraph {
+  div.itemizedlist.indented,
+  p.numbered-paragraph {
     margin-left: utils.rem(spacing.$xx-large);
   }
-  .itemizedlist.indented .paragraph-number,
-  .numbered-paragraph .paragraph-number {
+  div.itemizedlist.indented .paragraph-number,
+  p.numbered-paragraph .paragraph-number {
     float: left;
     margin-left: utils.rem(-(spacing.$xx-large));
+  }
+  article.numbered-paragraph {
+    display: flex;
+
+    & > {
+      h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: normal;
+        flex: 0 0 calc(utils.rem(spacing.$xx-large) - 10px);
+        font-family: inherit;
+        line-height: 1.6;
+        padding-right: 10px;
+      }
+    }
+
+    p:first-child {
+        margin-top: 0;
+    }
+  }
+  caption {
+    display: block;
+    text-align: left;
   }
   table {
     td {
