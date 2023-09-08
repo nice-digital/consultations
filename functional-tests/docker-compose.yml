@@ -32,7 +32,7 @@ services:
       GRID_DEBUG: "true"
       GRID_MAX_SESSION: 2
     ports:
-       - 4444:4444
+      - 4444:4444
 
   # The tests themselves
   tests:
@@ -127,7 +127,7 @@ services:
   # MS SQL Server database
   database:
     container_name: functional-tests_database_1
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
@@ -160,11 +160,11 @@ services:
     #command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
     #command: ["redis-server", "--bind", "redis", "--port", "6379"]
 
 
-  #JSON Server for Indev Api
+    #JSON Server for Indev Api
   api:
     container_name: functional-tests_api_1
     build: ./../Indev.MockApi/
