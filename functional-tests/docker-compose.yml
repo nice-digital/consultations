@@ -123,17 +123,19 @@ services:
       - INDEV_IDAM_CONFIG_CLIENTSECRET
       - INDEV_IDAM_CONFIG_DOMAIN
       - AUTH_ADMIN_ID
+      - DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
+      # - ASPNETCORE_ENVIRONMENT=Development
 
-  # MS SQL Server database
+      # MS SQL Server database
   database:
     container_name: functional-tests_database_1
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
       - SA_PASSWORD=ABcd1234#
       - SA_USERNAME=sa
-      - COMPOSE_HTTP_TIMEOUT=200
+      - COMPOSE_HTTP_TIMEOUT=1000
     ports:
       - 1434:1433
 
