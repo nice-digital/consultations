@@ -1,13 +1,18 @@
 # Runs the Comment Collection webapp.
 # Assumes you've published the app to ./published-app
 
-FROM mcr.microsoft.com/dotnet/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 ENV ASPNETCORE_URLS http://+:8080
 
 # Install Git
 RUN apt-get update && apt-get install git -y
 RUN git --version
+
+# Install curl
+RUN apt-get update \
+  && apt-get install -y curl
+
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018

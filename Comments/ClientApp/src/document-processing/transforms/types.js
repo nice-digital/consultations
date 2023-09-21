@@ -1,9 +1,19 @@
+export function nodeIsParagraphNumber(node) {
+	return node.name === "span" && node.attribs && node.attribs["class"] === "paragraph-number";
+}
+
+export function nodeIsNewArticleHeading(node) {
+	return /h[1-6]/g.test(node.name);
+}
+
 export function nodeIsChapter(node){
-	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "chapter";
+	const isHeading = nodeIsNewArticleHeading(node);
+	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "chapter";
 }
 
 export function nodeIsSection(node) {
-	return node.name === "a" && node.attribs && node.attribs["data-heading-type"] === "section";
+	const isHeading = nodeIsNewArticleHeading(node);
+	return (node.name === "a" || isHeading) && node.attribs && node.attribs["data-heading-type"] === "section";
 }
 
 export function nodeIsInternalLink(node) {
@@ -11,7 +21,7 @@ export function nodeIsInternalLink(node) {
 }
 
 export function nodeIsSubsection(node) {
-	return node.name === "p" && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
+	return (node.name === "p" || node.name === "article") && node.attribs && node.attribs["data-heading-type"] === "numbered-paragraph";
 }
 
 export function nodeIsTypeText(node) {
