@@ -29,6 +29,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using NICE.Feeds;
 using NICE.Feeds.Indev;
+using NICE.Identity.Authentication.Sdk.Authorisation;
 using NICE.Identity.Authentication.Sdk.Domain;
 using NICE.Identity.Authentication.Sdk.Extensions;
 using ConsultationsContext = Comments.Models.ConsultationsContext;
@@ -87,8 +88,9 @@ namespace Comments
 			services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
 			services.TryAddTransient<ICacheService, MemoryCacheService>();
 			services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
-			services.TryAddTransient<IRemoteSystemReader, RemoteSystemReader>();
-			services.TryAddTransient<IIndevFeedService, IndevFeedService>();
+            services.TryAddTransient<IRemoteSystemReader>(ServiceProvider => 
+                new RemoteSystemReader(apiTokenClient: ServiceProvider.GetRequiredService<IApiTokenClient>()));
+            services.TryAddTransient<IIndevFeedService, IndevFeedService>();
 
 			services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
