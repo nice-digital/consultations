@@ -60,6 +60,14 @@ services:
       - IDAM_EMAIL5
       - IDAM_EMAIL6
       - IDAM_EMAIL7
+      - IDAM_EMAIL8
+      - IDAM_EMAIL9
+      - IDAM_EMAIL10
+      - IDAM_EMAIL11
+      - IDAM_EMAIL12
+      - IDAM_EMAIL13
+      - IDAM_EMAIL14
+      - IDAM_EMAIL15
       - IDAM_PASSWORD
       - BROWSERSTACK_ACCESS_KEY
       - BROWSERSTACK_USERNAME
@@ -123,10 +131,6 @@ services:
       - INDEV_IDAM_CONFIG_CLIENTSECRET
       - INDEV_IDAM_CONFIG_DOMAIN
       - AUTH_ADMIN_ID
-      - DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
-      - DOTNET_SYSTEM_NET_SOCKETS_INLINE_COMPLETIONS=1
-      # - ASPNETCORE_ENVIRONMENT=Development
-
       # MS SQL Server database
   database:
     container_name: functional-tests_database_1

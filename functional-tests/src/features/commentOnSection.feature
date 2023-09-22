@@ -4,7 +4,7 @@ Feature: Comment on a Section
 	We want to be able to comment at the Section
 	Background:
 		Given I open the url "406/1/information-about-risdiplam"
-		When I log into accounts with username "IDAM_EMAIL2" and password "IDAM_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL8" and password "IDAM_PASSWORD"
 	# Given I delete all comments on the page
 
 	Scenario: User makes a comment at section level
