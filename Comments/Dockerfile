@@ -16,8 +16,8 @@ RUN apt-get update \
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
-ENV NODE_VERSION 10.22.0
-ENV NODE_DOWNLOAD_SHA aa7e9e1d8abcc169119bf5c56ede515689f2644ccc4d40ca0fc33756a3deb1f7
+ENV NODE_VERSION 18.17.0
+ENV NODE_DOWNLOAD_SHA 5c4a7fd9262c0c47bafab3442de6c3fed1602be3d243cb8cf11309a201955e75
 ENV NODE_DOWNLOAD_URL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
 
 RUN curl -SL "$NODE_DOWNLOAD_URL" --output nodejs.tar.gz \
