@@ -70,7 +70,7 @@ export const processChapterSectionSubsection = (node, onNewCommentClick, sourceU
 
 	// if new html conversion format then insert CommentButton as a child node rather than a sibling
 	// nb. new conversion format doesn't have a nested anchor in headings, so node is heading rather than an anchor
-	if (insertCommentButton) {
+	if (allowComments && insertCommentButton) {
 		existingElementChildren.unshift(CommentButton);
 		existingElement = React.cloneElement(existingElement, null, existingElementChildren);
 	}
