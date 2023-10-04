@@ -30,6 +30,7 @@ import { enterEmailaddress } from "../support/action/enterEmailaddress";
 import { generateOrganisationCode } from "../support/action/generateOrganisationCode";
 
 import validateAlertCautionText from "../support/check/validateAlertCautionText";
+import { validateCommentOnDocIsDisabled, validateCommentOnChapterIsDisabled, validateCommentOnSectionIsDisabled, validateCommentOnSubSectionIsDisabled} from "../support/check/validateConsultationIsCLosed";
 
 Then(/^I expect the comment box contains "([^"]*)"$/, validateCommentBox);
 
@@ -74,3 +75,11 @@ Then(/^I enter code user emailaddress "([A-Z0-9_]+)"$/, enterEmailaddress);
 Then(/^I click on consultation to generate and copy the organisation code$/,	generateOrganisationCode);
 
 Then(/^I expect the alert caution to contain "([^"]*)"$/,	validateAlertCautionText);
+
+Then(/^I expect the Comment on document button to not appear$/, validateCommentOnDocIsDisabled);
+
+Then(/^I expect the Comment on Chapter bubbles to not appear$/, validateCommentOnChapterIsDisabled);
+
+Then(/^I expect the Comment on Section bubbles to not appear$/, validateCommentOnSectionIsDisabled);
+
+Then(/^I expect the Comment on Subsection bubbles to not appear$/, validateCommentOnSubSectionIsDisabled);

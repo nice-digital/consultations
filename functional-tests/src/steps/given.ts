@@ -8,6 +8,8 @@ import { validateStatusFilterChecked } from "../support/check/validateStatusFilt
 import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
 import { pause } from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
 import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink";
+import { validateConsultationIsClosed } from "../support/check/validateConsultationIsCLosed";
+import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed";
 
 Given(/^I delete all comments on the page$/, deleteCommentsOnReviewPage);
 
@@ -74,3 +76,7 @@ Given(
 Given(/^I select open and closed status filter$/,  validateStatusFilterChecked);
 
 Given(/^I click on the request commenting lead permision link$/,  clickLeadInfoLink);
+
+Given(/^I appear on a closed consultation$/, validateConsultationIsClosed);
+
+Given(/^I expect the not current guidance banner to appear$/, validateConsultationClosedMessage);
