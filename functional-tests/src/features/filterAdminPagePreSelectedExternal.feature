@@ -15,7 +15,7 @@ Feature: External User can access download page and only the consultations comme
 		When I navigate to the Review Page
 		And I submit my response
 		When I open the url "admin"
-		Then I expect the result list count contains "Showing 1 to 25 of 55 consultations"
+		Then I expect the result list count contains "Showing 1 to 25 of 56 consultations"
 		Then I expect my consultations filter not to be selected by default
 		When I select my consultations filter
 		Then I expect the result list count contains "Showing 1 consultation"
