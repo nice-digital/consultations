@@ -8,6 +8,10 @@ const toQAselAndChild = (attrValue, childIndex) =>
 export default {
 	documentPage: {
 		pageHeader: ".page-header",
+		documentContainer: ".document-comment-container",
+		commentOnDocButton: toDataQASelAttr("comment-on-consultation-document"),
+		ConsultationStatusTag: ".container > span > .tag",
+		closeConsultationMessage: ".caution",
 		openQuestionPanel: toDataQASelAttr("open-questions-panel"),
 		commentPanel: toDataQASelAttr("comment-panel"),
 		commentBoxTitle: toDataQASelAttr("comment-box-title"),
