@@ -14,7 +14,11 @@ import { tagManager } from "../../helpers/tag-manager";
 export const processChapterSectionSubsection = (node, onNewCommentClick, sourceURI, allowComments, sectionNumber) => {
 
 	let commentOn = node.attribs["data-heading-type"].toLowerCase();
-	let quote =  node.children.filter(nodeIsTypeText)[0].data;
+
+	// workaround for line break children in new converted html
+	const nodeTextTypeChildren = node.children.filter(nodeIsTypeText);
+	const elementTextTypeChildren = convertNodeToElement(node, 0, transform).props.children.filter((element) => typeof element === "string");
+	let quote =  nodeTextTypeChildren.length <= 1 ? nodeTextTypeChildren[0].data : elementTextTypeChildren[0];
 
 	if (nodeIsSubsection(node)) {
 		quote = node.children.filter(nodeIsSpanTag);
