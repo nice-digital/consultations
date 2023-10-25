@@ -117,15 +117,17 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 ## Set up
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
-3. Restore Consultations database in SSMS and copy database connection string
-4. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
-5. Open *Consultations.sln*
-6. Paste database connection string into DefaultConnection in secrets.json file
-7. Press F5 to run the project in debug mode
-8. Dependencies will download (npm and NuGet) so be patient on first run
-9. The app will run in IIS Express on http://localhost:52679/
-10. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-11. Run `npm test` in a separate window to run client side tests in watch mode
+3. Install [Redis](https://redis.io/) and make sure it is running.
+4. Add 127.0.0.1	niceorg to your hosts file
+5. Restore Consultations database in SSMS and copy database connection string
+6. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
+7. Open *Consultations.sln*
+8. Paste database connection string into DefaultConnection in secrets.json file
+9. Press F5 to run the project in debug mode
+10. Dependencies will download (npm and NuGet) so be patient on first run
+11. The app will run in IIS Express on http://localhost:52679/
+12. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+13. Run `npm test` in a separate window to run client side tests in watch mode
 
 ### Gotchas
 - `spa.UseReactDevelopmentServer` can be slow so try using `spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");` instead within [Startup.cs](Comments/Startup.cs).
@@ -167,4 +169,3 @@ To update the database
 </a>
 
 We're using BrowserStack's support of open source projects for our day-to-day cross-browser and cross-device testing, and as part of an automated CI environment. <a href="https://www.browserstack.com/open-source">See their support for open source projects</a>.
-
