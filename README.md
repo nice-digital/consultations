@@ -117,19 +117,112 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 ## Set up
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
-3. Restore Consultations database in SSMS and copy database connection string
+3. Restore Consultations database in SSMS and set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
 4. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
 5. Open *Consultations.sln*
-6. Paste database connection string into DefaultConnection in secrets.json file
+6. Paste database connection string into DefaultConnection in secrets.json file (see "Secrets" below for format)
 7. Press F5 to run the project in debug mode
 8. Dependencies will download (npm and NuGet) so be patient on first run
 9. The app will run in IIS Express on http://localhost:52679/
 10. cd into *consultations\Comments\ClientApp* and run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
 11. Run `npm test` in a separate window to run client side tests in watch mode
+12. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+13. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identity.nice.org.uk/ and give youself Administrator access to Consultations.
+14. Install Redis locally on your machine. Instructions below.
+
+### Other README files
+-There is another README file in *consultations\Comments\ClientApp* which goes into more detail if `npm start` does not work immediately.
+
+### Secrets
+- First try to copy the secrets file from another developer who has had comment collection working before.
+- If you cannot find another developer with a secrets file, you can copy the format below.
+'''
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "<connection string>"
+  },
+  "Logging": {
+    "RabbitMQHost": "<rabbit server URL>",
+    "RabbitMQPort": "<rabbit server port>",
+    "IncludeScopes": false,
+    "LogFilePath": "<log file path>",
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    },
+    "UseRabbit": false,
+    "UseFile": true
+  },
+  "AppSettings": {
+    "Environment": {
+      "Name": "local",
+      "SecureSite": "false"
+    }
+  },
+  "Feeds": {
+    "ApiKey": "<indev API key>",
+    "IndevBasePath": "<indev base path>",
+    "IndevPublishedChapterFeedPath": "<feed path>",
+    "IndevDraftPreviewChapterFeedPath": "<feed path>",
+    "IndevPublishedDetailFeedPath": "<feed path>",
+    "IndevDraftPreviewDetailFeedPath": "<feed path>",
+    "IndevPublishedPreviewDetailFeedPath": "<feed path>",
+    "IndevListFeedPath": "<feed path>",
+    "CacheDurationSeconds": 60,
+    "IndevIDAMConfig": {
+      "Domain": "<InDev IDAM Domain>",
+      "ClientId": "<Auth0 Client Id>",
+      "ClientSecret": "<Auth0 Client Secret>",
+      "APIIdentifier": "<Auth0 API Identifier>"
+    }
+  },
+  "WebAppConfiguration": {
+    "ApiIdentifier": "<Auth0 API Identifier for comment collection>",
+    "ClientId": "<Auth0 Client Id for comment collection>",
+    "ClientSecret": "<Auth0 Client secret for comment collection>",
+    "AuthorisationServiceUri": "<Auth0 Authorisation service URI for comment collection>",
+    "Domain": "<Auth0 Domain comment collection>",
+    "PostLogoutRedirectUri": "<Auth0 Post Logout Redirect Uri>",
+    "RedirectUri": "<Auth0 Redirect Uri>",
+    "CallBackPath": "<Auth0 callback path>",
+    "GoogleTrackingId": "<google tracking id>",
+    "RedisServiceConfiguration": {
+      "ConnectionString": "<redis server URL>",
+      "Enabled": true
+    }
+  },
+  "Encryption": {
+    "Key": "<Encryption key for encrypting comment text>",
+    "IV": "<Initialisation Vector for encrypting comment text>"
+  },
+  "PDF": {
+    "PDFDocGenServer": "<PDF DocGen Server>"
+  },
+  "ConsultationList": {
+    "DownloadRoles": {
+      "AdminRoles": [ "<List of Admin roles>", "<List of Admin roles>" ],
+      "TeamRoles": [ "<List of team roles>", "<List of team roles>", "<List of team roles>" ]
+    }
+  },
+  "AWS": {
+    "Profile": "<AWS Profile>",
+    "Region": "<AWS Region>"
+  }
+}
+
+'''
+
+### Redis server
+
+This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis using Chocolatey, A docker/podman container or via WSL at a command prompt. Go to [https://redis.io/docs/getting-started/](https://redis.io/docs/getting-started/) to get started, the instructions are well written.
 
 ### Gotchas
 - `spa.UseReactDevelopmentServer` can be slow so try using `spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");` instead within [Startup.cs](Comments/Startup.cs).
 - Need to ensure that nothing else is running on port 80, otherwise you will encounter a socket exception error when running in debug.
+- Exception: OpenIdConnectAuthenticationHandler: message.State is null or empty. -- caused if login is attempted without redis, clear your cookies and login again.
+- It might take a few F5's, visual studio restarts and cookie clears to get all the various services/applications to start co-operating
 
 ## Tests
 

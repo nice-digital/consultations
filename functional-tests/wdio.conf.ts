@@ -11,21 +11,23 @@ export const config: WebdriverIO.Config = {
 	path: "/wd/hub",
 
 	specs: ["./src/features/**/*.feature"],
-
+	specFileRetries: 1,
+	specFileRetriesDelay: 2,
+	specFileRetriesDeferred: true,
 	capabilities: [
 		{
-		acceptInsecureCerts: true, // Because of self-signed cert inside Docker
-		// acceptSslCerts: true,
-		maxInstances: 1,
-		browserName: "chrome",
+			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+			// acceptSslCerts: true,
+			maxInstances: 1,
+			browserName: "chrome",
 			"goog:chromeOptions": {
 				args: ["--window-size=1366,768",
-			// '--headless',
-      '--no-sandbox',
-      '--disable-gpu',
-      '--disable-setuid-sandbox',
-			'--ignore-certificate-errors',
-      '--disable-dev-shm-usage'].concat(isInDocker ? "--headless" : []),
+					// '--headless',
+					'--no-sandbox',
+					'--disable-gpu',
+					'--disable-setuid-sandbox',
+					'--ignore-certificate-errors',
+					'--disable-dev-shm-usage'].concat(isInDocker ? "--headless" : []),
 			},
 		},
 	],
