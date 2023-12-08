@@ -34,6 +34,7 @@ import { scrollDeleteButtonIntoView } from "../support/action/scrollDeleteButton
 import { selectValueFromDropdown } from "../support/action/selectFromDropdownByIndex";
 import { CodeLogin } from "../support/action/CodeLogin";
 import { selectMyConsultationFilter } from "../support/action/selectMyConsultationFilter";
+import handleModal from "../support/action/handleModal";
 
 
 // E.g. When I click on text "Title here" in ".ancestor"
@@ -92,4 +93,6 @@ When(/^I click send your response to your organisation button$/,	clickSendYourRe
 When(/^I click yes submit my response button$/, clickYesSubmitResponseButton);
 
 When(/^I select my consultations filter$/, selectMyConsultationFilter);
+
+When(/^I (accept|dismiss) the (alertbox|confirmbox|prompt)$/, handleModal);
 

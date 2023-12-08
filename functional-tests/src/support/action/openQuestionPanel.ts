@@ -6,7 +6,7 @@ import selectors from "../selectors";
 export async function openQuestionPanel(): Promise<void> {
 	await waitForDisplayed(selectors.documentPage.openQuestionPanel, "");
 	await clickElement("click", "selector", selectors.documentPage.openQuestionPanel);
-	await checkWithinViewport(selectors.documentPage.commentPanel, false);
+	await checkWithinViewport(selectors.documentPage.commentPanel, true);
 	await waitForDisplayed(selectors.documentPage.commentTextArea, "");
 };
 
