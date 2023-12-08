@@ -1,4 +1,3 @@
-// import "@nice-digital/wdio-cucumber-steps/lib/then";
 import { Then } from "@cucumber/cucumber";
 
 import validateCommentBox, {
@@ -20,10 +19,8 @@ import validateDownloadPageResultCount, {
 	validateFirstLinkInPagination,
 } from "../support/check/validateAdminDownloadPage";
 import clickCancelFilter from "../support/action/clickCancelFilter";
-import clickPaginationOption, {
-	clickSecondPaginationOption,
-} from "../support/action/clickSecondPaginationOption";
-import { clickPreviousPagination } from "../support/action/clickPreviousPagination";
+import clickSecondPaginationOption from "../support/action/clickSecondPaginationOption";
+import { clickPreviousPagination } from "../support/action/clickPreviousPagination"
 import { clickNextPagination } from "../support/action/clickNextPagination";
 import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
 import { enterEmailaddress } from "../support/action/enterEmailaddress";
@@ -31,6 +28,8 @@ import { generateOrganisationCode } from "../support/action/generateOrganisation
 
 import validateAlertCautionText from "../support/check/validateAlertCautionText";
 import { validateCommentOnDocIsDisabled, validateCommentOnChapterIsDisabled, validateCommentOnSectionIsDisabled, validateCommentOnSubSectionIsDisabled} from "../support/check/validateConsultationIsCLosed";
+import checkModalText from "../support/check/checkModalText";
+import checkModal from "../support/check/checkModal";
 
 Then(/^I expect the comment box contains "([^"]*)"$/, validateCommentBox);
 
@@ -83,3 +82,9 @@ Then(/^I expect the Comment on Chapter bubbles to not appear$/, validateCommentO
 Then(/^I expect the Comment on Section bubbles to not appear$/, validateCommentOnSectionIsDisabled);
 
 Then(/^I expect the Comment on Subsection bubbles to not appear$/, validateCommentOnSubSectionIsDisabled);
+
+Then(/^I expect that a (alertbox|confirmbox|prompt) is( not)* opened$/, checkModal);
+
+Then(/^I expect that a (alertbox|confirmbox|prompt)( not)* contains the text "([^"]*)?"$/, checkModalText);
+
+
