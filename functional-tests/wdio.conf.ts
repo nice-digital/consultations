@@ -10,7 +10,7 @@ export const config: WebdriverIO.Config = {
 	maxInstances: 1,
 	path: "/wd/hub",
 
-	specs: ["./src/features/**/answerQuestion.feature"],
+	specs: ["./src/features/**/*.feature"],
 	specFileRetries: 1,
 	specFileRetriesDelay: 2,
 	specFileRetriesDeferred: true,
@@ -50,8 +50,8 @@ export const config: WebdriverIO.Config = {
 	framework: "cucumber",
 	cucumberOpts: {
 		require: [
-			"./src/steps/**/*.ts"
-			//"./node_modules/@nice-digital/wdio-cucumber-steps/lib",
+			"./src/steps/**/*.ts",
+			"./node_modules/@nice-digital/wdio-cucumber-steps/lib",
 		],
 		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
 		timeout: 1500000,
