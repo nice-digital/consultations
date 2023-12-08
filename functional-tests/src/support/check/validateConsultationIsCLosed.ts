@@ -1,8 +1,7 @@
-import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import { checkContainsText } from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkContainsText";
-import {isExisting} from "@nice-digital/wdio-cucumber-steps/lib/support/check/isExisting";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
+import waitForDisplayed from "../action/waitForDisplayed";
+import checkContainsText from "../check/checkContainsText";
+import pause from "../action/pause";
+import clickElement from "../action/clickElement";
 import selectors from "../selectors";
 
 export async function validateConsultationIsClosed(): Promise<void> {
@@ -10,7 +9,7 @@ export async function validateConsultationIsClosed(): Promise<void> {
 	await checkContainsText(
 		"element",
 		selectors.documentPage.ConsultationStatusTag,
-		"",
+		null,
 		"Closed for comments"
 	);
 	await pause("1000");
@@ -21,7 +20,7 @@ export async function validateConsultationClosedMessage(): Promise<void> {
 	await checkContainsText(
 		"element",
 		selectors.documentPage.closeConsultationMessage,
-		"",
+		null,
 		"The content on this page is not current guidance and is only for the purposes of the consultation process."
 	);
 	await pause("1000");

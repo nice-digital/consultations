@@ -1,4 +1,4 @@
-import {setInputField} from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
+import setInputField from "../action/setInputField";
 import selectors from "../selectors";
 
 export async function enterQuestionAnswer(answerText: string): Promise<void> {

@@ -1,5 +1,4 @@
 import idamLogin from "./idamLogin";
-import { checkCookieExists } from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkCookieExists";
 
 export async function idamGlobalnavLoginAdmin(
 	username: string,

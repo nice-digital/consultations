@@ -1,4 +1,4 @@
-import {scroll} from "@nice-digital/wdio-cucumber-steps/lib/support/action/scroll";
+import scroll from "../action/scroll";
 import selectors from "../selectors";
 
 export async function scrollDeleteButtonIntoView(): Promise<void> {

@@ -1,15 +1,21 @@
 // import "@nice-digital/wdio-cucumber-steps/lib/given";
 import { Given } from "@cucumber/cucumber";
-import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
+import openWebsite from "../support/action/openWebsite";
+import waitForDisplayed from "../support/action/waitForDisplayed";
 import { deleteCommentsOnReviewPage } from "../support/action/deleteComments";
 import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
 import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation";
 import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked";
-import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import { pause } from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
+import clickElement from "../support/action/clickElement";
+import pause from "../support/action/pause";
 import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink";
 import { validateConsultationIsClosed } from "../support/check/validateConsultationIsCLosed";
 import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed";
+
+Given(
+    /^I open the (url|site) "([^"]*)?"$/,
+    openWebsite
+);
 
 Given(/^I delete all comments on the page$/, deleteCommentsOnReviewPage);
 

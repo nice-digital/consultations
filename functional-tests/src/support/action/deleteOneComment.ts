@@ -1,4 +1,4 @@
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
+import clickElement from "../action/clickElement";
 import selectors from "../selectors";
 
 export async function deleteOneComment(): Promise<void> {

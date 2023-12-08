@@ -1,7 +1,7 @@
-import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import {pause} from	"@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import {pressButton} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pressButton";
+import waitForDisplayed from "../action/waitForDisplayed";
+import clickElement from "../action/clickElement";
+import pause from	"../action/pause";
+import pressButton from "../action/pressButton";
 
 export async function generateOrganisationCode(): Promise<void> {
 

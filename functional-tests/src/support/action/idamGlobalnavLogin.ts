@@ -1,6 +1,4 @@
 import idamLogin from "./idamLogin";
-import {checkCookieExists} from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkCookieExists";
-import {waitFor} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFor"
 
 export async function idamGlobalNavLogin(username: string, password: string): Promise<void> {
 	// If you are already logged in

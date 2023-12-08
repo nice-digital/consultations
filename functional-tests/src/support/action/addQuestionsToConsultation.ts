@@ -1,5 +1,5 @@
-import {openWebsite} from "@nice-digital/wdio-cucumber-steps/lib/support/action/openWebsite";
-import {waitFor} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFor";
+import openWebsite from "../action/openWebsite";
+import waitFor from "../action/waitFor";
 import selectors from "../selectors";
 
 export async function addQuestionsToConsultation(consultationId: string): Promise<void> {

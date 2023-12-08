@@ -1,9 +1,9 @@
 import acceptCookieBanner from "./acceptCookieBanner";
-import {scroll} from "@nice-digital/wdio-cucumber-steps/lib/support/action/scroll";
-import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import { setInputField } from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
-import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import { pause } from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
+import scroll from "../action/scroll";
+import waitForDisplayed from "../action/waitForDisplayed";
+import setInputField from "../action/setInputField";
+import clickElement from "../action/clickElement";
+import pause from "../action/pause";
 
 export async function idamLogin(username: string, password: string): Promise<void> {
 	await pause("2000");

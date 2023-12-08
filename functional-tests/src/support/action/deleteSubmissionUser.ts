@@ -1,6 +1,5 @@
-import { openWebsite } from "@nice-digital/wdio-cucumber-steps/lib/support/action/openWebsite";
-import { refresh } from "@nice-digital/wdio-cucumber-steps/lib/support/action/refresh";
-import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
+import openWebsite from "../action/openWebsite";
+import waitForDisplayed from "../action/waitForDisplayed";
 import selectors from "../selectors";
 
 export async function deleteSubmissionUser(userId: string, returnUrl: string): Promise<void> {

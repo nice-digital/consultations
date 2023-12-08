@@ -22,9 +22,9 @@ import validateDownloadPageResultCount, {
 import clickCancelFilter from "../support/action/clickCancelFilter";
 import clickPaginationOption, {
 	clickSecondPaginationOption,
-	clickNextPagination,
-	clickPreviousPagination,
-} from "../support/action/clickPaginationOption";
+} from "../support/action/clickSecondPaginationOption";
+import { clickPreviousPagination } from "../support/action/clickPreviousPagination";
+import { clickNextPagination } from "../support/action/clickNextPagination";
 import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
 import { enterEmailaddress } from "../support/action/enterEmailaddress";
 import { generateOrganisationCode } from "../support/action/generateOrganisationCode";

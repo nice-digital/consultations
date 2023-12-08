@@ -1,14 +1,11 @@
-// import {globalnavLogin} from "@nice-digital/wdio-cucumber-steps/lib/support/action/globalnavLogin";
-import {waitFor} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFor";
-import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import {setInputField} from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
-import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refresh";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
+import waitForDisplayed from "../action/waitForDisplayed";
+import clickElement from "../action/clickElement";
+import setInputField from "../action/setInputField";
+import pause from "../action/pause";
 import selectors from "../selectors";
 
 export async function sidebarLogin(username: string, password: string): Promise<void> {
-	await refresh();
+	await browser.refresh();
 	await clickElement("click", "selector", "[data-qa-sel='open-commenting-panel']");
 	await waitForDisplayed(".LoginBanner", "");
 	await clickElement("click", "selector", "a[href*='/consultations/account/login?returnURL=']");

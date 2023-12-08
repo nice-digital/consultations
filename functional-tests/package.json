@@ -25,7 +25,6 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@nice-digital/wdio-cucumber-steps": "^2.0.3",
     "@wdio/allure-reporter": "^7.9.0",
     "@wdio/cli": "^7.9.0",
     "@wdio/cucumber-framework": "^7.9.0",
