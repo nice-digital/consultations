@@ -1,4 +1,4 @@
-import idamLogin from "./idamLogin";
+import idamLogin from "./idamLogin.js";
 
 export async function idamGlobalNavLogin(username: string, password: string): Promise<void> {
 	// If you are already logged in

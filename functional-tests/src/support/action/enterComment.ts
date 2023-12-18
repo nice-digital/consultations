@@ -1,5 +1,5 @@
-import setInputField from "../action/setInputField";
-import selectors from "../selectors";
+import setInputField from "../action/setInputField.js";
+import selectors from "../selectors.js";
 
 export async function enterComment(commentText: string): Promise<void> {
 	await browser.pause(1000);

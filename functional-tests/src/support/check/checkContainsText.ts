@@ -11,7 +11,7 @@ import type { Selector } from 'webdriverio';
 export default async (
     elementType: 'element' | 'button',
     selector: Selector,
-    falseCase: ' not',
+    falseCase: string,
     expectedText: string
 ) => {
     /**

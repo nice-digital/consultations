@@ -1,6 +1,6 @@
-import openWebsite from "../action/openWebsite";
-import waitFor from "../action/waitFor";
-import selectors from "../selectors";
+import openWebsite from "../action/openWebsite.js";
+import waitFor from "../action/waitFor.js";
+import selectors from "../selectors.js";
 
 export async function addQuestionsToConsultation(consultationId: string): Promise<void> {
 	await openWebsite(

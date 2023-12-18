@@ -1,6 +1,6 @@
-import idamGlobalnavLoginAdmin from "./idamGlobalnavLoginAdmin";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import idamGlobalnavLoginAdmin from "./idamGlobalnavLoginAdmin.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function LoginAdmin(username: string, password: string): Promise<void> {
 	await pause("2000");

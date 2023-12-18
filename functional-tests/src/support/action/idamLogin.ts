@@ -1,9 +1,9 @@
-import acceptCookieBanner from "./acceptCookieBanner";
-import scroll from "../action/scroll";
-import waitForDisplayed from "../action/waitForDisplayed";
-import setInputField from "../action/setInputField";
-import clickElement from "../action/clickElement";
-import pause from "../action/pause";
+import acceptCookieBanner from "./acceptCookieBanner.js";
+import scroll from "../action/scroll.js";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import setInputField from "../action/setInputField.js";
+import clickElement from "../action/clickElement.js";
+import pause from "../action/pause.js";
 
 export async function idamLogin(username: string, password: string): Promise<void> {
 	await pause("2000");

@@ -1,5 +1,5 @@
-import clickElement from "./clickElement";
-import pause from "./pause";
+import clickElement from "./clickElement.js";
+import pause from "./pause.js";
 
 
 export async function clickLeadInfoLink(): Promise<void> {

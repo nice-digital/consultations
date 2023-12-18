@@ -1,9 +1,9 @@
-import waitForDisplayed from "../action/waitForDisplayed";
-import clickElement from "../action/clickElement";
-import checkContainsText from "../check/checkContainsText";
-import setInputField from "../action/setInputField";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import clickElement from "../action/clickElement.js";
+import checkContainsText from "../check/checkContainsText.js";
+import setInputField from "../action/setInputField.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function submitResponse(): Promise<void> {
 	await waitForDisplayed(selectors.reviewPage.answerNoRepresentOrg, "");
@@ -16,7 +16,7 @@ export async function submitResponse(): Promise<void> {
 	await clickElement("click", "selector", selectors.reviewPage.YessubmitResponseButton);
 	await pause("2000");
 	await waitForDisplayed(selectors.reviewPage.reviewSubmittedCommentsButton, "");
-	await checkContainsText("element", selectors.reviewPage.responseSubmittedHeader, null, "Response submitted");
+	await checkContainsText("element", selectors.reviewPage.responseSubmittedHeader, "", "Response submitted");
 };
 
 export async function completeResponseMandatoryQuestions(): Promise<void> {

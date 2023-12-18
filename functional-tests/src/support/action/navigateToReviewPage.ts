@@ -1,7 +1,7 @@
-import clickElement from "../action/clickElement";
-import waitForDisplayed from "../action/waitForDisplayed";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import clickElement from "../action/clickElement.js";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function navigateToReviewPage(): Promise<void> {
 	await clickElement("click", "selector", selectors.documentPage.reviewAllButton);

@@ -1,4 +1,4 @@
-import idamLogin from "./idamLogin";
+import idamLogin from "./idamLogin.js";
 
 export async function idamGlobalnavLoginAdmin(
 	username: string,

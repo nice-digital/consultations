@@ -1,6 +1,6 @@
-import waitForDisplayed from "../action/waitForDisplayed";
-import clickElement from "../action/clickElement"
-import pause from	"../action/pause";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import clickElement from "../action/clickElement.js"
+import pause from	"../action/pause.js";
 
 export async function CodeLogin(): Promise<void> {
 

@@ -1,16 +1,16 @@
 // import "@nice-digital/wdio-cucumber-steps/lib/given";
-import { Given } from "@cucumber/cucumber";
-import openWebsite from "../support/action/openWebsite";
-import waitForDisplayed from "../support/action/waitForDisplayed";
-import { deleteCommentsOnReviewPage } from "../support/action/deleteComments";
-import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
-import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation";
-import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked";
-import clickElement from "../support/action/clickElement";
-import pause from "../support/action/pause";
-import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink";
-import { validateConsultationIsClosed } from "../support/check/validateConsultationIsCLosed";
-import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed";
+import { Given } from "@wdio/cucumber-framework";
+import openWebsite from "../support/action/openWebsite.js";
+import waitForDisplayed from "../support/action/waitForDisplayed.js";
+import { deleteCommentsOnReviewPage } from "../support/action/deleteComments.js";
+import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser.js";
+import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation.js";
+import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked.js";
+import clickElement from "../support/action/clickElement.js";
+import pause from "../support/action/pause.js";
+import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink.js";
+import { validateConsultationIsClosed } from "../support/check/validateConsultationIsCLosed.js";
+import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed.js";
 
 Given(
     /^I open the (url|site) "([^"]*)?"$/,

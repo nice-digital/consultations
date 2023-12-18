@@ -1,7 +1,7 @@
-import waitForDisplayed from "../action/waitForDisplayed";
-import clickElement from "../action/clickElement";
-import pause from	"../action/pause";
-import pressButton from "../action/pressButton";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import clickElement from "../action/clickElement.js";
+import pause from	"../action/pause.js";
+import pressButton from "../action/pressButton.js";
 
 export async function generateOrganisationCode(): Promise<void> {
 

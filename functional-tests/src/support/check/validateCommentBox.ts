@@ -1,7 +1,7 @@
-import checkContainsText from "../check/checkContainsText";
-import isEnabled from "../check/isEnabled";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import checkContainsText from "../check/checkContainsText.js";
+import isEnabled from "../check/isEnabled.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function validateCommentBoxText(commentText: string): Promise<void> {
 	await pause("1000");
@@ -33,12 +33,12 @@ export async function validateThirdCommentBox(commentText: string): Promise<void
 
 export async function validateCommentBoxTitle(titleText: string): Promise<void> {
 	await pause("1000");
-	await checkContainsText("element", selectors.documentPage.commentBoxTitle, null, titleText);
+	await checkContainsText("element", selectors.documentPage.commentBoxTitle, "", titleText);
 	await pause("1000");
 };
 
 export async function validateCommentSaved(commentText: string): Promise<void> {
-	await checkContainsText("element", selectors.documentPage.saveIndicator, null, commentText);
+	await checkContainsText("element", selectors.documentPage.saveIndicator, "", commentText);
 	await pause("1000");
 };
 

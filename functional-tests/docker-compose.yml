@@ -3,7 +3,7 @@ version: "3.8"
 services:
   firefox:
     container_name: functional-tests_firefox_1
-    image: selenium/node-firefox:3.11.0-dysprosium
+    image: selenium/node-firefox:latest
     # See https://github.com/SeleniumHQ/docker-selenium#running-the-images
     volumes:
       - /dev/shm:/dev/shm
@@ -14,25 +14,31 @@ services:
 
   chrome:
     container_name: functional-tests_chrome_1
-    image: selenium/node-chrome:3.141.59-20210713
+    image: selenium/node-chrome:latest
     shm_size: '1gb'
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
       - hub
     environment:
-      - HUB_HOST=hub
-      - HUB_PORT=4444
+      - SE_EVENT_BUS_HOST=hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VNC_NO_PASSWORD=1
+    ports:
+      - "5900"
 
   # Selenium Grid/Hub
   hub:
-    image: selenium/hub:3.141.59-20210713
+    image: selenium/hub:latest
     container_name: selenium_hub
     environment:
       GRID_DEBUG: "true"
       GRID_MAX_SESSION: 2
     ports:
-      - 4444:4444
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
 
   # The tests themselves
   tests:

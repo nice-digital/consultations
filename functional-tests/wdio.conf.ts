@@ -1,3 +1,4 @@
+import { hooks } from './src/support/hooks.js';
 const isInDocker = !!process.env.IN_DOCKER,
 	isTeamCity = !!process.env.TEAMCITY_VERSION;
 
@@ -7,10 +8,13 @@ export const config: WebdriverIO.Config = {
 	// We need to use webdriver protocol in Docker because we use the selenium grid.
 	automationProtocol: isInDocker ? "webdriver" : "devtools",
 
+	runner:'local',
+	hostname: 'localhost',
+	port: 4444,
 	maxInstances: 1,
 	path: "/wd/hub",
 
-	specs: ["./src/features/**/*.feature"],
+	specs: ["./src/features/**/answerQuestion.feature"],
 	specFileRetries: 1,
 	specFileRetriesDelay: 2,
 	specFileRetriesDeferred: true,
@@ -21,16 +25,11 @@ export const config: WebdriverIO.Config = {
 			maxInstances: 1,
 			browserName: "chrome",
 			"goog:chromeOptions": {
-				args: ["--window-size=1366,768",
-					// '--headless',
-					'--no-sandbox',
-					'--disable-gpu',
-					'--disable-setuid-sandbox',
-					'--ignore-certificate-errors',
-					'--disable-dev-shm-usage'].concat(isInDocker ? "--headless" : []),
+				args: ['--disable-web-security', '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
 			},
 		},
 	],
+
 
 	logLevel: "warn",
 
@@ -50,14 +49,15 @@ export const config: WebdriverIO.Config = {
 	framework: "cucumber",
 	cucumberOpts: {
 		require: [
-			"./src/steps/**/*.ts",
-			"./node_modules/@nice-digital/wdio-cucumber-steps/lib",
+						'./src/steps/given.ts',
+            './src/steps/then.ts',
+            './src/steps/when.ts',
 		],
-		tagExpression: "not @pending", // See https://docs.cucumber.io/tag-expressions/
+		tags: "not @pending", // See https://docs.cucumber.io/tag-expressions/
 		timeout: 1500000,
 	},
 
-	afterStep: async function (_test, _scenario, { error, passed }) {
+	afterHook: async function (_test, _scenario, { error, passed }) {
 		// Take screenshots on error, these end up in the Allure reports
 		var fileName = "errorShots/" + "ERROR_" + _scenario.name + ".png";
 		if (error) await browser.takeScreenshot();

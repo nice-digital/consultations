@@ -1,4 +1,4 @@
-import selectors from "../selectors";
+import selectors from "../selectors.js";
 
 export async function selectValueFromDropdown(index: string): Promise<void> {
 	const optionIndex = parseInt(index, 10);

@@ -1,7 +1,7 @@
-import clickElement from "../action/clickElement";
-import pause from "../action/pause";
-import waitForDisplayed from "../action/waitForDisplayed";
-import selectors from "../selectors";
+import clickElement from "../action/clickElement.js";
+import pause from "../action/pause.js";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import selectors from "../selectors.js";
 
 
 export async function clickNextPagination(): Promise<void> {

@@ -1,6 +1,6 @@
-import idamGlobalnavLogin from "./idamGlobalnavLogin";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import idamGlobalnavLogin from "./idamGlobalnavLogin.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function Login(username: string, password: string): Promise<void> {
 	await browser.refresh();

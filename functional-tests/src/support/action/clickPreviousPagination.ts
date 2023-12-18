@@ -1,6 +1,6 @@
-import clickElement from "../action/clickElement";
-import pause from "../action/pause";
-import selectors from "../selectors";
+import clickElement from "../action/clickElement.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 
 export async function clickPreviousPagination(): Promise<void> {

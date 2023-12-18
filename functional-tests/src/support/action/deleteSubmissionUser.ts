@@ -1,6 +1,6 @@
-import openWebsite from "../action/openWebsite";
-import waitForDisplayed from "../action/waitForDisplayed";
-import selectors from "../selectors";
+import openWebsite from "../action/openWebsite.js";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import selectors from "../selectors.js";
 
 export async function deleteSubmissionUser(userId: string, returnUrl: string): Promise<void> {
 	await openWebsite("url", "admin/DeleteAllSubmissionsFromUser?userId=" + process.env[userId]);
