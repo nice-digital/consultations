@@ -5,7 +5,7 @@ export async function deleteCommentsOnReviewPage(): Promise<void> {
 	// if (commentsNotDisplayed = true){
 	// 	return;
 	// } else {
-	await $("[data-qa-sel='delete-comment-button']").scrollIntoView({ block: 'center', inline: 'center' });
+	//await $("[data-qa-sel='delete-comment-button']").scrollIntoView({ block: 'center'});
 	// await $("[data-qa-sel='delete-comment-button']").click()
 	await clickAllDeleteButtons();
 	// async function clickAllDeleteButtons() {

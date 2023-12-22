@@ -22,5 +22,5 @@ Feature: Code user unable to submit when they have not completed mandatory quest
 		When I click send your response to your organisation button
 		Then I expect the feedback message "You have not entered an email address" to be displayed
 		Then I enter code user emailaddress "CODE_EMAIL1"
-		When I scroll the delete button into view
+		# When I scroll the delete button into view
 		Given I delete all comments on the page

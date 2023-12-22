@@ -10,8 +10,8 @@ export async function sidebarLogin(username: string, password: string): Promise<
 	await waitForDisplayed(".LoginBanner", "");
 	await clickElement("click", "selector", "a[href*='/consultations/account/login?returnURL=']");
 	await waitForDisplayed("[data-qa-sel='login-email']", "");
-	await setInputField("set", process.env[username], "[data-qa-sel='login-email']");
-	await setInputField("set", process.env[password], "[data-qa-sel='login-password']");
+	await setInputField("set", process.env[username]!, "[data-qa-sel='login-email']");
+	await setInputField("set", process.env[password]!, "[data-qa-sel='login-password']");
 	await clickElement("click", "selector", "[data-qa-sel='login-button']");
 	await pause("2000");
 	await waitForDisplayed("[data-qa-sel='open-commenting-panel']", "");

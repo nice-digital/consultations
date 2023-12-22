@@ -14,7 +14,25 @@ export const config: WebdriverIO.Config = {
 	maxInstances: 1,
 	path: "/wd/hub",
 
-	specs: ["./src/features/**/answerQuestion.feature"],
+	specs: [
+					"./src/features/**/*.feature"
+					//"./src/features/**/answerQuestion.feature",
+					//"./src/features/**/closedForCommenting.feature",
+					//"./src/features/**/codeuserAddCommentSubmitResponseMessage.feature",
+					//"./src/features/**/commentOnDocumentChapter.feature",
+					// "./src/features/**/commentOnSection.feature",
+					// "./src/features/**/filterAdminPageByTitleStatusGIDNumberofResults.feature",
+					// "./src/features/**/filterAdminPagePreSelectedExternal.feature",
+					// "./src/features/**/hiddenConsultation.feature"
+					// "./src/features/**/orderingOnReviewPage.feature",
+					// "./src/features/**/paginationOnAdminPage.feature",
+					// "./src/features/**/submitComments.feature",
+					// "./src/features/**/submitResponseNoManQuestions.feature"
+					// "./src/features/**/submitResponseSupportQualityStandardMan.feature",
+					// "./src/features/**/unhiddenConsultation.feature",
+					// "./src/features/**/unsavedCommentDocPage.feature",
+					// "./src/features/**/unsavedCommentReviewPage.feature"
+				],
 	specFileRetries: 1,
 	specFileRetriesDelay: 2,
 	specFileRetriesDeferred: true,
