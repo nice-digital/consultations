@@ -1,12 +1,12 @@
 import { hooks } from './src/support/hooks.js';
-const isInDocker = !!process.env.IN_DOCKER,
-	isTeamCity = !!process.env.TEAMCITY_VERSION;
+// const isInDocker = !!process.env.IN_DOCKER,
+// 	isTeamCity = !!process.env.TEAMCITY_VERSION;
 
 export const config: WebdriverIO.Config = {
 	// Use devtools to control Chrome when we're running tests locally
 	// Avoids issues with having the wrong ChromeDriver installed via selenium-standalone when Chrome updates every 6 weeks.
 	// We need to use webdriver protocol in Docker because we use the selenium grid.
-	automationProtocol: isInDocker ? "webdriver" : "devtools",
+	automationProtocol: "webdriver",
 
 	runner:'local',
 	hostname: 'localhost',
