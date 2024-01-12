@@ -12,7 +12,7 @@ export const config: WebdriverIO.Config = {
 	hostname: 'localhost',
 	port: 4444,
 	maxInstances: 1,
-	path: "/",
+	// path: "/",
 
 	specs: [
 					"./src/features/**/*.feature"
