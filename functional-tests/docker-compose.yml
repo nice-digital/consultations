@@ -30,7 +30,7 @@ services:
 
   # Selenium Grid/Hub
   hub:
-    image: selenium/hub:latest
+    image: selenium/hub:4
     container_name: selenium_hub
     environment:
       GRID_DEBUG: "true"

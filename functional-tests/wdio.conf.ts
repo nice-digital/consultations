@@ -12,7 +12,7 @@ export const config: WebdriverIO.Config = {
 	hostname: 'localhost',
 	port: 4444,
 	maxInstances: 1,
-	path: "/wd/hub",
+	path: "/",
 
 	specs: [
 					"./src/features/**/*.feature"
@@ -52,7 +52,6 @@ export const config: WebdriverIO.Config = {
 	logLevel: "warn",
 
 	baseUrl: "https://niceorg/consultations/",
-	services: ['docker'],
 	reporters: [
 		"spec",
 		"teamcity",
