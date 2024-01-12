@@ -15,8 +15,8 @@ export const config: WebdriverIO.Config = {
 	// path: "/",
 
 	specs: [
-					"./src/features/**/*.feature"
-					//"./src/features/**/answerQuestion.feature",
+					// "./src/features/**/*.feature"
+					"./src/features/**/answerQuestion.feature",
 					//"./src/features/**/closedForCommenting.feature",
 					//"./src/features/**/codeuserAddCommentSubmitResponseMessage.feature",
 					//"./src/features/**/commentOnDocumentChapter.feature",
