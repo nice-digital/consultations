@@ -8,11 +8,11 @@ export const config: WebdriverIO.Config = {
 	// We need to use webdriver protocol in Docker because we use the selenium grid.
 	automationProtocol: "webdriver",
 
-	runner:'local',
-	hostname: 'localhost',
+	// runner:'local',
+	// hostname: 'localhost',
 	port: 4444,
-	maxInstances: 1,
 	path: "/wd/hub",
+	maxInstances: 1,
 
 	specs: [
 					// "./src/features/**/*.feature"
