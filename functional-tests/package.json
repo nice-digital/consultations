@@ -36,6 +36,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "wait-on": "^7.2.0",
+    "wdio-docker-service": "^3.2.1",
     "wdio-teamcity-reporter": "^3.1.1",
     "webdriverio": "^8.1.3"
   },

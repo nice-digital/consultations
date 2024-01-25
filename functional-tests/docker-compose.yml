@@ -25,7 +25,7 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - VNC_NO_PASSWORD=1
-      - SE_NODE_GRID_URL=http://localhost:4444
+      - SE_NODE_GRID_URL=http://hub:4444
     ports:
       - "5900"
 
