@@ -53,7 +53,7 @@ services:
       - ./:/tests
       - /tests/node_modules
       - ./errorShots:/tests/errorShots
-    links:
+    depends_on:
       - hub
       - nginx
       - comments
@@ -90,7 +90,7 @@ services:
   comments:
     container_name: functional-tests_comments_1
     build: ./../Comments/
-    links:
+    depends_on:
       - database
       - redis
       - api
@@ -163,7 +163,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    links:
+    depends_on:
       - comments
     networks:
       default:
