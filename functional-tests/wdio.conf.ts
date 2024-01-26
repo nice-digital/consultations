@@ -13,7 +13,7 @@ export const config: WebdriverIO.Config = {
 	port: 4444,
 	path: "/",
 	maxInstances: 1,
-	services: ['docker'],
+	// services: ['docker'],
 
 	specs: [
 					// "./src/features/**/*.feature"
@@ -44,7 +44,7 @@ export const config: WebdriverIO.Config = {
 			maxInstances: 1,
 			browserName: "chrome",
 			"goog:chromeOptions": {
-				args: ['--disable-web-security', '--headless', '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
+				args: ['--disable-web-security', /*'--headless',*/ '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
 			},
 		},
 	],
