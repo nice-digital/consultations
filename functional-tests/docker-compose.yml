@@ -1,49 +1,25 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
 version: "3.8"
 services:
-  firefox:
-    container_name: functional-tests_firefox_1
-    image: selenium/node-firefox:latest
-    # See https://github.com/SeleniumHQ/docker-selenium#running-the-images
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - hub
-    environment:
-      HUB_HOST: hub
-
   chrome:
-    container_name: functional-tests_chrome_1
-    image: selenium/node-chrome:latest
-    shm_size: '1gb'
-    volumes:
-      - /dev/shm:/dev/shm
+    image: selenium/node-chrome:4.17.0-20240123
+    shm_size: '2gb'
     depends_on:
-      - hub
+      - selenium-hub
     environment:
-      - SE_EVENT_BUS_HOST=hub
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - VNC_NO_PASSWORD=1
-      - SE_NODE_GRID_URL=http://hub:4444
-    ports:
-      - "5900"
 
   # Selenium Grid/Hub
-  hub:
-    image: selenium/hub:nightly
-    container_name: selenium_hub
-    environment:
-      GRID_DEBUG: "true"
-      GRID_MAX_SESSION: 2
+  selenium-hub:
+    image: selenium/hub:4.17.0-20240123
+    container_name: selenium-hub
     ports:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
-    networks:
-      default:
-        aliases:
-          - hub
 
   # The tests themselves
   tests:
@@ -54,7 +30,7 @@ services:
       - /tests/node_modules
       - ./errorShots:/tests/errorShots
     depends_on:
-      - hub
+      - selenium-hub
       - nginx
       - comments
     environment:
