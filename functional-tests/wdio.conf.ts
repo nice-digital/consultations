@@ -9,7 +9,7 @@ export const config: WebdriverIO.Config = {
 	automationProtocol: "webdriver",
 
 	runner:'local',
-	hostname: 'selenium-hub',
+	hostname: 'localhost',
 	port: 4444,
 	path: "/wd/hub",
 	maxInstances: 1,

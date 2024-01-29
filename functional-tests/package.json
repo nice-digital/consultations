@@ -9,7 +9,7 @@
     "test:docker": "npm test -- --hostname selenium-hub --baseUrl https://niceorg/consultations/",
     "test:accessibility-docker": "npm run test:accessibility -- --hostname hub --baseUrl https://niceorg/consultations/",
     "wait:docker": "waitforit -t 120 --strict comments:8080",
-    "wait-then-test": "npm run wait:docker && curl selenium-hub:4444/wd/hub/status && npm run test:docker",
+    "wait-then-test": "npm run wait:docker && curl localhost:4444/wd/hub/status && npm run test:docker",
     "wait-then-accessibility-test": "npm run wait:docker && npm run test:accessibility-docker",
     "test2": "node node_modules/webdriverio/bin/wdio",
     "test:teamcity": "wdio run wdio.teamcity.conf.js",
