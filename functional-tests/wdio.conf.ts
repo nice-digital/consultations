@@ -11,7 +11,7 @@ export const config: WebdriverIO.Config = {
 	runner:'local',
 	hostname: 'selenium-hub',
 	port: 4444,
-	path: "/",
+	path: "/wd/hub",
 	maxInstances: 1,
 	// services: ['docker'],
 
