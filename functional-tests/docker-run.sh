@@ -14,7 +14,7 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
   docker-compose build --no-cache && docker-compose up -d
 
   # Wait for the web app to be up before running the tests
-  docker-compose run -T tests npm run wait-then-test
+  docker-compose run -iT --service-ports tests npm run wait-then-test
   # Or for dev mode, uncomment:
   # winpty docker-compose exec tests bash
 
