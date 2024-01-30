@@ -1,7 +1,6 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
 version: "3.8"
 services:
-  network_mode: "host"
   chrome:
     image: selenium/node-chrome:4.17.0-20240123
     shm_size: '2gb'
@@ -20,6 +19,10 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
+    networks:
+      default:
+        aliases:
+          - selenium-hub
 
   # The tests themselves
   tests:
