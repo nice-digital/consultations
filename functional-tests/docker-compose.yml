@@ -13,6 +13,7 @@ services:
 
   # Selenium Grid/Hub
   selenium-hub:
+    restart: always
     image: selenium/hub:4.17.0-20240123
     ports:
       - "4442:4442"
