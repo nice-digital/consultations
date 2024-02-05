@@ -9,11 +9,11 @@ export const config: WebdriverIO.Config = {
 	automationProtocol: "webdriver",
 
 	runner:'local',
-	hostname: '0.0.0.0',
+	hostname: 'selenium-hub',
 	port: 4444,
 	path: "/wd/hub",
 	maxInstances: 1,
-	// services: ['docker'],
+	services: ['devtools'],
 
 	specs: [
 					// "./src/features/**/*.feature"
