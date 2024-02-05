@@ -60,6 +60,10 @@ services:
       - BUILD_NUMBER
       - CODE_EMAIL1
       - AUTH_ADMIN_ID
+    networks:
+      default:
+        aliases:
+          - tests
 
   # Comment Collection dotnet core web app
   comments:
