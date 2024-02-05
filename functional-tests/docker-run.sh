@@ -18,6 +18,7 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
   docker-compose run -T tests curl selenium-hub:4444/wd/hub/status
   docker-compose run -T tests curl localhost:4444/wd/hub/status
   docker ps -a
+  docker network inspect functional-tests_default
   # Or for dev mode, uncomment:
   # winpty docker-compose exec tests bash
 
