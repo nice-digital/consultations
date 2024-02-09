@@ -1,9 +1,9 @@
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import selectors from "../selectors";
+import clickElement from "../action/clickElement.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function clickCancelFilter(): Promise<void> {
-	await clickElement("click", "button", selectors.adminDownloadPage.cancelFilter);
+	await clickElement("click", "selector", selectors.adminDownloadPage.cancelFilter);
 	await pause("2000");
 };
 

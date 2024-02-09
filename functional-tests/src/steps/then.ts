@@ -1,5 +1,4 @@
-// import "@nice-digital/wdio-cucumber-steps/lib/then";
-import { Then } from "@cucumber/cucumber";
+import { Then } from "@wdio/cucumber-framework";
 
 import validateCommentBox, {
 	validateCommentBoxText,
@@ -10,27 +9,27 @@ import validateCommentBox, {
 	validateThirdCommentBox,
 	validateCommentBoxInactive,
 	validateAllCommentBoxesInactive,
-} from "../support/check/validateCommentBox";
-import deleteOneComment from "../support/action/deleteOneComment";
+} from "../support/check/validateCommentBox.js";
+import deleteOneComment from "../support/action/deleteOneComment.js";
 import validateSubmitResponseButtonInactive, {
 	validateSubmitResponseValidationMessage,
-} from "../support/check/validateSubmitResponseButton";
+} from "../support/check/validateSubmitResponseButton.js";
 import validateDownloadPageResultCount, {
 	validateDownloadPageAllResults,
 	validateFirstLinkInPagination,
-} from "../support/check/validateAdminDownloadPage";
-import clickCancelFilter from "../support/action/clickCancelFilter";
-import clickPaginationOption, {
-	clickSecondPaginationOption,
-	clickNextPagination,
-	clickPreviousPagination,
-} from "../support/action/clickPaginationOption";
-import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked";
-import { enterEmailaddress } from "../support/action/enterEmailaddress";
-import { generateOrganisationCode } from "../support/action/generateOrganisationCode";
+} from "../support/check/validateAdminDownloadPage.js";
+import clickCancelFilter from "../support/action/clickCancelFilter.js";
+import clickSecondPaginationOption from "../support/action/clickSecondPaginationOption.js";
+import { clickPreviousPagination } from "../support/action/clickPreviousPagination.js"
+import { clickNextPagination } from "../support/action/clickNextPagination.js";
+import validateResponsesFilterChecked from "../support/check/validateResponsesFilterChecked.js";
+import { enterEmailaddress } from "../support/action/enterEmailaddress.js";
+import { generateOrganisationCode } from "../support/action/generateOrganisationCode.js";
 
-import validateAlertCautionText from "../support/check/validateAlertCautionText";
-import { validateCommentOnDocIsDisabled, validateCommentOnChapterIsDisabled, validateCommentOnSectionIsDisabled, validateCommentOnSubSectionIsDisabled} from "../support/check/validateConsultationIsCLosed";
+import validateAlertCautionText from "../support/check/validateAlertCautionText.js";
+import { validateCommentOnDocIsDisabled, validateCommentOnChapterIsDisabled, validateCommentOnSectionIsDisabled, validateCommentOnSubSectionIsDisabled} from "../support/check/validateConsultationIsCLosed.js";
+import checkModalText from "../support/check/checkModalText.js";
+import checkModal from "../support/check/checkModal.js";
 
 Then(/^I expect the comment box contains "([^"]*)"$/, validateCommentBox);
 
@@ -83,3 +82,9 @@ Then(/^I expect the Comment on Chapter bubbles to not appear$/, validateCommentO
 Then(/^I expect the Comment on Section bubbles to not appear$/, validateCommentOnSectionIsDisabled);
 
 Then(/^I expect the Comment on Subsection bubbles to not appear$/, validateCommentOnSubSectionIsDisabled);
+
+Then(/^I expect that a (alertbox|confirmbox|prompt) is( not)* opened$/, checkModal);
+
+Then(/^I expect that a (alertbox|confirmbox|prompt)( not)* contains the text "([^"]*)?"$/, checkModalText);
+
+

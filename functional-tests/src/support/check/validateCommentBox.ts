@@ -1,8 +1,7 @@
-import {checkEqualsText} from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkEqualsText";
-import {checkContainsText} from "@nice-digital/wdio-cucumber-steps/lib/support/check/checkContainsText";
-import {isEnabled} from "@nice-digital/wdio-cucumber-steps/lib/support/check/isEnabled";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import selectors from "../selectors";
+import checkContainsText from "../check/checkContainsText.js";
+import isEnabled from "../check/isEnabled.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function validateCommentBoxText(commentText: string): Promise<void> {
 	await pause("1000");
@@ -34,26 +33,26 @@ export async function validateThirdCommentBox(commentText: string): Promise<void
 
 export async function validateCommentBoxTitle(titleText: string): Promise<void> {
 	await pause("1000");
-	await checkContainsText("element", selectors.documentPage.commentBoxTitle, "false", titleText);
+	await checkContainsText("element", selectors.documentPage.commentBoxTitle, "", titleText);
 	await pause("1000");
 };
 
 export async function validateCommentSaved(commentText: string): Promise<void> {
-	await checkContainsText("element", selectors.documentPage.saveIndicator, "false", commentText);
+	await checkContainsText("element", selectors.documentPage.saveIndicator, "", commentText);
 	await pause("1000");
 };
 
 export async function validateCommentBoxInactive(): Promise<void> {
-	await isEnabled(selectors.reviewPage.firstCommentTextArea, "true");
+	await isEnabled(selectors.reviewPage.firstCommentTextArea, true);
 	await pause("1000");
 };
 
 export async function validateAllCommentBoxesInactive(): Promise<void> {
-	await isEnabled(selectors.reviewPage.firstCommentTextArea, "true");
+	await isEnabled(selectors.reviewPage.firstCommentTextArea, true);
 	await pause("1000");
-	await isEnabled(selectors.reviewPage.secondCommentTextArea, "true");
+	await isEnabled(selectors.reviewPage.secondCommentTextArea, true);
 	await pause("1000");
-	await isEnabled(selectors.reviewPage.thirdCommentTextArea, "true");
+	await isEnabled(selectors.reviewPage.thirdCommentTextArea, true);
 	await pause("1000");
 }
 

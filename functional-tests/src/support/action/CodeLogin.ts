@@ -1,14 +1,12 @@
-import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement"
-import {pause} from	"@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import {setInputField} from "@nice-digital/wdio-cucumber-steps/lib/support/action/setInputField";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import clickElement from "../action/clickElement.js"
+import pause from	"../action/pause.js";
 
 export async function CodeLogin(): Promise<void> {
 
 	await clickElement("click", "selector", "[data-qa-sel='loginpanel-label-organisation']");
 	await clickElement("click", "selector", "[data-qa-sel='loginpanel-label-code']");
 	await waitForDisplayed("[data-qa-sel='OrganisationCodeLogin']", "");
-	// await setInputField("set",  "", "[data-qa-sel='OrganisationCodeLogin']");
 	await clickElement("click", "selector", "[data-qa-sel='OrganisationCodeLogin']");
 	await browser.keys(['Control', 'v']);
   await pause("5000");
