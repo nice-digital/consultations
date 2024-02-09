@@ -15,10 +15,6 @@ export COMPOSE_CONVERT_WINDOWS_PATHS=1
 
   # Wait for the web app to be up before running the tests
   docker-compose run -T tests npm run wait-then-test
-  docker-compose run -T tests curl selenium-hub:4444/wd/hub/status
-  docker-compose run -T tests curl localhost:4444/wd/hub/status
-  docker ps -a
-  docker network inspect functional-tests_default
   # Or for dev mode, uncomment:
   # winpty docker-compose exec tests bash
 
