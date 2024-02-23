@@ -1,5 +1,5 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
-version: "3.7"
+version: "3.8"
 services:
   chrome:
     image: selenium/node-chrome:4.17.0-20240123
@@ -10,7 +10,29 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+  edge:
+    image: selenium/node-edge:4.1.2-20220217
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VNC_NO_PASSWORD=1
+      - SE_NODE_MAX_SESSIONS=2
 
+  firefox:
+    image: selenium/node-firefox:4.1.2-20220217
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VNC_NO_PASSWORD=1
+      - SE_NODE_MAX_SESSIONS=2
   # Selenium Grid/Hub
   selenium-hub:
     restart: always
@@ -60,6 +82,7 @@ services:
       - BUILD_NUMBER
       - CODE_EMAIL1
       - AUTH_ADMIN_ID
+      - AUTH_ADMIN_ID_5
     networks:
       default:
         aliases:
@@ -121,6 +144,7 @@ services:
       - INDEV_IDAM_CONFIG_CLIENTSECRET
       - INDEV_IDAM_CONFIG_DOMAIN
       - AUTH_ADMIN_ID
+      - AUTH_ADMIN_ID_5
       # MS SQL Server database
   database:
     container_name: functional-tests_database_1
