@@ -35,6 +35,7 @@ import { selectValueFromDropdown } from "../support/action/selectFromDropdownByI
 import { CodeLogin } from "../support/action/CodeLogin.js";
 import { selectMyConsultationFilter } from "../support/action/selectMyConsultationFilter.js";
 import handleModal from "../support/action/handleModal.js";
+import { logout } from "../support/action/logout.js";
 
 
 // E.g. When I click on text "Title here" in ".ancestor"
@@ -79,6 +80,8 @@ When(/^I log into accounts with username "([A-Z0-9_]+)" and password "([A-Z0-9_]
 When(/^I log into the admin page with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	LoginAdmin);
 
 When(/^I log in using sidebar with username "([A-Z0-9_]+)" and password "([A-Z0-9_]+)"$/,	sidebarLogin);
+
+When (/^I logout$/, logout);
 
 When(/^I open question panel$/, openQuestionPanel);
 

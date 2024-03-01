@@ -9,14 +9,9 @@ export const config: WebdriverIO.Config = {
 	automationProtocol: "webdriver",
 
 	runner:'local',
-	// hostname: 'selenium-hub',
-	// port: 4444,
-	path: "/wd/hub",
 	maxInstances: 1,
-	// services: ['devtools'],
-
 	specs: [
-					"./src/features/**/*.feature"
+					// "./src/features/**/*.feature"
 					// "./src/features/**/answerQuestion.feature",
 					//"./src/features/**/closedForCommenting.feature",
 					//"./src/features/**/codeuserAddCommentSubmitResponseMessage.feature",
@@ -43,9 +38,13 @@ export const config: WebdriverIO.Config = {
 			// acceptSslCerts: true,
 			maxInstances: 1,
 			browserName: "chrome",
+			browserVersion: "122.0.6261.39",
 			"goog:chromeOptions": {
 				args: ['--disable-web-security', /*'--headless',*/ '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
 			},
+			specs: [
+					"./src/features/**/*.feature"
+			]
 		},
 		{
 
@@ -92,7 +91,7 @@ export const config: WebdriverIO.Config = {
 	],
 
 
-	logLevel: "warn",
+	logLevel: "debug",
 
 	baseUrl: "https://niceorg/consultations/",
 	reporters: [
