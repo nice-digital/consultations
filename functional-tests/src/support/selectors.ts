@@ -1,9 +1,9 @@
-const toDataQASelAttr = (attrValue) => `[data-qa-sel='${attrValue}']`;
-const toNthChildAttr = (attrValue) => `.CommentBox:nth-child(${attrValue})`;
-const onlyToNthChildAttr = (attrValue) => `:nth-child(${attrValue})`;
-const toChildAndQASel = (childIndex, attrValue) =>
+const toDataQASelAttr = (attrValue: string) => `body [data-qa-sel='${attrValue}']`;
+const toNthChildAttr = (attrValue: number) => `body .CommentBox:nth-child(${attrValue})`;
+const onlyToNthChildAttr = (attrValue: any) => `:nth-child(${attrValue})`;
+const toChildAndQASel = (childIndex: number, attrValue: string) =>
 	toNthChildAttr(childIndex) + " " + toDataQASelAttr(attrValue);
-const toQAselAndChild = (attrValue, childIndex) =>
+const toQAselAndChild = (attrValue: string, childIndex: number) =>
 	toDataQASelAttr(attrValue) + " > li" + onlyToNthChildAttr(childIndex) + " a";
 export default {
 	documentPage: {

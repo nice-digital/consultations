@@ -27,6 +27,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@wdio/allure-reporter": "^8.0.0",
     "@wdio/cli": "^8.31.1",
     "@wdio/cucumber-framework": "^8.31.1",
