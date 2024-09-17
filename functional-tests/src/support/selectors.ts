@@ -1,5 +1,5 @@
-const toDataQASelAttr = (attrValue: string) => `body [data-qa-sel='${attrValue}']`;
-const toNthChildAttr = (attrValue: number) => `body .CommentBox:nth-child(${attrValue})`;
+const toDataQASelAttr = (attrValue: string) => `[data-qa-sel='${attrValue}']`;
+const toNthChildAttr = (attrValue: number) => `.CommentBox:nth-child(${attrValue})`;
 const onlyToNthChildAttr = (attrValue: any) => `:nth-child(${attrValue})`;
 const toChildAndQASel = (childIndex: number, attrValue: string) =>
 	toNthChildAttr(childIndex) + " " + toDataQASelAttr(attrValue);
