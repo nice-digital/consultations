@@ -6,7 +6,7 @@ Feature: User unable to submit when they have not completed mandatory questions 
 
 	Background:
 		Given I open the url "410/1/recommendations"
-		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		When I log into accounts with username "IDAM_EMAIL12" and password "IDAM_PASSWORD"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions
 		Given I comment on a Document
@@ -18,5 +18,5 @@ Feature: User unable to submit when they have not completed mandatory questions 
 		And I click yes submit my response button
 		Then I expect the feedback message "You have not stated whether you are submitting the response on behalf of an organisation" to be displayed
 		And I expect the feedback message "You have not disclosed whether you or the organisation you represent have links to the tobacco industry" to be displayed
-		When I scroll the delete button into view
+		# When I scroll the delete button into view
 		Given I delete all comments on the page

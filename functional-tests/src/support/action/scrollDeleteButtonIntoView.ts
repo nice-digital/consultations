@@ -1,5 +1,5 @@
-import {scroll} from "@nice-digital/wdio-cucumber-steps/lib/support/action/scroll";
-import selectors from "../selectors";
+import scroll from "../action/scroll.js";
+import selectors from "../selectors.js";
 
 export async function scrollDeleteButtonIntoView(): Promise<void> {
 	await scroll(selectors.reviewPage.deletebutton);

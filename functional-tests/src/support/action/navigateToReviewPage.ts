@@ -1,12 +1,11 @@
-import {clickElement} from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refresh";
-import selectors from "../selectors";
+import clickElement from "../action/clickElement.js";
+import waitForDisplayed from "../action/waitForDisplayed.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function navigateToReviewPage(): Promise<void> {
-	await clickElement("click", "button", selectors.documentPage.reviewAllButton);
-	await pause("2000");
+	await clickElement("click", "selector", selectors.documentPage.reviewAllButton);
+	await pause("4000");
 	await waitForDisplayed(selectors.reviewPage.commentTextArea, "");
 	await pause("2000");
 	await waitForDisplayed(selectors.reviewPage.answerNoRepresentOrg, "");
@@ -16,7 +15,7 @@ export async function navigateToReviewPage(): Promise<void> {
 };
 
 export async function clickReviewPageLink(): Promise<void> {
-	await clickElement("click", "button", selectors.documentPage.reviewAllButton);
+	await clickElement("click", "selector", selectors.documentPage.reviewAllButton);
 	await pause("2000");
 };
 

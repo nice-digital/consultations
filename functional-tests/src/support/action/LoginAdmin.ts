@@ -1,9 +1,6 @@
-import idamGlobalnavLoginAdmin from "./idamGlobalnavLoginAdmin";
-import {waitForDisplayed} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {waitFor} from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitFor";
-import {refresh} from "@nice-digital/wdio-cucumber-steps/lib/support/action/refresh";
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import selectors from "../selectors";
+import idamGlobalnavLoginAdmin from "./idamGlobalnavLoginAdmin.js";
+import pause from "../action/pause.js";
+import selectors from "../selectors.js";
 
 export async function LoginAdmin(username: string, password: string): Promise<void> {
 	await pause("2000");

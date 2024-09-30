@@ -86,7 +86,7 @@
                 "Options":[
                     {
                         "Id":"HasContributed",
-                        "Label":"Your responses",
+                        "Label":"My consultations",
                         "IsSelected":true,
                         "FilteredResultCount":1,
                         "UnfilteredResultCount":2

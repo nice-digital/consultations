@@ -1,13 +1,21 @@
 // import "@nice-digital/wdio-cucumber-steps/lib/given";
-import { Given } from "@cucumber/cucumber";
-import { waitForDisplayed } from "@nice-digital/wdio-cucumber-steps/lib/support/action/waitForDisplayed";
-import {deleteCommentsOnReviewPage} from "../support/action/deleteComments";
-import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser";
-import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation";
-import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked";
-import { clickElement } from "@nice-digital/wdio-cucumber-steps/lib/support/action/clickElement";
-import { pause } from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
-import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink";
+import { Given } from "@wdio/cucumber-framework";
+import openWebsite from "../support/action/openWebsite.js";
+import waitForDisplayed from "../support/action/waitForDisplayed.js";
+import { deleteCommentsOnReviewPage } from "../support/action/deleteComments.js";
+import { deleteSubmissionUser } from "../support/action/deleteSubmissionUser.js";
+import { addQuestionsToConsultation } from "../support/action/addQuestionsToConsultation.js";
+import { validateStatusFilterChecked } from "../support/check/validateStatusFilterChecked.js";
+import clickElement from "../support/action/clickElement.js";
+import pause from "../support/action/pause.js";
+import { clickLeadInfoLink } from "../support/action/clickLeadInfoLink.js";
+import { validateConsultationIsClosed } from "../support/check/validateConsultationIsCLosed.js";
+import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed.js";
+
+Given(
+    /^I open the (url|site) "([^"]*)?"$/,
+    openWebsite
+);
 
 Given(/^I delete all comments on the page$/, deleteCommentsOnReviewPage);
 
@@ -42,7 +50,7 @@ Given(/^I comment on a Chapter$/, async () => {
 
 Given(/^I comment on a Section$/, async () => {
 	await pause("1000");
-	await clickElement("click", "selector", "[data-qa-sel='nav-list-item']:nth-of-type(2)");
+	//await clickElement("click", "selector", "[data-qa-sel='nav-list-item']:nth-of-type(2)");
 	await waitForDisplayed(".document-comment-container", "");
 	await pause("1000");
 	await waitForDisplayed(
@@ -71,6 +79,11 @@ Given(/^I delete submissions for userid "([A-Z0-9_]+)" and navigate to review pa
 Given(
 	/^I add questions to Consultation "([^"]*)?"$/, addQuestionsToConsultation);
 
-Given(/^I select open and closed status filter$/,  validateStatusFilterChecked);
+Given(/^I select open and closed status filter$/, validateStatusFilterChecked);
 
 Given(/^I click on the request commenting lead permision link$/,  clickLeadInfoLink);
+
+Given(/^I appear on a closed consultation$/, validateConsultationIsClosed);
+
+Given(/^I expect the not current guidance banner to appear$/, validateConsultationClosedMessage);
+Given(/^I click on the request commenting lead permision link$/, clickLeadInfoLink);

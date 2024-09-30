@@ -1,4 +1,4 @@
-import {pause} from "@nice-digital/wdio-cucumber-steps/lib/support/action/pause";
+import pause from "../action/pause.js";
 
 export async function validateStatusFilterChecked(): Promise<void> {
 	await $('#filter_Status_Open').click();

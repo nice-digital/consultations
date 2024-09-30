@@ -5,8 +5,8 @@ Feature: User unable to submit when they have not completed mandatory questions 
 	We want to be warned if I attempt to submit response without answering mandatory questions for a QS
 
 	Background:
-		Given I open the url "413/1/recommendations"
-		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
+		Given I open the url "413/1/overview"
+		When I log into accounts with username "IDAM_EMAIL13" and password "IDAM_PASSWORD"
 
 	Scenario: User is unable to Submit when they have not answered the default response questions when answering on behalf of an Organisation on a QS Consultation
 		Given I comment on a Document
@@ -18,5 +18,5 @@ Feature: User unable to submit when they have not completed mandatory questions 
 		Then I expect the alert caution to contain "I understand that once I have submitted my response, I will not be able to edit my comments or provide additional information."
 		And I click yes submit my response button
 		Then I expect the feedback message "You have not disclosed whether your organisation would like to express an interest in formally supporting this quality standard" to be displayed
-		When I scroll the delete button into view
+		# When I scroll the delete button into view
 		Given I delete all comments on the page
