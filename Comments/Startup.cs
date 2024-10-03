@@ -136,16 +136,6 @@ namespace Comments
 			//    });
 			//}
 
-
-	        if (!Environment.IsDevelopment())
-	        {
-		        services.AddHttpsRedirection(options =>
-		        {
-			        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-			        options.HttpsPort = 443;
-		        });
-	        }
-
 	        services.Configure<ForwardedHeadersOptions>(options =>
 			{
 				options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
