@@ -6,7 +6,7 @@ import {
 	nodeIsSpanTag,
 	nodeIsInternalLink,
 	nodeIsParagraphNumber,
-	nodeIsNewArticleHeading
+	nodeIsNewArticleHeading,
 } from "./types";
 import processInternalLink from "./internal-link";
 import { tagManager } from "../../helpers/tag-manager";
