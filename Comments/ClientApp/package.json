@@ -68,11 +68,13 @@
     "stringify-object": "^3.2.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@nice-digital/browserslist-config": "^1.0.0",
     "@nice-digital/eslint-config": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "14.1.1",
+    "ajv": "^8.17.1",
     "assert": "^2.0.0",
     "axios-mock-adapter": "^1.15.0",
     "buffer": "^6.0.3",
