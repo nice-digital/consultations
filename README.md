@@ -19,12 +19,18 @@
 - [Stack](#stack)
   - [Architecture](#architecture)
   - [Technical stack](#technical-stack)
-  - [In-dev integration](#in-dev-integration)
 - [Set up](#set-up)
+  - [Other README files](#other-readme-files)
+  - [Secrets](#secrets)
+  - [Redis server](#redis-server)
   - [Gotchas](#gotchas)
 - [Tests](#tests)
+- [Entity Framework Migrations](#entity-framework-migrations)
 - [Good to know](#good-to-know)
+  - [Further info](#further-info)
   - [Environments](#environments)
+  - [Supported by](#supported-by)
+  - [Regenerate the Table of Contents](#regenerate-the-table-of-contents)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 </details>
@@ -78,7 +84,7 @@ What do we need to measure against these outcomes?
 
 ### Architecture
 
-Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is under the main niceorg domain. It pulls data from [InDev](https://github.com/nhsevidence/publicationsindev) via an API and stores data in SQL Server.
+Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so is under the main niceorg domain. It pulls data from [InDev](https://github.com/nice-digital/publicationsindev) via an API and stores data in SQL Server.
 
 <!-- See http://asciiflow.com/ -->
 
@@ -103,7 +109,7 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 
 - [Varnish](https://varnish-cache.org/) for infrastructure-level routing
 - [.NET Core 2](https://github.com/dotnet/core) on the server
-  - [xUnit.net](https://xunit.github.io/) for .NET unit tests
+  - [xUnit.net](https://xunit.net/) for .NET unit tests
   - [Moq](https://github.com/moq/moq4) for mocking in .NET
   - [Shouldly](https://github.com/shouldly/shouldly) for .NET assertions
   - [KDiff](http://kdiff3.sourceforge.net/) for diffing approvals tests
@@ -118,15 +124,15 @@ Consultations sits below [Varnish](https://github.com/nhsevidence/varnish) so is
 - [SASS](https://sass-lang.com/) as a CSS pre-processor
 - [Modernizr](https://modernizr.com/) for feature detection
 - [WebdriverIO](http://webdriver.io/) for automated functional testing
-- [NICE Design System](https://nhsevidence.github.io/nice-design-system/) for NICE styling
-  - [NICE Icons](https://github.com/nhsevidence/nice-icons) for icon webfont
+- [NICE Design System](https://nice-digital.github.io/nice-design-system/) for NICE styling
+  - [NICE Icons](https://github.com/nice-digital/nice-icons) for icon webfont
 
 ## Set up
 
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
 3. Restore Consultations database in SSMS and set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
-4. Clone the project `git clone git@github.com:nhsevidence/consultations.git`
+4. Clone the project `git clone git@github.com:nice-digital/consultations.git`
 5. Open _Consultations.sln_
 6. Paste database connection string into DefaultConnection in secrets.json file (see "Secrets" below for format)
    - right click on project
@@ -265,17 +271,23 @@ To update the database
 
 ## Good to know
 
+### Further info
+
+See the [Consultations Sharepoint site](https://niceuk.sharepoint.com/sites/External_Consultations)
+
 ### Environments
 
-| Environment |                   URL                   |
-| ----------- | :-------------------------------------: |
-| Dev         | https://dev.nice.org.uk/consultations/  |
-| Test        | https://test.nice.org.uk/consultations/ |
+| Environment | URL                                      |
+| ----------- | ---------------------------------------- |
+| local       | https://local.nice.org.uk/consultations/ |
+| Alpha       | https://alpha.nice.org.uk/consultations/ |
+| Live        | https://www.nice.org.uk/consultations/   |
 
-## Supported by
+### Supported by
 
-<a href="https://browserstack.com">
-<img src="https://image.ibb.co/k7aNvK/browserstack_logo_600x315.png" width="300" alt="BrowserStack Logo">
-</a>
+<img src="https://cdn.worldvectorlogo.com/logos/browserstack.svg" align="left" width="80" style= "padding-right: 20px" alt="BrowserStack Logo">
+We're using <a href="https://browserstack.com">BrowserStack's</a> support of open source projects for our day-to-day cross-browser and cross-device testing, and as part of an automated CI environment. <a href="https://www.browserstack.com/open-source">See their support for open source projects</a>.
 
-We're using BrowserStack's support of open source projects for our day-to-day cross-browser and cross-device testing, and as part of an automated CI environment. <a href="https://www.browserstack.com/open-source">See their support for open source projects</a>.
+### Regenerate the Table of Contents
+
+For further information about the recommended ReadMe structure plus a 'how to' for regenerating the table of contents, follow the instructions in [DIT Engineering - ReadMes](https://niceuk.sharepoint.com/sites/DIT_Engineering/SitePages/Readmes.aspx)
