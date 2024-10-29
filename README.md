@@ -158,83 +158,82 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 
 - First try to copy the secrets file from another developer who has had comment collection working before.
 - If you cannot find another developer with a secrets file, you can copy the format below.
-  '''
 
+```
 {
-"ConnectionStrings": {
-"DefaultConnection": "<connection string>"
-},
-"Logging": {
-"RabbitMQHost": "<rabbit server URL>",
-"RabbitMQPort": "<rabbit server port>",
-"IncludeScopes": false,
-"LogFilePath": "<log file path>",
-"LogLevel": {
-"Default": "Debug",
-"System": "Information",
-"Microsoft": "Information"
-},
-"UseRabbit": false,
-"UseFile": true
-},
-"AppSettings": {
-"Environment": {
-"Name": "local",
-"SecureSite": "false"
+	"ConnectionStrings": {
+		"DefaultConnection": "<connection string>"
+	},
+	"Logging": {
+		"RabbitMQHost": "<rabbit server URL>",
+		"RabbitMQPort": "<rabbit server port>",
+		"IncludeScopes": false,
+		"LogFilePath": "<log file path>",
+		"LogLevel": {
+			"Default": "Debug",
+			"System": "Information",
+			"Microsoft": "Information"
+		},
+		"UseRabbit": false,
+		"UseFile": true
+	},
+	"AppSettings": {
+		"Environment": {
+			"Name": "local",
+			"SecureSite": "false"
+		}
+	},
+	"Feeds": {
+		"ApiKey": "<indev API key>",
+		"IndevBasePath": "<indev base path>",
+		"IndevPublishedChapterFeedPath": "<feed path>",
+		"IndevDraftPreviewChapterFeedPath": "<feed path>",
+		"IndevPublishedDetailFeedPath": "<feed path>",
+		"IndevDraftPreviewDetailFeedPath": "<feed path>",
+		"IndevPublishedPreviewDetailFeedPath": "<feed path>",
+		"IndevListFeedPath": "<feed path>",
+		"CacheDurationSeconds": 60,
+		"IndevIDAMConfig": {
+			"Domain": "<InDev IDAM Domain>",
+			"ClientId": "<Auth0 Client Id>",
+			"ClientSecret": "<Auth0 Client Secret>",
+			"APIIdentifier": "<Auth0 API Identifier>"
+		}
+	},
+	"WebAppConfiguration": {
+		"ApiIdentifier": "<Auth0 API Identifier for comment collection>",
+		"ClientId": "<Auth0 Client Id for comment collection>",
+		"ClientSecret": "<Auth0 Client secret for comment collection>",
+		"AuthorisationServiceUri": "<Auth0 Authorisation service URI for comment collection>",
+		"Domain": "<Auth0 Domain comment collection>",
+		"PostLogoutRedirectUri": "<Auth0 Post Logout Redirect Uri>",
+		"RedirectUri": "<Auth0 Redirect Uri>",
+		"CallBackPath": "<Auth0 callback path>",
+		"GoogleTrackingId": "<google tracking id>",
+		"RedisServiceConfiguration": {
+			"ConnectionString": "<redis server URL>",
+			"Enabled": true
+		}
+	},
+	"Encryption": {
+		"Key": "<Encryption key for encrypting comment text>",
+		"IV": "<Initialisation Vector for encrypting comment text>"
+	},
+	"PDF": {
+		"PDFDocGenServer": "<PDF DocGen Server>"
+	},
+	"ConsultationList": {
+		"DownloadRoles": {
+			"AdminRoles": [ "<List of Admin roles>", "<List of Admin roles>" ],
+			"TeamRoles": [ "<List of team roles>", "<List of team roles>", "<List of team roles>" ]
+		}
+	},
+	"AWS": {
+		"Profile": "<AWS Profile>",
+		"Region": "<AWS Region>"
+	}
 }
-},
-"Feeds": {
-"ApiKey": "<indev API key>",
-"IndevBasePath": "<indev base path>",
-"IndevPublishedChapterFeedPath": "<feed path>",
-"IndevDraftPreviewChapterFeedPath": "<feed path>",
-"IndevPublishedDetailFeedPath": "<feed path>",
-"IndevDraftPreviewDetailFeedPath": "<feed path>",
-"IndevPublishedPreviewDetailFeedPath": "<feed path>",
-"IndevListFeedPath": "<feed path>",
-"CacheDurationSeconds": 60,
-"IndevIDAMConfig": {
-"Domain": "<InDev IDAM Domain>",
-"ClientId": "<Auth0 Client Id>",
-"ClientSecret": "<Auth0 Client Secret>",
-"APIIdentifier": "<Auth0 API Identifier>"
-}
-},
-"WebAppConfiguration": {
-"ApiIdentifier": "<Auth0 API Identifier for comment collection>",
-"ClientId": "<Auth0 Client Id for comment collection>",
-"ClientSecret": "<Auth0 Client secret for comment collection>",
-"AuthorisationServiceUri": "<Auth0 Authorisation service URI for comment collection>",
-"Domain": "<Auth0 Domain comment collection>",
-"PostLogoutRedirectUri": "<Auth0 Post Logout Redirect Uri>",
-"RedirectUri": "<Auth0 Redirect Uri>",
-"CallBackPath": "<Auth0 callback path>",
-"GoogleTrackingId": "<google tracking id>",
-"RedisServiceConfiguration": {
-"ConnectionString": "<redis server URL>",
-"Enabled": true
-}
-},
-"Encryption": {
-"Key": "<Encryption key for encrypting comment text>",
-"IV": "<Initialisation Vector for encrypting comment text>"
-},
-"PDF": {
-"PDFDocGenServer": "<PDF DocGen Server>"
-},
-"ConsultationList": {
-"DownloadRoles": {
-"AdminRoles": [ "<List of Admin roles>", "<List of Admin roles>" ],
-"TeamRoles": [ "<List of team roles>", "<List of team roles>", "<List of team roles>" ]
-}
-},
-"AWS": {
-"Profile": "<AWS Profile>",
-"Region": "<AWS Region>"
-}
-}
-
-'''
+```
 
 ### Redis server
 
