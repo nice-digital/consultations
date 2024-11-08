@@ -1,5 +1,4 @@
 # See https://github.com/SeleniumHQ/docker-selenium#via-docker-compose
-version: "3.8"
 services:
   chrome:
     image: selenium/node-chrome:4.17.0-20240123
