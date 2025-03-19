@@ -38,15 +38,15 @@ export const config: WebdriverIO.Config = {
 	specFileRetriesDelay: 2,
 	specFileRetriesDeferred: true,
 	capabilities: [
-		{
-			acceptInsecureCerts: true, // Because of self-signed cert inside Docker
-			// acceptSslCerts: true,
-			maxInstances: 1,
-			browserName: "chrome",
-			"goog:chromeOptions": {
-				args: ['--disable-web-security', /*'--headless',*/ '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
-			},
-		},
+		// {
+		// 	acceptInsecureCerts: true, // Because of self-signed cert inside Docker
+		// 	// acceptSslCerts: true,
+		// 	maxInstances: 1,
+		// 	browserName: "chrome",
+		// 	"goog:chromeOptions": {
+		// 		args: ['--disable-web-security', /*'--headless',*/ '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
+		// 	},
+		// },
 		{
 
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
@@ -68,28 +68,29 @@ export const config: WebdriverIO.Config = {
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
     },
-		{
+		// {
 
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        maxInstances: 2,
-        //
-        browserName: 'MicrosoftEdge',
-				specs: ["./src/features/**/answerQuestion.feature",
-					"./src/features/**/closedForCommenting.feature",
-					"./src/features/**/commentOnDocumentChapter.feature",
-					"./src/features/**/commentOnSection.feature",],
-        // 'moz:firefoxOptions': {
-        //     args: ['-headless']
-        // },
-        acceptInsecureCerts: true
-        // If outputDir is provided WebdriverIO can capture driver session logs
-        // it is possible to configure which logTypes to include/exclude.
-        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
-        // excludeDriverLogs: ['bugreport', 'server'],
-    }
-	],
+    //     // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+    //     // grid with only 5 firefox instances available you can make sure that not more than
+    //     // 5 instances get started at a time.
+    //     maxInstances: 2,
+    //     //
+    //     browserName: 'MicrosoftEdge',
+		// 		specs: ["./src/features/**/answerQuestion.feature",
+		// 			"./src/features/**/closedForCommenting.feature",
+		// 			"./src/features/**/commentOnDocumentChapter.feature",
+		// 			"./src/features/**/commentOnSection.feature",],
+    //     // 'moz:firefoxOptions': {
+    //     //     args: ['-headless']
+    //     // },
+    //     acceptInsecureCerts: true
+    //     // If outputDir is provided WebdriverIO can capture driver session logs
+    //     // it is possible to configure which logTypes to include/exclude.
+    //     // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+    //     // excludeDriverLogs: ['bugreport', 'server'],
+    // }
+	]
+	,
 
 
 	logLevel: "warn",

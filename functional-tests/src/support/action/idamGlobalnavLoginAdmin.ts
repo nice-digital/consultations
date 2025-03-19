@@ -5,7 +5,7 @@ export async function idamGlobalnavLoginAdmin(
 	password: string
 ): Promise<void> {
 	// You're already logged in if you have the nrpa auth cookie, so no need to do anything more
-	const accountsAuthCookie = await browser.getCookies("__nrpa_2.2");
+	const accountsAuthCookie = await browser.getCookies(["__nrpa_2.2"]);
 	if (accountsAuthCookie.length > 0) return;
 
 	const headerElement = await $("header[aria-label='Site header']");

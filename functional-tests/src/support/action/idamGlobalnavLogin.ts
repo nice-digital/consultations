@@ -2,7 +2,7 @@ import idamLogin from "./idamLogin.js";
 
 export async function idamGlobalNavLogin(username: string, password: string): Promise<void> {
 	// If you are already logged in
-	const accountsAuthCookie = await browser.getCookies("__nrpa_2.2");
+	const accountsAuthCookie = await browser.getCookies(["__nrpa_2.2"]);
 	if (accountsAuthCookie.length > 0) return;
 
 	const headerMenuExists = await $("header[aria-label='Site header']");
