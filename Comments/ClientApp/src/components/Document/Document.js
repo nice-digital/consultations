@@ -458,27 +458,80 @@ export class Document extends Component<PropsType, StateType> {
 													<Header
 														title={currentDocumentTitle}
 														reference={reference}
-														consultationState={this.state.consultationData.consultationState}/>
+														consultationState={
+															this.state.consultationData.consultationState
+														}
+													/>
 
-													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
-														<Alert type="info" role="status" aria-live="polite">
-															<p>We have updated this service so that members of the same organisation can now collaborate on a joint online response.</p>
-															<p>Read our <a href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response">blog</a> to learn more.</p>
-														</Alert>
-													}
+													{this.state.consultationData.consultationState
+														.consultationIsOpen &&
+														!this.state.consultationData.consultationState
+															.submittedDate && (
+															<Alert
+																type="info"
+																role="status"
+																aria-live="polite"
+															>
+																<p>
+																	We have updated this service so that members
+																	of the same organisation can now collaborate
+																	on a joint online response.
+																</p>
+																<p>
+																	Read our{" "}
+																	<a href="https://www.nice.org.uk/news/blogs/nice-enables-groups-and-organisations-to-work-together-on-their-response-to-our-online-public-consultations">
+																		blog
+																	</a>{" "}
+																	to learn more.
+																</p>
+															</Alert>
+														)}
 
-													{this.state.consultationData.consultationState.submittedDate &&
+													{this.state.consultationData.consultationState
+														.submittedDate && (
 														<Alert type="info" role="status" aria-live="polite">
-															<p>You submitted your response to this consultation on <Moment format="D MMMM YYYY" date={this.state.consultationData.consultationState.submittedDate}/>, you cannot add, edit or provide additional information.</p>
+															<p>
+																You submitted your response to this consultation
+																on{" "}
+																<Moment
+																	format="D MMMM YYYY"
+																	date={
+																		this.state.consultationData
+																			.consultationState.submittedDate
+																	}
+																/>
+																, you cannot add, edit or provide additional
+																information.
+															</p>
 														</Alert>
-													}
+													)}
 
-													{contextValue.isOrganisationCommenter && !contextValue.isLead && !this.state.consultationData.consultationState.submittedDate &&
-														<Alert type="info" role="status" aria-live="polite">
-															<p>You are commenting on behalf of {contextValue.organisationName}.</p>
-															<p>When you submit your response it will be submitted to the organisational lead at {contextValue.organisationName}. <strong>On submission your email address and responses will be visible to other members or associates of your organisation who are using the same commenting code.</strong></p>
-														</Alert>
-													}
+													{contextValue.isOrganisationCommenter &&
+														!contextValue.isLead &&
+														!this.state.consultationData.consultationState
+															.submittedDate && (
+															<Alert
+																type="info"
+																role="status"
+																aria-live="polite"
+															>
+																<p>
+																	You are commenting on behalf of{" "}
+																	{contextValue.organisationName}.
+																</p>
+																<p>
+																	When you submit your response it will be
+																	submitted to the organisational lead at{" "}
+																	{contextValue.organisationName}.{" "}
+																	<strong>
+																		On submission your email address and
+																		responses will be visible to other members
+																		or associates of your organisation who are
+																		using the same commenting code.
+																	</strong>
+																</p>
+															</Alert>
+														)}
 												</>
 											);}}
 									</UserContext.Consumer>
