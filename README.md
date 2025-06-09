@@ -147,8 +147,47 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
     run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
 11. Run `npm test` in a separate window to run client side tests in watch mode
 12. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
-13. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations.
-14. Install Redis locally on your machine. Instructions below.
+13. You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings, more detailed instructions below
+14. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations.
+15. Install Redis locally on your machine. Instructions below.
+
+### Creating Self Signed Certificate for niceorg
+
+Below is a powershell script which will create and bind an SSL certificate for niceorg. This needs to be run as administrator.
+
+Once the script has run, you will need to import the certificate into your Trusted Root Certificates.
+1. Log into your sudo admin account
+2. type "manage computer certificates" into the search bar, go into "Manage computer certificates", it will ask for admin password again.
+3. Open up Personal > Certificates
+4. Find the certificate for "niceorg" and export it to a folder locally
+5. Open up "Trusted Root Certification Authorities > Certificates"
+6. Delete and existing certificates for "niceorg"
+6. Right click "Certificates" and go to "All Tasks > Import"
+7. Follow the instructions to import the certificate Exported in step 4
+
+If you return to your normal user account and re-start your project, you should not get any more security errors in your browser
+
+```
+$cert = New-SelfSignedCertificate `
+    -DnsName "niceorg" `
+    -CertStoreLocation "cert:\LocalMachine\My" `
+    -KeyExportPolicy Exportable `
+    -FriendlyName "niceorg" `
+    -NotAfter (Get-Date).AddYears(5)
+
+$store = New-Object System.Security.Cryptography.X509Certificates.X509Store("Root","LocalMachine")
+$store.Open("ReadWrite")
+$store.Add($cert)
+$store.Close()
+
+$guid = [guid]::NewGuid().ToString()
+
+netsh http delete sslcert ipport=0.0.0.0:44306
+
+netsh http add sslcert ipport=0.0.0.0:44306 `
+    certhash=$($cert.Thumbprint) `
+    appid="{$guid}"
+```
 
 ### Other README files
 
