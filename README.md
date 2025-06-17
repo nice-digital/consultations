@@ -131,25 +131,66 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
-3. Restore Consultations database in SSMS and set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
-4. Clone the project `git clone git@github.com:nice-digital/consultations.git`
-5. Open _Consultations.sln_
-6. Paste database connection string into DefaultConnection in secrets.json file (see "Secrets" below for format)
+3. Create a blank database called "Consultations" using SSMS. Set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
+4. Optionally restore Consultations database from a backup. (if left blank, EF Migrations will run and create everything)
+5. Clone the project `git clone git@github.com:nice-digital/consultations.git`
+6. Open _Consultations.sln_
+7. Create user secrets
    - right click on project
    - select 'manage user secrets'
-   - paste contents of secrets.json (from another dev) to replace the defualt text here.
-7. Press F5 to run the project in debug mode
-8. Dependencies will download (npm and NuGet) so be patient on first run
-9. The app will run in IIS Express on http://localhost:52679/
-10. cd into _consultations\Comments\ClientApp_
-    run 'npm install --only=dev'
-    run 'npm run build'
+   - paste contents of secrets.json (from another dev) 
+	 - OR copy and paste the default user secrets from the Secrets section below
+8. Replace the {DatabaseServer} and {DatabaseName} in the connection string with the details from the database created in step 3. SQLServer Express often creates an instance, so your local server name might be in the form of {LaptopName}//SQLEXPRESS
+9. Ask devops for read access to our current deployment pipeline and copy all the test environment values for the following secrets file sections
+   - Logging
+	 - Feeds
+	 - WebAppConfiguration
+	 - Encryption
+	 - ConsultationList
+10. Set WebAppConfiguration PostLogoutRedirectUri to "http://niceorg:81"
+11. Set WebAppConfiguration RedirectUri to "http://niceorg:81/signin-auth0"
+12. Press F5 to run the project in debug mode
+13. Dependencies will download (npm and NuGet) so be patient on first run
+14. The app will run in IIS Express on http://localhost:44306/
+15. Optionally (but recommended) install Volta to ensure the correct node version is used [Volta](https://volta.sh/)
+16. Open up a powershell terminal with administrator priviledges
+    cd into _consultations\Comments\ClientApp_
+    run 'npm ci'
     run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-11. Run `npm test` in a separate window to run client side tests in watch mode
-12. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
-13. You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings, more detailed instructions below
-14. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations.
-15. Install Redis locally on your machine. Instructions below.
+17. Run `npm test` in a separate window to run client side tests in watch mode
+18. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+19. You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings, more detailed instructions below
+20. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
+21. Install Redis locally on your machine. Instructions below
+
+### Integration With Indev
+
+Consultations ties in closely with Indev. You can integrate with test indev or run indev locally
+
+## Test Indev
+
+Following the instructions above should integrate with test indev.
+
+The data in test indev can be patchy. Creating a new consultation from scratch is recommended.
+
+## Local Indev
+
+Coming soon...
+
+## Creating a consultation in Indev
+
+1. Create a new project
+2. Go to Timeline and click Consultation
+3. Set the start date and end date, ensure that today's date is between the two dates
+4. Set the consultation number as 1
+5. Hit save
+6. Go to Upload and drag in any templated guidance document.
+7. Set the type as "Draft Consultation Document (online commenting)"
+8. Hit Upload and wait for the message to say "Converted!" then hit Close
+9. Schedule the guidance for Now and hit Save
+10. go to https://test-indev.nice.org.uk/golive and hit Go Live
+
+If you go to your consultations list and search for the consultation you just created it should be there. Clicking on the consultation should take you to the guidance page with all the links to add comments etc...
 
 ### Creating Self Signed Certificate for niceorg
 
@@ -201,13 +242,11 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
 ```
 {
   "ConnectionStrings": {
-    "DefaultConnection": "<connection string>"
+    "DefaultConnection": "Data Source={DatabaseServer};Initial Catalog={DatabaseName};Persist Security Info=True;Trusted_Connection=True;"
   },
   "Logging": {
-    "RabbitMQHost": "<rabbit server URL>",
-    "RabbitMQPort": "<rabbit server port>",
     "IncludeScopes": false,
-    "LogFilePath": "<log file path>",
+    "LogFilePath": "Serilog-{Date}.json",
     "LogLevel": {
       "Default": "Debug",
       "System": "Information",
@@ -247,10 +286,9 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
     "Domain": "<Auth0 Domain comment collection>",
     "PostLogoutRedirectUri": "<Auth0 Post Logout Redirect Uri>",
     "RedirectUri": "<Auth0 Redirect Uri>",
-    "CallBackPath": "<Auth0 callback path>",
     "GoogleTrackingId": "<google tracking id>",
     "RedisServiceConfiguration": {
-      "ConnectionString": "<redis server URL>",
+      "ConnectionString": "<redis server URL (127.0.0.1:port if running locally)>",
       "Enabled": true
     }
   },
@@ -258,18 +296,11 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
     "Key": "<Encryption key for encrypting comment text>",
     "IV": "<Initialisation Vector for encrypting comment text>"
   },
-  "PDF": {
-    "PDFDocGenServer": "<PDF DocGen Server>"
-  },
   "ConsultationList": {
     "DownloadRoles": {
       "AdminRoles": [ "<List of Admin roles>", "<List of Admin roles>" ],
       "TeamRoles": [ "<List of team roles>", "<List of team roles>", "<List of team roles>" ]
     }
-  },
-  "AWS": {
-    "Profile": "<AWS Profile>",
-    "Region": "<AWS Region>"
   }
 }
 
@@ -285,6 +316,8 @@ This application uses a data store called Redis to capture and store Tokens from
 - Need to ensure that nothing else is running on port 80, otherwise you will encounter a socket exception error when running in debug.
 - Exception: OpenIdConnectAuthenticationHandler: message.State is null or empty. -- caused if login is attempted without redis, clear your cookies and login again.
 - It might take a few F5's, visual studio restarts and cookie clears to get all the various services/applications to start co-operating
+- Make sure you sign into the main consultation window which pops up when you run the project
+- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check that the ClientId and ClientSecret are correct for the API Identifier on the tenent you are using.
 
 ## Tests
 
