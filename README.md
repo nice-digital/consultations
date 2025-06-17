@@ -133,7 +133,7 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
 3. Create a blank database called "Consultations" using SSMS. Set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
 4. Optionally restore Consultations database from a backup. (if left blank, EF Migrations will run and create everything)
-5. Clone the project `git clone git@github.com:nice-digital/consultations.git`
+5. Clone the project `git clone https://github.com/nice-digital/consultations.git`
 6. Open _Consultations.sln_
 7. Create user secrets
    - Right click on project
@@ -164,17 +164,46 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 
 ## Integration With Indev
 
-Consultations ties in closely with Indev. You can integrate with test indev or run indev locally
+Consultations requires access to feeds from Indev to function.
 
 ### Test Indev
 
-Following the instructions above should integrate with test indev.
+If you have followed the instructions from the Setup section above then consultations should be integrated with test.
 
-The data in test indev can be patchy. Creating a new consultation from scratch is recommended.
+The data in Indev test can be patchy. Creating a new consultation is recommended. Instructions to create consultations are listed later in this readme.
 
 ### Local Indev
 
-Coming soon...
+Indev can be integrated into consultations locally so the whole API chain can be debugged.
+
+The following chain of projects will need to be set up and running.
+
+<pre>
+┌─────────────────┐    ┌───────────────┐    ┌────────────────┐
+│                 │    │               │    │  Guidance      │
+│  Consultations  ◄────┼     Indev     ◄────┼  Conversion    │
+│                 │    │               │    │  Service       │
+└─────────────────┘    └───────────────┘    └────────────────┘
+</pre>
+	
+#### Consultations Project
+
+1. In the user secrets file
+	- Change Feeds > IndevBasePath to "https://local-indev.nice.org.uk" in the secrets file
+
+#### Indev Project
+
+1. Clone the project `git clone https://github.com/nice-digital/indev.git`
+2. Set up Indev as per its README.md file
+3. Make further changes to the web.config
+	- Change appSettings > IndevApiIdentifier to "https://test-indev.nice.org.uk"
+	- Anywhere http://niceorg appears, change it to https://niceorg:44306
+	
+#### Guidance Conversion Service Project
+
+1. Clone the project `git clone https://github.com/nice-digital/guidance-conversion-service.git`
+2. Guidance Conversion Service should run straight out of git. Indev points to this local service by default.
+3. If you have any trouble consult the README.md
 
 ### Creating a consultation in Indev
 
