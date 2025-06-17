@@ -136,48 +136,47 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 5. Clone the project `git clone git@github.com:nice-digital/consultations.git`
 6. Open _Consultations.sln_
 7. Create user secrets
-   - right click on project
-   - select 'manage user secrets'
-   - paste contents of secrets.json (from another dev) 
-	 - OR copy and paste the default user secrets from the Secrets section below
+   - Right click on project
+   - Select 'manage user secrets'
+   - Copy and paste the default user secrets from the Secrets section below
 8. Replace the {DatabaseServer} and {DatabaseName} in the connection string with the details from the database created in step 3. SQLServer Express often creates an instance, so your local server name might be in the form of {LaptopName}//SQLEXPRESS
 9. Ask devops for read access to our current deployment pipeline and copy all the test environment values for the following secrets file sections
-   - Logging
-	 - Feeds
-	 - WebAppConfiguration
-	 - Encryption
-	 - ConsultationList
+	- Logging
+	- Feeds
+	- WebAppConfiguration
+	- Encryption
+	- ConsultationList
 10. Set WebAppConfiguration PostLogoutRedirectUri to "http://niceorg:81"
 11. Set WebAppConfiguration RedirectUri to "http://niceorg:81/signin-auth0"
 12. Press F5 to run the project in debug mode
 13. Dependencies will download (npm and NuGet) so be patient on first run
 14. The app will run in IIS Express on http://localhost:44306/
-15. Optionally (but recommended) install Volta to ensure the correct node version is used [Volta](https://volta.sh/)
-16. Open up a powershell terminal with administrator priviledges
-    cd into _consultations\Comments\ClientApp_
-    run 'npm ci'
-    run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-17. Run `npm test` in a separate window to run client side tests in watch mode
-18. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+15. Optionally (but recommended), install [Volta](https://volta.sh/) to ensure the version of node on you machine does not clash with the node version needed for Consultations
+16. Open up a powershell terminal
+	- cd into _consultations\Comments\ClientApp_
+	- run 'npm ci'
+	- run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+17. Optionally, Run `npm test` in a separate window to run client side tests in watch mode
+18. You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
 19. You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings, more detailed instructions below
-20. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
+20. If you don't have it already, you will need to go into Identity Management for the environment you are working with e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
 21. Install Redis locally on your machine. Instructions below
 
-### Integration With Indev
+## Integration With Indev
 
 Consultations ties in closely with Indev. You can integrate with test indev or run indev locally
 
-## Test Indev
+### Test Indev
 
 Following the instructions above should integrate with test indev.
 
 The data in test indev can be patchy. Creating a new consultation from scratch is recommended.
 
-## Local Indev
+### Local Indev
 
 Coming soon...
 
-## Creating a consultation in Indev
+### Creating a consultation in Indev
 
 1. Create a new project
 2. Go to Timeline and click Consultation
@@ -190,7 +189,7 @@ Coming soon...
 9. Schedule the guidance for Now and hit Save
 10. go to https://test-indev.nice.org.uk/golive and hit Go Live
 
-If you go to your consultations list and search for the consultation you just created it should be there. Clicking on the consultation should take you to the guidance page with all the links to add comments etc...
+If you go to the list page in consultations and search for this consultation it should be there. Clicking on the consultation should take you to the guidance page with all the links to add comments etc...
 
 ### Creating Self Signed Certificate for niceorg
 
