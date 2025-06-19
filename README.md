@@ -117,6 +117,7 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
   - [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) as an ORM
   - [EF Core In-Memory Database Provider](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) for integration tests
 - [React](https://reactjs.org/) for the UI library
+  - [Volta] (https://volta.sh/) Javascript manager for having multiple version of node js on the same machine 
   - [Create React App](https://github.com/facebook/create-react-app) for configless React
   - [Jest](https://facebook.github.io/jest/) for JavaScript tests
   - [ASP.NET Core JavaScript Services](https://github.com/aspnet/JavaScriptServices) for rendering JavaScript server side in .NET
@@ -124,6 +125,8 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 - [SASS](https://sass-lang.com/) as a CSS pre-processor
 - [Modernizr](https://modernizr.com/) for feature detection
 - [WebdriverIO](http://webdriver.io/) for automated functional testing
+- [IDAM] (https://github.com/nice-digital/identity-management) Authorisation and Authentication 
+  - [Redis] (https://redis.io/) an in-memory caching application used by IDAM to cache Auth0 tokens
 - [NICE Design System](https://nice-digital.github.io/nice-design-system/) for NICE styling
   - [NICE Icons](https://github.com/nice-digital/nice-icons) for icon webfont
 
@@ -136,31 +139,31 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 5. Clone the project `git clone https://github.com/nice-digital/consultations.git`
 6. Open _Consultations.sln_
 7. Create user secrets
-   - Right click on project
-   - Select 'manage user secrets'
-   - Copy and paste the default user secrets from the Secrets section below
-8. Replace the {DatabaseServer} and {DatabaseName} in the connection string with the details from the database created in step 3. SQLServer Express often creates an instance, so your local server name might be in the form of {LaptopName}//SQLEXPRESS
-9. Ask devops for read access to our current deployment pipeline and copy all the test environment values for the following secrets file sections
-	- Logging
-	- Feeds
-	- WebAppConfiguration
-	- Encryption
-	- ConsultationList
-10. Set WebAppConfiguration PostLogoutRedirectUri to "http://niceorg:81"
-11. Set WebAppConfiguration RedirectUri to "http://niceorg:81/signin-auth0"
-12. Press F5 to run the project in debug mode
-13. Dependencies will download (npm and NuGet) so be patient on first run
-14. The app will run in IIS Express on http://localhost:44306/
-15. Optionally (but recommended), install [Volta](https://volta.sh/) to ensure the version of node on you machine does not clash with the node version needed for Consultations
-16. Open up a powershell terminal
+    - Right click on project
+    - Select 'manage user secrets'
+    - Copy and paste the default user secrets from the [Secrets](#secrets) section
+    - Replace the {DatabaseServer} and {DatabaseName} in the connection string with the details from the database created in step 3. SQLServer Express often creates an instance, so your local server name might be in the form of {LaptopName}//SQLEXPRESS
+   - Ask devops for read access to our current deployment pipeline and copy all the test environment values for the following secrets file sections
+	   - Logging
+	   - Feeds
+	   - WebAppConfiguration
+	   - Encryption
+	   - ConsultationList
+     - Set WebAppConfiguration PostLogoutRedirectUri to "http://niceorg:81"
+     - Set WebAppConfiguration RedirectUri to "http://niceorg:81/signin-auth0"
+8. Install Redis on your machine. See [Redis server](#redis-server) for more details
+9. Run the application (Hit F5 or the green triangle on the toolbar next to ‘IISExpress’)
+    - You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+    - You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings. More detailed instructions are under [Creating Self Signed Certificate for niceorg](#creating-self-signed-certificate-for-niceorg)
+10. Dependencies will download (npm and NuGet) so be patient on first run
+11. The app will run in IIS Express on http://localhost:44306/
+12. Install [Volta](https://volta.sh/) to ensure the version of node on you machine does not clash with the node version needed for Consultations. Volta will detect the node version automatically from package.json
+13. Open up a powershell terminal
 	- cd into _consultations\Comments\ClientApp_
 	- run 'npm ci'
 	- run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-17. Optionally, Run `npm test` in a separate window to run client side tests in watch mode
-18. You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
-19. You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings, more detailed instructions below
-20. If you don't have it already, you will need to go into Identity Management for the environment you are working with e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
-21. Install Redis locally on your machine. Instructions below
+14. Optionally, Run `npm test` in a separate window to run client side tests in watch mode
+15. If you don't have it already, you will need to go into Identity Management for the environment you are working with e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
 
 ## Integration With Indev
 
@@ -336,7 +339,16 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
 
 ### Redis server
 
-This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis using Chocolatey, A docker/podman container or via WSL at a command prompt. Go to [https://redis.io/docs/getting-started/](https://redis.io/docs/getting-started/) to get started, the instructions are well written.
+This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis 
+
+There are a number of ways to run Redis on windows:
+	- Windows subsystem for Linux (WSL)
+  - Chocolatey
+	- A docker/podman container 
+
+Getting Started with Redis - https://redis.io/docs/getting-started/
+
+Installing Redis on Windows (Using WSL) (https://redis.io/blog/install-redis-windows-11/)
 
 ### Gotchas
 
@@ -345,7 +357,7 @@ This application uses a data store called Redis to capture and store Tokens from
 - Exception: OpenIdConnectAuthenticationHandler: message.State is null or empty. -- caused if login is attempted without redis, clear your cookies and login again.
 - It might take a few F5's, visual studio restarts and cookie clears to get all the various services/applications to start co-operating
 - Make sure you sign into the main consultation window which pops up when you run the project
-- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check that the ClientId and ClientSecret are correct for the API Identifier on the tenent you are using.
+- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check in secrets.json that the WebAppConfiguration > ClientId and WebAppConfiguration > ClientSecret section  are correct for the API Identifier.
 
 ## Tests
 
@@ -377,11 +389,12 @@ See the [Consultations Sharepoint site](https://niceuk.sharepoint.com/sites/Exte
 
 ### Environments
 
-| Environment | URL                                      |
-| ----------- | ---------------------------------------- |
-| local       | https://local.nice.org.uk/consultations/ |
-| Alpha       | https://alpha.nice.org.uk/consultations/ |
-| Live        | https://www.nice.org.uk/consultations/   |
+Environment | URL                                     
+----------- | ----------------------------------------
+local       | https://local.nice.org.uk/consultations/
+Test        | https://test.nice.org.uk/consultations/ 
+Alpha       | https://alpha.nice.org.uk/consultations/
+Live        | https://www.nice.org.uk/consultations/  
 
 ### Supported by
 
