@@ -173,7 +173,7 @@ Consultations requires access to feeds from Indev to function.
 
 If you have followed the instructions from the Setup section above then consultations should be integrated with test.
 
-The data in Indev test can be patchy. Creating a new consultation is recommended. Instructions to create consultations are listed later in this readme.
+The data in Indev test can be patchy. Creating a new consultation is recommended. Instructions to create consultations are listed in [Creating a consultation in Indev](#creating-a-consultation-in-indev).
 
 ### Local Indev
 
