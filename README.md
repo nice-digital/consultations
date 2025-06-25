@@ -162,51 +162,18 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 	- cd into _consultations\Comments\ClientApp_
 	- run 'npm ci'
 	- run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+	- There is another README file in _consultations\Comments\ClientApp_ which goes into more detail if `npm start` does not work immediately.
 14. Optionally, Run `npm test` in a separate window to run client side tests in watch mode
 15. If you don't have it already, you will need to go into Identity Management for the environment you are working with e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
 
-## Integration With Indev
-
-Consultations requires access to feeds from Indev to function.
-
-### Test Indev
-
+### Integration With Indev
+#### Test Indev
 If you have followed the instructions from the Setup section above then consultations should be integrated with test.
 
 The data in Indev test can be patchy. Creating a new consultation is recommended. Instructions to create consultations are listed in [Creating a consultation in Indev](#creating-a-consultation-in-indev).
 
-### Local Indev
-
-Indev can be integrated into consultations locally so the whole API chain can be debugged.
-
-The following chain of projects will need to be set up and running.
-
-<pre>
-┌─────────────────┐    ┌───────────────┐    ┌────────────────┐
-│                 │    │               │    │  Guidance      │
-│  Consultations  ◄────┼     Indev     ◄────┼  Conversion    │
-│                 │    │               │    │  Service       │
-└─────────────────┘    └───────────────┘    └────────────────┘
-</pre>
-	
-#### Consultations Project
-
-1. In the user secrets file
-	- Change Feeds > IndevBasePath to "https://local-indev.nice.org.uk" in the secrets file
-
-#### Indev Project
-
-1. Clone the project `git clone https://github.com/nice-digital/indev.git`
-2. Set up Indev as per its README.md file
-3. Make further changes to the web.config
-	- Change appSettings > IndevApiIdentifier to "https://test-indev.nice.org.uk"
-	- Anywhere http://niceorg appears, change it to https://niceorg:44306
-	
-#### Guidance Conversion Service Project
-
-1. Clone the project `git clone https://github.com/nice-digital/guidance-conversion-service.git`
-2. Guidance Conversion Service should run straight out of git. Indev points to this local service by default.
-3. If you have any trouble consult the README.md
+#### Local Indev
+Indev can be integrated into consultations locally so the whole API chain can be debugged. See the [Indev](https://github.com/nice-digital/indev) repository for more instructions.
 
 ### Creating a consultation in Indev
 
@@ -260,10 +227,6 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
     certhash=$($cert.Thumbprint) `
     appid="{$guid}"
 ```
-
-### Other README files
-
--There is another README file in _consultations\Comments\ClientApp_ which goes into more detail if `npm start` does not work immediately.
 
 ### Secrets
 
@@ -336,7 +299,6 @@ netsh http add sslcert ipport=0.0.0.0:44306 `
 }
 
 ```
-
 ### Redis server
 
 This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis 
@@ -357,7 +319,7 @@ Installing Redis on Windows (Using WSL) (https://redis.io/blog/install-redis-win
 - Exception: OpenIdConnectAuthenticationHandler: message.State is null or empty. -- caused if login is attempted without redis, clear your cookies and login again.
 - It might take a few F5's, visual studio restarts and cookie clears to get all the various services/applications to start co-operating
 - Make sure you sign into the main consultation window which pops up when you run the project
-- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check in secrets.json that the WebAppConfiguration > ClientId and WebAppConfiguration > ClientSecret section  are correct for the API Identifier.
+- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check in secrets.json that the WebAppConfiguration > ClientId and WebAppConfiguration > ClientSecret section are correct for the API Identifier.
 
 ## Tests
 
