@@ -463,7 +463,7 @@ export class Document extends Component<PropsType, StateType> {
 													{(this.state.consultationData.consultationState.consultationIsOpen && !this.state.consultationData.consultationState.submittedDate) &&
 														<Alert type="info" role="status" aria-live="polite">
 															<p>We have updated this service so that members of the same organisation can now collaborate on a joint online response.</p>
-															<p>Read our <a href="https://www.nice.org.uk/news/blog/groups-and-organisations-can-work-together-on-public-consultations-response">blog</a> to learn more.</p>
+															<p>Read our <a href="https://www.nice.org.uk/news/blogs/nice-enables-groups-and-organisations-to-work-together-on-their-response-to-our-online-public-consultations">blog</a> to learn more.</p>
 														</Alert>
 													}
 
