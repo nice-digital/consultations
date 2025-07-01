@@ -24,3 +24,105 @@
 .limitWidth{
   max-width: 17rem;
 }
+
+$white: #fff;
+$nds-link-color: #005ea5;
+$nds-panel-border-color: #adadad;
+
+// accordion styles
+// revisit once component has been added to the design system
+
+.panel--details {
+  padding: 0;
+  margin: 0 0 2rem;
+
+  &:not(.panel--impact):not(.panel--primary) {
+    background: #e9e9e9;
+  }
+
+  summary {
+    color: $nds-link-color;
+    cursor: pointer;
+    padding: 1rem;
+    list-style: none;
+    display: flex;
+    gap: 0.5em;
+    align-items: start;
+
+    & > span {
+      text-decoration: underline;
+    }
+
+    &::before {
+      content: '▶︎';
+      width: 1em;
+      flex-shrink: 0;
+      transition: 0.3s;
+    }
+
+    &:hover {
+      & > span {
+        text-decoration: none;
+      }
+
+      &::after {
+        text-decoration: none;
+      }
+    }
+
+    &:focus-visible {
+      outline: .25rem solid #0092a6;
+    }
+  }
+
+  details {
+    position: relative;
+  }
+
+  details[open] summary {
+    &::before {
+      transform: rotate(90deg);
+      transform-origin: 40% 45% 0;
+    }
+
+    &::after {
+      display: inline-block;
+      content: "Close";
+      position: absolute;
+      left: 1rem;
+      bottom: -2.8rem;
+      text-decoration: underline;
+    }
+  }
+
+  &.panel--impact summary {
+    color: $white;
+  }
+
+  & + .panel--details {
+    margin-top: -1rem;
+  }
+}
+
+.panel--reveal {
+  // this should be panel__reveal but was accidentally input to the gcs as panel--reveal
+  border-left: 4px solid;
+  border-color: $nds-panel-border-color;
+  overflow: auto;
+  margin: 1rem 1rem 4rem 1rem;
+  padding: 0.5rem 1rem;
+
+  p {
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .panel--impact & {
+    border-color: $white;
+  }
+}
