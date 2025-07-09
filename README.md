@@ -20,7 +20,11 @@
   - [Architecture](#architecture)
   - [Technical stack](#technical-stack)
 - [Set up](#set-up)
-  - [Other README files](#other-readme-files)
+  - [Integration With Indev](#integration-with-indev)
+    - [Test Indev](#test-indev)
+    - [Local Indev](#local-indev)
+  - [Creating a consultation in Indev](#creating-a-consultation-in-indev)
+  - [Creating Self Signed Certificate for niceorg](#creating-self-signed-certificate-for-niceorg)
   - [Secrets](#secrets)
   - [Redis server](#redis-server)
   - [Gotchas](#gotchas)
@@ -117,6 +121,7 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
   - [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) as an ORM
   - [EF Core In-Memory Database Provider](https://docs.microsoft.com/en-us/ef/core/providers/in-memory/) for integration tests
 - [React](https://reactjs.org/) for the UI library
+  - [Volta] (https://volta.sh/) Javascript manager for having multiple version of node js on the same machine 
   - [Create React App](https://github.com/facebook/create-react-app) for configless React
   - [Jest](https://facebook.github.io/jest/) for JavaScript tests
   - [ASP.NET Core JavaScript Services](https://github.com/aspnet/JavaScriptServices) for rendering JavaScript server side in .NET
@@ -124,6 +129,8 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 - [SASS](https://sass-lang.com/) as a CSS pre-processor
 - [Modernizr](https://modernizr.com/) for feature detection
 - [WebdriverIO](http://webdriver.io/) for automated functional testing
+- [IDAM] (https://github.com/nice-digital/identity-management) Authorisation and Authentication 
+  - [Redis] (https://redis.io/) an in-memory caching application used by IDAM to cache Auth0 tokens
 - [NICE Design System](https://nice-digital.github.io/nice-design-system/) for NICE styling
   - [NICE Icons](https://github.com/nice-digital/nice-icons) for icon webfont
 
@@ -131,28 +138,99 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 
 1. Install [KDiff](http://kdiff3.sourceforge.net/) to be able see diffs from integration tests
 2. Install [SQL Server](https://www.microsoft.com/sql-server) and [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)
-3. Restore Consultations database in SSMS and set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
-4. Clone the project `git clone git@github.com:nice-digital/consultations.git`
-5. Open _Consultations.sln_
-6. Paste database connection string into DefaultConnection in secrets.json file (see "Secrets" below for format)
-   - right click on project
-   - select 'manage user secrets'
-   - paste contents of secrets.json (from another dev) to replace the defualt text here.
-7. Press F5 to run the project in debug mode
-8. Dependencies will download (npm and NuGet) so be patient on first run
-9. The app will run in IIS Express on http://localhost:52679/
-10. cd into _consultations\Comments\ClientApp_
-    run 'npm install --only=dev'
-    run 'npm run build'
-    run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
-11. Run `npm test` in a separate window to run client side tests in watch mode
-12. If the application has a URL like https://niceorg:44306/ You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
-13. If you don't have it already, you will need to go into Identity Management for the environment you are working in e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations.
-14. Install Redis locally on your machine. Instructions below.
+3. Create a blank database called "Consultations" using SSMS. Set account running visual studio as db_owner (Your domain username or SUDO account if running as administrator)
+4. Optionally restore Consultations database from a backup. (if left blank, EF Migrations will run and create everything)
+5. Clone the project `git clone https://github.com/nice-digital/consultations.git`
+6. Open _Consultations.sln_
+7. Create user secrets
+    - Right click on project
+    - Select 'manage user secrets'
+    - Copy and paste the default user secrets from the [Secrets](#secrets) section
+    - Replace the {DatabaseServer} and {DatabaseName} in the connection string with the details from the database created in step 3. SQLServer Express often creates an instance, so your local server name might be in the form of {LaptopName}//SQLEXPRESS
+   - Ask devops for read access to our current deployment pipeline and copy all the test environment values for the following secrets file sections
+	   - Logging
+	   - Feeds
+	   - WebAppConfiguration
+	   - Encryption
+	   - ConsultationList
+     - Set WebAppConfiguration PostLogoutRedirectUri to "http://niceorg:81"
+     - Set WebAppConfiguration RedirectUri to "http://niceorg:81/signin-auth0"
+8. Install Redis on your machine. See [Redis server](#redis-server) for more details
+9. Run the application (Hit F5 or the green triangle on the toolbar next to ‘IISExpress’)
+    - You may need to add a line to your hosts file (C:\Windows\System32\drivers\etc\hosts) pointing "niceorg" at 127.0.0.1
+    - You may need to create a Self Signed Certificate for "niceorg" on your machine and bind it to port 44306 to stop browser warnings. More detailed instructions are under [Creating Self Signed Certificate for niceorg](#creating-self-signed-certificate-for-niceorg)
+10. Dependencies will download (npm and NuGet) so be patient on first run
+11. The app will run in IIS Express on http://localhost:44306/
+12. Install [Volta](https://volta.sh/) to ensure the version of node on you machine does not clash with the node version needed for Consultations. Volta will detect the node version automatically from package.json
+13. Open up a powershell terminal
+	- cd into _consultations\Comments\ClientApp_
+	- run 'npm ci'
+	- run `npm start` if Startup is using `UseProxyToSpaDevelopmentServer`. This runs a react dev server on http://localhost:3000/.
+	- There is another README file in _consultations\Comments\ClientApp_ which goes into more detail if `npm start` does not work immediately.
+14. Optionally, Run `npm test` in a separate window to run client side tests in watch mode
+15. If you don't have it already, you will need to go into Identity Management for the environment you are working with e.g. https://test-identityadmin.nice.org.uk/ and give youself Administrator access to Consultations
 
-### Other README files
+### Integration With Indev
+#### Test Indev
+If you have followed the instructions from the Setup section above then consultations should be integrated with test.
 
--There is another README file in _consultations\Comments\ClientApp_ which goes into more detail if `npm start` does not work immediately.
+The data in Indev test can be patchy. Creating a new consultation is recommended. Instructions to create consultations are listed in [Creating a consultation in Indev](#creating-a-consultation-in-indev).
+
+#### Local Indev
+Indev can be integrated into consultations locally so the whole API chain can be debugged. See the [Indev](https://github.com/nice-digital/indev) repository for more instructions.
+
+### Creating a consultation in Indev
+
+1. Create a new project
+2. Go to Timeline and click Consultation
+3. Set the start date and end date, ensure that today's date is between the two dates
+4. Set the consultation number as 1
+5. Hit save
+6. Go to Upload and drag in any templated guidance document.
+7. Set the type as "Draft Consultation Document (online commenting)"
+8. Hit Upload and wait for the message to say "Converted!" then hit Close
+9. Schedule the guidance for Now and hit Save
+10. go to https://test-indev.nice.org.uk/golive and hit Go Live
+
+If you go to the list page in consultations and search for this consultation it should be there. Clicking on the consultation should take you to the guidance page with all the links to add comments etc...
+
+### Creating Self Signed Certificate for niceorg
+
+Below is a powershell script which will create and bind an SSL certificate for niceorg. This needs to be run as administrator.
+
+Once the script has run, you will need to import the certificate into your Trusted Root Certificates.
+1. Log into your sudo admin account
+2. type "manage computer certificates" into the search bar, go into "Manage computer certificates", it will ask for admin password again.
+3. Open up Personal > Certificates
+4. Find the certificate for "niceorg" and export it to a folder locally
+5. Open up "Trusted Root Certification Authorities > Certificates"
+6. Delete and existing certificates for "niceorg"
+6. Right click "Certificates" and go to "All Tasks > Import"
+7. Follow the instructions to import the certificate Exported in step 4
+
+If you return to your normal user account and re-start your project, you should not get any more security errors in your browser
+
+```
+$cert = New-SelfSignedCertificate `
+    -DnsName "niceorg" `
+    -CertStoreLocation "cert:\LocalMachine\My" `
+    -KeyExportPolicy Exportable `
+    -FriendlyName "niceorg" `
+    -NotAfter (Get-Date).AddYears(5)
+
+$store = New-Object System.Security.Cryptography.X509Certificates.X509Store("Root","LocalMachine")
+$store.Open("ReadWrite")
+$store.Add($cert)
+$store.Close()
+
+$guid = [guid]::NewGuid().ToString()
+
+netsh http delete sslcert ipport=0.0.0.0:44306
+
+netsh http add sslcert ipport=0.0.0.0:44306 `
+    certhash=$($cert.Thumbprint) `
+    appid="{$guid}"
+```
 
 ### Secrets
 
@@ -162,13 +240,11 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
 ```
 {
   "ConnectionStrings": {
-    "DefaultConnection": "<connection string>"
+    "DefaultConnection": "Data Source={DatabaseServer};Initial Catalog={DatabaseName};Persist Security Info=True;Trusted_Connection=True;"
   },
   "Logging": {
-    "RabbitMQHost": "<rabbit server URL>",
-    "RabbitMQPort": "<rabbit server port>",
     "IncludeScopes": false,
-    "LogFilePath": "<log file path>",
+    "LogFilePath": "Serilog-{Date}.json",
     "LogLevel": {
       "Default": "Debug",
       "System": "Information",
@@ -208,10 +284,9 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
     "Domain": "<Auth0 Domain comment collection>",
     "PostLogoutRedirectUri": "<Auth0 Post Logout Redirect Uri>",
     "RedirectUri": "<Auth0 Redirect Uri>",
-    "CallBackPath": "<Auth0 callback path>",
     "GoogleTrackingId": "<google tracking id>",
     "RedisServiceConfiguration": {
-      "ConnectionString": "<redis server URL>",
+      "ConnectionString": "<redis server URL (127.0.0.1:port if running locally)>",
       "Enabled": true
     }
   },
@@ -219,26 +294,27 @@ Consultations sits below [Varnish](https://github.com/nice-digital/varnish) so i
     "Key": "<Encryption key for encrypting comment text>",
     "IV": "<Initialisation Vector for encrypting comment text>"
   },
-  "PDF": {
-    "PDFDocGenServer": "<PDF DocGen Server>"
-  },
   "ConsultationList": {
     "DownloadRoles": {
       "AdminRoles": [ "<List of Admin roles>", "<List of Admin roles>" ],
       "TeamRoles": [ "<List of team roles>", "<List of team roles>", "<List of team roles>" ]
     }
-  },
-  "AWS": {
-    "Profile": "<AWS Profile>",
-    "Region": "<AWS Region>"
   }
 }
 
 ```
-
 ### Redis server
 
-This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis using Chocolatey, A docker/podman container or via WSL at a command prompt. Go to [https://redis.io/docs/getting-started/](https://redis.io/docs/getting-started/) to get started, the instructions are well written.
+This application uses a data store called Redis to capture and store Tokens from Auth0. You will need to run a local version of Redis 
+
+There are a number of ways to run Redis on windows:
+	- Windows subsystem for Linux (WSL)
+  - Chocolatey
+	- A docker/podman container 
+
+Getting Started with Redis - https://redis.io/docs/getting-started/
+
+Installing Redis on Windows (Using WSL) (https://redis.io/blog/install-redis-windows-11/)
 
 ### Gotchas
 
@@ -246,6 +322,8 @@ This application uses a data store called Redis to capture and store Tokens from
 - Need to ensure that nothing else is running on port 80, otherwise you will encounter a socket exception error when running in debug.
 - Exception: OpenIdConnectAuthenticationHandler: message.State is null or empty. -- caused if login is attempted without redis, clear your cookies and login again.
 - It might take a few F5's, visual studio restarts and cookie clears to get all the various services/applications to start co-operating
+- Make sure you sign into the main consultation window which pops up when you run the project
+- Error message saying "Something must have gone slightly wrong!" - Have a look at the logs in Auth0 tenent. This error is coming from the IDAM signin. Check in secrets.json that the WebAppConfiguration > ClientId and WebAppConfiguration > ClientSecret section are correct for the API Identifier.
 
 ## Tests
 
@@ -277,11 +355,12 @@ See the [Consultations Sharepoint site](https://niceuk.sharepoint.com/sites/Exte
 
 ### Environments
 
-| Environment | URL                                      |
-| ----------- | ---------------------------------------- |
-| local       | https://local.nice.org.uk/consultations/ |
-| Alpha       | https://alpha.nice.org.uk/consultations/ |
-| Live        | https://www.nice.org.uk/consultations/   |
+Environment | URL                                     
+----------- | ----------------------------------------
+local       | https://local.nice.org.uk/consultations/
+Test        | https://test.nice.org.uk/consultations/ 
+Alpha       | https://alpha.nice.org.uk/consultations/
+Live        | https://www.nice.org.uk/consultations/  
 
 ### Supported by
 
