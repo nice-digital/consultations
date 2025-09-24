@@ -15,7 +15,7 @@ So it should look like..
 
 1. Make sure Node is installed on your system [Node Website](https://nodejs.org)
 - Open your command prompt at `/Comments/ClientApp/`
-- Given you have Node installed, install necessary dependencies with `npm install`
+- Given you have Node installed, install necessary dependencies with `npm ci`
 - Run the test server with `npm run start`
 
 -
