@@ -4,7 +4,6 @@
 // See https://medium.com/@cereallarceny/server-side-rendering-with-create-react-app-fiber-react-router-v4-helmet-redux-and-thunk-275cb25ca972
 // and https://github.com/cereallarceny/cra-ssr/blob/master/server/universal.js
 
-import { createServerRenderer } from "aspnet-prerendering";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
@@ -170,4 +169,4 @@ export const serverRenderer = (params): Promise => {
 };
 
 // `createServerRenderer` is what the DotNetCore SpaServices requires for SSR
-export default createServerRenderer(serverRenderer);
+export default serverRenderer;

@@ -23,7 +23,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://niceorg"
+      "applicationUrl": "https://niceorg:44306"
     }
   }
-}
+}:
