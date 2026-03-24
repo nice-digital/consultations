@@ -31,6 +31,27 @@ namespace Comments
                 UseShellExecute = false
             };
 
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var envFile = Path.Combine(
+                startInfo.WorkingDirectory,
+                env == "Development" ? ".env" : ".env.production"
+            );
+
+            if (File.Exists(envFile))
+            {
+                foreach (var line in File.ReadAllLines(envFile))
+                {
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
+                        continue;
+
+                    var parts = line.Split('=', 2);
+                    if (parts.Length == 2)
+                    {
+                        startInfo.Environment[parts[0]] = parts[1];
+                    }
+                }
+            }
+
             _nodeProcess = new Process { StartInfo = startInfo };
 
             _nodeProcess.OutputDataReceived += (_, e) =>
