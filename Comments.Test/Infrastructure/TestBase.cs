@@ -168,7 +168,16 @@ namespace Comments.Test.Infrastructure
 
 			var builder = new WebHostBuilder()
                 .UseContentRoot("../../../../Comments")
-                .ConfigureServices(services =>
+                .ConfigureAppConfiguration((context, config) =>
+                {
+	                config.AddInMemoryCollection(new Dictionary<string, string>
+	                {
+		                ["EncryptionConfig:Key"] = "Key",
+		                ["EncryptionConfig:IV"] = "IV"
+	                });
+
+	                config.AddUserSecrets<Startup>(); // optional
+                }).ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
 
