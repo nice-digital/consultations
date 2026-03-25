@@ -159,12 +159,14 @@ namespace Comments
             });
 
             services.AddOptions();
-            services.AddHttpClient("ssr", client =>
+            if (!Environment.IsIntegrationTest())
             {
-                client.BaseAddress = new Uri("http://localhost:4000");
-            });
-            services.AddHostedService<NodeSsrService>();
-
+                services.AddHttpClient("ssr", client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:4000");
+                });
+                services.AddHostedService<NodeSsrService>();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -266,33 +268,38 @@ namespace Comments
 			    app.UseHttpsRedirection();
 		    }
 
+ 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.Map("{*path:nonfile}", async context =>
+                if (!env.IsIntegrationTest())
                 {
-                    var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
-                    var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
-
-                    var client = httpClientFactory.CreateClient("ssr");
-
-                    var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
-
-                    var payload = new
+                    endpoints.Map("{*path:nonfile}", async context =>
                     {
-                        url = context.Request.Path.ToString(),
-                        origin = $"{context.Request.Scheme}://{context.Request.Host}",
-                        data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
-                    };
+                        var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
+                        var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
 
-                    var response = await client.PostAsJsonAsync("/render", payload);
+                        var client = httpClientFactory.CreateClient("ssr");
 
-                    var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+                        var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
 
-                    context.Response.StatusCode = result.StatusCode;
-                    context.Response.ContentType = "text/html";
+                        var payload = new
+                        {
+                            url = context.Request.Path.ToString(),
+                            origin = $"{context.Request.Scheme}://{context.Request.Host}",
+                            data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
+                        };
 
-                    await context.Response.WriteAsync(result.Html);
-                });
+                        var response = await client.PostAsJsonAsync("/render", payload);
+
+                        var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+
+                        context.Response.StatusCode = result.StatusCode;
+                        context.Response.ContentType = "text/html";
+
+                        await context.Response.WriteAsync(result.Html);
+                    });
+                }
+
 endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
                                              pattern: "consultations/{consultationId:int}",
                                              defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
