@@ -163,7 +163,7 @@ namespace Comments
             {
                 client.BaseAddress = new Uri("http://localhost:4000");
             });
-            //services.AddHostedService<NodeSsrService>();
+            services.AddHostedService<NodeSsrService>();
 
         }
 
@@ -172,12 +172,12 @@ namespace Comments
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {
             app.UseStaticFiles();
-            /*app.UseStaticFiles(new StaticFileOptions
+            app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "build")),
+                    Path.Combine(env.ContentRootPath, "ClientApp", "build")),
                 RequestPath = "/consultations"
-            });*/
+            });
             app.Use(async (context, next) =>
                 {
                     context.Response.OnStarting(() =>

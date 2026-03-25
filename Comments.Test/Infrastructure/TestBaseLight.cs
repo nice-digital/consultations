@@ -10,8 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using NICE.Identity.Authentication.Sdk.TokenStore;
 
 namespace Comments.Test.Infrastructure
@@ -29,6 +31,16 @@ namespace Comments.Test.Infrastructure
 
 			var builder = new WebHostBuilder()
 				.UseContentRoot("../../../../Comments")
+				.ConfigureAppConfiguration((context, config) =>
+				{
+					config.AddInMemoryCollection(new Dictionary<string, string>
+					{
+						["EncryptionConfig:Key"] = "Key",
+						["EncryptionConfig:IV"] = "IV"
+					});
+
+					config.AddUserSecrets<Startup>(); // optional
+				})
 				.ConfigureServices(services =>
 				{
 					services.AddEntityFrameworkSqlite();

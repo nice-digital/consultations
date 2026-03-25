@@ -86,7 +86,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, authorisationSession, null, organisationUserId: organisationUserId);
 			TestBaseDBHelpers.AddStatus(context, nameof(StatusName.SubmittedToLead), (int)StatusName.SubmittedToLead);
 
-			var userService = FakeUserService.Get(true, "Benjamin Button", null, TestUserType.NotAuthenticated, false, organisationUserId);
+			var userService = FakeUserService.Get(true, "Benjamin Button", userId:"BB", TestUserType.NotAuthenticated, false, organisationUserId);
 			
 			var fakeHttpContextAccessor = FakeHttpContextAccessor.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: organisationUserId);
 			var fakeConsultationService = new FakeConsultationService();
@@ -94,7 +94,7 @@ namespace Comments.Test.IntegrationTests.API.Submit
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
-			TestBaseDBHelpers.AddComment(context, locationId, commentText, null, (int)StatusName.Draft, organisationUserId, null, organisationId);
+			TestBaseDBHelpers.AddComment(context, locationId, commentText, "null", (int)StatusName.Draft, organisationUserId, null, organisationId);
 			TestBaseDBHelpers.AddAnswer(context, questionId, organisationUserId: organisationUserId);
 
 			var commentsAndQuestions = await commentService.GetCommentsAndQuestions(sourceURI, new FakeUrlHelper());

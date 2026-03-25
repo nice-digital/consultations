@@ -48,9 +48,12 @@ namespace Comments.Test.IntegrationTests.API.Answers
 
 				//Act
 				var response = await builder.PostAsync();
+				var content = await response.Content.ReadAsStringAsync();
+				Console.WriteLine(content);
 				response.EnsureSuccessStatusCode();
 
 				var responseString = await response.Content.ReadAsStringAsync();
+
 				var deserialisedAnswer = JsonConvert.DeserializeObject<ViewModels.Answer>(responseString);
 
 				var answerInDatabase = context.Answer.IgnoreQueryFilters().Single(dbAnswer => dbAnswer.AnswerId.Equals(deserialisedAnswer.AnswerId));
