@@ -35,11 +35,9 @@ namespace Comments.Test.Infrastructure
 				{
 					config.AddInMemoryCollection(new Dictionary<string, string>
 					{
-						["EncryptionConfig:Key"] = "Key",
-						["EncryptionConfig:IV"] = "IV"
+						["Encryption:Key"] = "Key",
+						["Encryption:IV"] = "IV"
 					});
-
-					config.AddUserSecrets<Startup>(); // optional
 				})
 				.ConfigureServices(services =>
 				{

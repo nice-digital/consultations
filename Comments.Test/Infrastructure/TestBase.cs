@@ -174,9 +174,7 @@ namespace Comments.Test.Infrastructure
 	                {
 		                ["Encryption:Key"] = "Key",
 		                ["Encryption:IV"] = "IV"
-});
-
-	                config.AddUserSecrets<Startup>(); // optional
+	                });
                 }).ConfigureServices(services =>
                 {
                     services.AddEntityFrameworkSqlite();
