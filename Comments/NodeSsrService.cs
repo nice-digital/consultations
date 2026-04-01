@@ -5,19 +5,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting; // important
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 public class NodeSsrService : IHostedService, IDisposable
 {
     private readonly IWebHostEnvironment _env;
     private Process _nodeProcess;
+    private ILogger _logger;
 
-    public NodeSsrService(IWebHostEnvironment env)
+    public NodeSsrService(IWebHostEnvironment env, ILogger<NodeSsrService>logger)
     {
         _env = env;
+        _logger = logger;
     }
-
     public Task StartAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("NodeSsrService starting...");
+
         var scriptPath = Path.Combine(
             _env.ContentRootPath,
             "ClientApp",
@@ -28,11 +32,12 @@ public class NodeSsrService : IHostedService, IDisposable
 
         var workingDir = Path.Combine(_env.ContentRootPath, "ClientApp");
 
-        /*if (!Directory.Exists(workingDir))
-        {
-            // Don’t start SSR when tests are running
-            return Task.CompletedTask;
-        }*/
+        _logger.LogInformation($"ContentRootPath: {_env.ContentRootPath}");
+        _logger.LogInformation($"WorkingDirectory: {workingDir}");
+        _logger.LogInformation($"ScriptPath: {scriptPath}");
+
+        _logger.LogInformation($"Script exists: {File.Exists(scriptPath)}");
+        _logger.LogInformation($"Working dir exists: {Directory.Exists(workingDir)}");
 
         var startInfo = new ProcessStartInfo
         {
@@ -44,14 +49,17 @@ public class NodeSsrService : IHostedService, IDisposable
             UseShellExecute = false
         };
 
-        var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        var envFile = Path.Combine(
-            workingDir,
-            envName == "Development" ? ".env" : ".env.production"
-        );
+        _logger.LogInformation("ProcessStartInfo configured");
+        _logger.LogInformation($"FileName: {startInfo.FileName}");
+        _logger.LogInformation($"Arguments: {startInfo.Arguments}");
+
+        var envFile = Path.Combine(".env");
+        _logger.LogInformation($"Looking for .env at: {Path.GetFullPath(envFile)}");
 
         if (File.Exists(envFile))
         {
+            _logger.LogInformation(".env file found, loading variables...");
+
             foreach (var line in File.ReadAllLines(envFile))
             {
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
@@ -61,8 +69,13 @@ public class NodeSsrService : IHostedService, IDisposable
                 if (parts.Length == 2)
                 {
                     startInfo.Environment[parts[0]] = parts[1];
+                    _logger.LogInformation($"Loaded env var: {parts[0]}");
                 }
             }
+        }
+        else
+        {
+            _logger.LogWarning(".env file NOT found");
         }
 
         _nodeProcess = new Process { StartInfo = startInfo };
@@ -70,18 +83,35 @@ public class NodeSsrService : IHostedService, IDisposable
         _nodeProcess.OutputDataReceived += (_, e) =>
         {
             if (!string.IsNullOrEmpty(e.Data))
-                Console.WriteLine("[SSR] " + e.Data);
+                _logger.LogInformation("[SSR OUTPUT] " + e.Data);
         };
 
         _nodeProcess.ErrorDataReceived += (_, e) =>
         {
             if (!string.IsNullOrEmpty(e.Data))
-                Console.WriteLine("[SSR ERROR] " + e.Data);
+                _logger.LogError("[SSR ERROR] " + e.Data);
         };
 
-        _nodeProcess.Start();
-        _nodeProcess.BeginOutputReadLine();
-        _nodeProcess.BeginErrorReadLine();
+        try
+        {
+            _logger.LogInformation("Starting Node process...");
+            _nodeProcess.Start();
+
+            _logger.LogInformation($"Node process started. PID: {_nodeProcess.Id}");
+
+            if (_nodeProcess.HasExited)
+            {
+                _logger.LogError("Node process exited immediately after start!");
+            }
+
+            _nodeProcess.BeginOutputReadLine();
+            _nodeProcess.BeginErrorReadLine();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Failed to start Node SSR process");
+            throw;
+        }
 
         return Task.CompletedTask;
     }

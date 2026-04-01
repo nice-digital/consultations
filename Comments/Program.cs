@@ -25,6 +25,7 @@ namespace Comments
 		        
 			    try
 		        {
+
 			        var context = services.GetService<ConsultationsContext>();
 			        context.Database.Migrate();
 				}
