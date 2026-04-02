@@ -44,6 +44,7 @@
     "babel-preset-react-app": "^9.1.2",
     "bless": "^3.0.3",
     "classlist-polyfill": "^1.2.0",
+    "express": "^5.2.1",
     "ie9-oninput-polyfill": "^1.1.1",
     "ignore-styles": "^5.0.1",
     "js-cookie": "^2.2.0",
