@@ -6,7 +6,7 @@
     "extends @nice-digital/browserslist-config"
   ],
   "volta": {
-    "node": "14.19.0"
+    "node": "18.20.8"
   },
   "engines": {
     "node": ">=8.11.1",
