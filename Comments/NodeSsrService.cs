@@ -53,7 +53,11 @@ public class NodeSsrService : IHostedService, IDisposable
         _logger.LogInformation($"FileName: {startInfo.FileName}");
         _logger.LogInformation($"Arguments: {startInfo.Arguments}");
 
-        var envFile = Path.Combine(".env");
+        var envFile = Path.Combine(
+            _env.ContentRootPath,
+            "ClientApp",
+            ".env"
+        );
         _logger.LogInformation($"Looking for .env at: {Path.GetFullPath(envFile)}");
 
         if (File.Exists(envFile))
@@ -89,7 +93,7 @@ public class NodeSsrService : IHostedService, IDisposable
         _nodeProcess.ErrorDataReceived += (_, e) =>
         {
             if (!string.IsNullOrEmpty(e.Data))
-                _logger.LogError("[SSR ERROR] " + e.Data);
+               Console.WriteLine("[SSR ERROR] " + e.Data);
         };
 
         try
