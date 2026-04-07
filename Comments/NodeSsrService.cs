@@ -105,7 +105,7 @@ public class NodeSsrService : IHostedService, IDisposable
             _nodeProcess.BeginOutputReadLine();
             _nodeProcess.BeginErrorReadLine();
 
-            await WaitForPortAsync(Port, 15000);
+            await WaitForPortAsync(Port, 60000);
 
             _logger.LogInformation("Node SSR server is ready.");
         }
