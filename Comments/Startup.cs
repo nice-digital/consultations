@@ -159,13 +159,6 @@ namespace Comments
             });
 
             services.AddOptions();
-            if (!Environment.IsIntegrationTest())
-            {
-                services.AddHttpClient("ssr", client =>
-                {
-                    client.BaseAddress = new Uri("http://localhost:4000");
-                });
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -270,53 +263,13 @@ namespace Comments
  
             app.UseEndpoints(endpoints =>
             {
-                if (!env.IsIntegrationTest())
+                endpoints.MapGet("/consultations", async context =>
                 {
-                    endpoints.Map("{*path:nonfile}", async context =>
-                    {
-                        var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
-                        var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
+                    context.Response.ContentType = "text/plain";
+                    await context.Response.WriteAsync("Consultations endpoint is working");
+                });
 
-                        var client = httpClientFactory.CreateClient("ssr");
-
-                        var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
-
-                        try
-                        {
-                            var payload = new
-                            {
-                                url = context.Request.Path.ToString(),
-                                origin = $"{context.Request.Scheme}://{context.Request.Host}",
-                                data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
-                            };
-
-                            var response = await client.PostAsJsonAsync("/render", payload);
-
-                            if (!response.IsSuccessStatusCode)
-                                throw new Exception("SSR returned non-success");
-
-                            var result = await response.Content.ReadFromJsonAsync<SsrResult>();
-
-                            if (result == null || string.IsNullOrEmpty(result.Html))
-                                throw new Exception("Invalid SSR response");
-
-                            context.Response.StatusCode = result.StatusCode;
-                            context.Response.ContentType = "text/html";
-                            await context.Response.WriteAsync(result.Html);
-                        }
-                        catch (Exception ex)
-                        {
-                            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
-                            logger.LogError(ex, "SSR failed, falling back to static HTML");
-
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "text/html";
-                            await context.Response.WriteAsync(htmlTemplate);
-                        }
-                    });
-                }
-
-endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
+                endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
                                              pattern: "consultations/{consultationId:int}",
                                              defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
                 
