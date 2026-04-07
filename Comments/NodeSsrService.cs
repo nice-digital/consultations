@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,32 +16,33 @@ public class NodeSsrService : IHostedService, IDisposable
     private readonly ILogger _logger;
     private Process _nodeProcess;
 
+    private const int Port = 4000;
+
     public NodeSsrService(IWebHostEnvironment env, ILogger<NodeSsrService> logger)
     {
         _env = env;
         _logger = logger;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("NodeSsrService starting...");
+
+        KillProcessesOnPort(Port);
 
         var workingDir = Path.Combine(_env.ContentRootPath, "ClientApp");
         var scriptPath = Path.Combine(workingDir, "src", "server", "ssr-server.js");
 
         _logger.LogInformation($"WorkingDirectory: {workingDir}");
         _logger.LogInformation($"ScriptPath: {scriptPath}");
-        _logger.LogInformation($"Script exists: {File.Exists(scriptPath)}");
 
         if (!File.Exists(scriptPath))
-        {
             throw new FileNotFoundException("SSR script not found", scriptPath);
-        }
 
         if (_nodeProcess != null && !_nodeProcess.HasExited)
         {
             _logger.LogWarning("Node process already running, skipping start.");
-            return Task.CompletedTask;
+            return;
         }
 
         var startInfo = new ProcessStartInfo
@@ -48,17 +52,15 @@ public class NodeSsrService : IHostedService, IDisposable
             WorkingDirectory = workingDir,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            UseShellExecute = false
+            UseShellExecute = false,
+            CreateNoWindow = true
         };
-
-        startInfo.Environment["NODE_PATH"] = Path.Combine(workingDir, "node_modules");
 
         var nodeModulesPath = Path.Combine(workingDir, "node_modules");
         startInfo.Environment["NODE_PATH"] = nodeModulesPath;
 
         _logger.LogInformation($"NODE_PATH set to: {nodeModulesPath}");
 
-        // Load .env
         var envFile = Path.Combine(workingDir, ".env");
         if (File.Exists(envFile))
         {
@@ -69,9 +71,7 @@ public class NodeSsrService : IHostedService, IDisposable
 
                 var parts = line.Split('=', 2);
                 if (parts.Length == 2)
-                {
                     startInfo.Environment[parts[0]] = parts[1];
-                }
             }
         }
 
@@ -104,14 +104,16 @@ public class NodeSsrService : IHostedService, IDisposable
 
             _nodeProcess.BeginOutputReadLine();
             _nodeProcess.BeginErrorReadLine();
+
+            await WaitForPortAsync(Port, 15000);
+
+            _logger.LogInformation("Node SSR server is ready.");
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Failed to start Node SSR process");
             throw;
         }
-
-        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -121,7 +123,8 @@ public class NodeSsrService : IHostedService, IDisposable
             if (_nodeProcess != null && !_nodeProcess.HasExited)
             {
                 _logger.LogInformation("Stopping Node SSR process...");
-                _nodeProcess.Kill();
+                _nodeProcess.Kill(true);
+                _nodeProcess.WaitForExit(5000);
             }
         }
         catch (Exception ex)
@@ -135,5 +138,86 @@ public class NodeSsrService : IHostedService, IDisposable
     public void Dispose()
     {
         _nodeProcess?.Dispose();
+    }
+
+    private void KillProcessesOnPort(int port)
+    {
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "cmd",
+                Arguments = $"/c netstat -ano -p tcp | findstr :{port}",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using var process = Process.Start(psi);
+            var output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            var pids = new HashSet<int>();
+
+            foreach (var line in output.Split(Environment.NewLine))
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                if (!line.Contains("LISTENING")) continue;
+
+                var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (int.TryParse(parts[^1], out var pid))
+                    pids.Add(pid);
+            }
+
+            foreach (var pid in pids)
+            {
+                try
+                {
+                    var proc = Process.GetProcessById(pid);
+
+                    _logger.LogWarning($"Killing PID {pid} on port {port} ({proc.ProcessName})");
+
+                    proc.Kill(true);
+                    proc.WaitForExit(5000);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Failed to kill PID {pid}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to inspect port {port}");
+        }
+    }
+    private async Task WaitForPortAsync(int port, int timeoutMs)
+    {
+        var start = DateTime.UtcNow;
+
+        while ((DateTime.UtcNow - start).TotalMilliseconds < timeoutMs)
+        {
+            if (_nodeProcess.HasExited)
+            {
+                throw new Exception("Node process exited while waiting for port.");
+            }
+
+            try
+            {
+                using var client = new TcpClient();
+                var connectTask = client.ConnectAsync("127.0.0.1", port);
+
+                var completed = await Task.WhenAny(connectTask, Task.Delay(500));
+
+                if (completed == connectTask && client.Connected)
+                    return;
+            }
+            catch { }
+
+            await Task.Delay(200);
+        }
+
+        throw new TimeoutException($"Timed out waiting for port {port}");
     }
 }
