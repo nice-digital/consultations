@@ -108,33 +108,28 @@ namespace Comments
 
 			services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddControllersWithViews(options =>
-                {
-                    options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-                    options.EnableEndpointRouting = false;
-                })
-                .AddNewtonsoftJson();
+            services.AddControllersWithViews();
 
-			// Uncomment this if you want to debug server node
-			//if (Environment.IsDevelopment())
-			//{
-			//    services.AddNodeServices(options =>
-			//    {
-			//        options.LaunchWithDebugging = true;
-			//        options.DebuggingPort = 9229;
-			//    });
-			//}
+            // Uncomment this if you want to debug server node
+            //if (Environment.IsDevelopment())
+            //{
+            //    services.AddNodeServices(options =>
+            //    {
+            //        options.LaunchWithDebugging = true;
+            //        options.DebuggingPort = 9229;
+            //    });
+            //}
 
-			//if (!Environment.IsDevelopment()) //this breaks the tests.
-			//{
-			//    services.Configure<MvcOptions>(options =>
-			//    {
-			//        options.Filters.Add(new RequireHttpsAttribute());
-			//    });
-			//}
+            //if (!Environment.IsDevelopment()) //this breaks the tests.
+            //{
+            //    services.Configure<MvcOptions>(options =>
+            //    {
+            //        options.Filters.Add(new RequireHttpsAttribute());
+            //    });
+            //}
 
 
-	        if (!Environment.IsDevelopment())
+            if (!Environment.IsDevelopment())
 	        {
 		        services.AddHttpsRedirection(options =>
 		        {
