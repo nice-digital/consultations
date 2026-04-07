@@ -165,7 +165,6 @@ namespace Comments
                 {
                     client.BaseAddress = new Uri("http://localhost:4000");
                 });
-                services.AddHostedService<NodeSsrService>();
             }
         }
 
@@ -282,21 +281,38 @@ namespace Comments
 
                         var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
 
-                        var payload = new
+                        try
                         {
-                            url = context.Request.Path.ToString(),
-                            origin = $"{context.Request.Scheme}://{context.Request.Host}",
-                            data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
-                        };
+                            var payload = new
+                            {
+                                url = context.Request.Path.ToString(),
+                                origin = $"{context.Request.Scheme}://{context.Request.Host}",
+                                data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
+                            };
 
-                        var response = await client.PostAsJsonAsync("/render", payload);
+                            var response = await client.PostAsJsonAsync("/render", payload);
 
-                        var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+                            if (!response.IsSuccessStatusCode)
+                                throw new Exception("SSR returned non-success");
 
-                        context.Response.StatusCode = result.StatusCode;
-                        context.Response.ContentType = "text/html";
+                            var result = await response.Content.ReadFromJsonAsync<SsrResult>();
 
-                        await context.Response.WriteAsync(result.Html);
+                            if (result == null || string.IsNullOrEmpty(result.Html))
+                                throw new Exception("Invalid SSR response");
+
+                            context.Response.StatusCode = result.StatusCode;
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(result.Html);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
+                            logger.LogError(ex, "SSR failed, falling back to static HTML");
+
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(htmlTemplate);
+                        }
                     });
                 }
 
