@@ -173,6 +173,11 @@ namespace Comments
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {
             app.UseForwardedHeaders();
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -262,10 +267,10 @@ namespace Comments
                 await next();
             });
 
-            if (!env.IsDevelopment() && !env.IsIntegrationTest())
-            {
+            //if (!env.IsDevelopment() && !env.IsIntegrationTest())
+            //{
                 app.UseHttpsRedirection();
-            }
+            //}
             
 
             app.UseEndpoints(endpoints =>
