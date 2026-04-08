@@ -48,7 +48,7 @@ namespace Comments
             Configuration = configuration;
             Environment = env;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
@@ -56,9 +56,9 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			if (Environment.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
-                AppSettings.Configure(services, Configuration, @"c:\"); 
+                AppSettings.Configure(services, Configuration, @"c:\");
             }
             else
             {
@@ -67,11 +67,11 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			services.AddHttpClient();
+            services.AddHttpClient();
 
-			services.TryAddTransient<IUserService, UserService>();
+            services.TryAddTransient<IUserService, UserService>();
 
-			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -83,32 +83,37 @@ namespace Comments
             // Add authentication before adding the FeedReaderService
             var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
             services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
-	            .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
+                .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
             services.AddAuthorisation(authConfiguration);
 
             services.AddFeatureManagement();
 
-			services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
-			services.TryAddTransient<ICacheService, MemoryCacheService>();
-			services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
-            services.TryAddTransient<IRemoteSystemReader>(ServiceProvider => 
+            services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
+            services.TryAddTransient<ICacheService, MemoryCacheService>();
+            services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
+            services.TryAddTransient<IRemoteSystemReader>(ServiceProvider =>
                 new RemoteSystemReader(apiTokenClient: ServiceProvider.GetRequiredService<IApiTokenClient>()));
             services.TryAddTransient<IIndevFeedService, IndevFeedService>();
 
-			services.TryAddTransient<IAnswerService, AnswerService>();
+            services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
-	        services.TryAddTransient<ISubmitService, SubmitService>();
-			services.TryAddTransient<IAdminService, AdminService>();
-	        services.TryAddTransient<IExportService, ExportService>();
-			services.TryAddSingleton<IEncryption, Encryption>();
-	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
-	        services.TryAddTransient<IStatusService, StatusService>();
-			services.TryAddTransient<IConsultationListService, ConsultationListService>();
-			services.TryAddTransient<IOrganisationService, OrganisationService>();
+            services.TryAddTransient<ISubmitService, SubmitService>();
+            services.TryAddTransient<IAdminService, AdminService>();
+            services.TryAddTransient<IExportService, ExportService>();
+            services.TryAddSingleton<IEncryption, Encryption>();
+            services.TryAddTransient<IExportToExcel, ExportToExcel>();
+            services.TryAddTransient<IStatusService, StatusService>();
+            services.TryAddTransient<IConsultationListService, ConsultationListService>();
+            services.TryAddTransient<IOrganisationService, OrganisationService>();
 
-			services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+                options.EnableEndpointRouting = false;
+            })
+                .AddNewtonsoftJson();
 
             // Uncomment this if you want to debug server node
             //if (Environment.IsDevelopment())
@@ -130,30 +135,37 @@ namespace Comments
 
 
             if (!Environment.IsDevelopment())
-	        {
-		        /*services.AddHttpsRedirection(options =>
-		        {
-			        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-			        options.HttpsPort = 443;
-		        });*/
-	        }
+            {
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
 
-	        services.Configure<ForwardedHeadersOptions>(options =>
-			{
-				options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
-				options.KnownProxies.Clear();
-			});
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+                options.KnownProxies.Clear();
+            });
 
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicyName,
-                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin) 
+                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
 
             services.AddOptions();
+            if (!Environment.IsIntegrationTest())
+            {
+                services.AddHttpClient("ssr", client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:4000");
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -168,30 +180,30 @@ namespace Comments
                 RequestPath = "/consultations"
             });
             app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
                 {
-                    context.Response.OnStarting(() =>
-                    {
-                        context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
-                        return Task.FromResult(0);
-                    });
-                    await next();
-                }
+                    context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
+                    return Task.FromResult(0);
+                });
+                await next();
+            }
             );
 
             if (env.IsDevelopment())
             {
-	            app.UseDeveloperExceptionPage();
-				app.UseExceptionHandler(Constants.ErrorPath);
+                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler(Constants.ErrorPath);
 
-			}
+            }
             else
             {
-	            app.UseExceptionHandler(Constants.ErrorPath);
+                app.UseExceptionHandler(Constants.ErrorPath);
 
-	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
-			}
+                app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
+            }
 
-	        app.UseCors(CorsPolicyName);
+            app.UseCors(CorsPolicyName);
 
             // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
             // we re-write paths for static files to map them to the root
@@ -220,7 +232,7 @@ namespace Comments
 
             app.UseRouting();
 
-	        app.UseForwardedHeaders();
+            app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -250,24 +262,64 @@ namespace Comments
                 await next();
             });
 
-		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
-		    {
-			    app.UseHttpsRedirection();
-		    }
+            if (!env.IsDevelopment() && !env.IsIntegrationTest())
+            {
+                app.UseHttpsRedirection();
+            }
 
- 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/consultations", async context =>
+                if (!env.IsIntegrationTest())
                 {
-                    context.Response.ContentType = "text/plain";
-                    await context.Response.WriteAsync("Consultations endpoint is working");
-                });
+                    endpoints.Map("{*path:nonfile}", async context =>
+                    {
+                        var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
+                        var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
 
-                endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
-                                             pattern: "consultations/{consultationId:int}",
-                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
-                
+                        var client = httpClientFactory.CreateClient("ssr");
+
+                        var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
+
+                        try
+                        {
+                            var payload = new
+                            {
+                                url = context.Request.Path.ToString(),
+                                origin = $"{context.Request.Scheme}://{context.Request.Host}",
+                                data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
+                            };
+
+                            var response = await client.PostAsJsonAsync("/render", payload);
+
+                            if (!response.IsSuccessStatusCode)
+                                throw new Exception("SSR returned non-success");
+
+                            var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+
+                            if (result == null || string.IsNullOrEmpty(result.Html))
+                                throw new Exception("Invalid SSR response");
+
+                            context.Response.StatusCode = result.StatusCode;
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(result.Html);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
+                            logger.LogError(ex, "SSR failed, falling back to static HTML");
+
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(htmlTemplate);
+                        }
+                    });
+                }
+
+                endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument",
+                                                             pattern: "consultations/{consultationId:int}",
+                                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+
                 endpoints.MapControllerRoute(name: "PublishedRedirect",
                                              pattern: "consultations/{consultationId:int}/{documentId:int}",
                                              defaults: new { controller = "Redirect", action = "PublishedDocumentWithoutChapter" });
@@ -278,9 +330,9 @@ namespace Comments
 
                 endpoints.MapControllerRoute(name: "default",
                                              pattern: "{controller}/{action=Index}/{id?}");
-                
+
                 // endpoints.MapHealthChecks("/health"); //TODO: replace the custom health check controller with this package, which is now supported since the upgrade.
-                
+
 
             });
 
