@@ -5,6 +5,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 ## Table of Contents
 
+- [.NET 10 Upgrade Update](#net-10-upgrade-update)
 - [Updating to New Releases](#updating-to-new-releases)
 - [Sending Feedback](#sending-feedback)
 - [Folder Structure](#folder-structure)
@@ -94,6 +95,17 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [`npm run build` fails to minify](#npm-run-build-fails-to-minify)
   - [Moment.js locales are missing](#momentjs-locales-are-missing)
 - [Something Missing?](#something-missing)
+
+## Net 10 Upgrade Update
+Server side rendering was previously entirely handled by .NET but this was removed in later versions of .NET. With .NET 10 framework we call the react app via http://localhost:port and post the JSON properties such as `isAuthorised`, `displayName`, `isAdminUser` etc we then render this server side.
+
+PM2 is deployed on staging environments, locally you can use
+
+`"start:ssr": "dotenv -e .env node src/server/ssr-server.js"`
+
+Once the noder server is running you can open the site in Visual Studio.
+
+.env and .env.production are used to control which port to assign.
 
 ## Updating to New Releases
 
