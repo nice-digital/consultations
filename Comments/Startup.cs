@@ -172,6 +172,7 @@ namespace Comments
         [Obsolete("the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {
+            app.UseForwardedHeaders();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -232,7 +233,6 @@ namespace Comments
 
             app.UseRouting();
 
-            app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseAuthorization();
 
