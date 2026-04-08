@@ -4,6 +4,12 @@ require("@babel/register")({
 
 require("ignore-styles");
 
+const path = require('path');
+
+require('dotenv').config({
+  path: path.resolve(__dirname, '../../.env')
+});
+
 const express = require("express");
 
 // IMPORTANT: load index.js so Babel + ignore-styles run
@@ -23,6 +29,8 @@ app.post("/render", async (req, res) => {
   }
 });
 
-app.listen(4000, () => {
-  console.log("React SSR running on port 4000");
+const port = process.env.PORT || 4000
+
+app.listen(port, () => {
+  console.log(`React SSR running on port ${port}`);
 });
