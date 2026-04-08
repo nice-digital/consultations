@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
-    "start:ssr": "node src/server/server.js",
+    "start:ssr": "dotenv -e .env node src/server/ssr-server.js",
     "start-js": "react-app-rewired start",
     "build": "npm run modernizr && npm run sass:build && react-app-rewired build",
     "test": "react-app-rewired test",
