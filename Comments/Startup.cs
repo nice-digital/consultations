@@ -134,7 +134,7 @@ namespace Comments
             //}
 
 
-            if (!Environment.IsDevelopment())
+            /*if (!Environment.IsDevelopment())
             {
                 services.AddHttpsRedirection(options =>
                 {
@@ -142,7 +142,7 @@ namespace Comments
                     options.HttpsPort = 443;
                 });
             }
-
+            */
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
@@ -262,11 +262,11 @@ namespace Comments
                 await next();
             });
 
-            if (!env.IsDevelopment() && !env.IsIntegrationTest())
+            /*if (!env.IsDevelopment() && !env.IsIntegrationTest())
             {
                 app.UseHttpsRedirection();
             }
-
+            */
 
             app.UseEndpoints(endpoints =>
             {
