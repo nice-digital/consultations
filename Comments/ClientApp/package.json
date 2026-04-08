@@ -6,7 +6,7 @@
     "extends @nice-digital/browserslist-config"
   ],
   "volta": {
-    "node": "18.16.0"
+    "node": "14.19.0"
   },
   "engines": {
     "node": ">=8.11.1",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "rimraf ./build && npm run modernizr && npm-run-all -p sass:watch start-js",
-    "start:ssr": "dotenv -e .env node src/server/ssr-server.js",
+    "start:ssr": "node src/server/server.js",
     "start-js": "react-app-rewired start",
     "build": "npm run modernizr && npm run sass:build && react-app-rewired build",
     "test": "react-app-rewired test",
@@ -46,7 +46,6 @@
     "bless": "^3.0.3",
     "classlist-polyfill": "^1.2.0",
     "dotenv": "^17.4.1",
-    "dotenv-cli": "^11.0.0",
     "express": "^5.2.1",
     "ie9-oninput-polyfill": "^1.1.1",
     "ignore-styles": "^5.0.1",
