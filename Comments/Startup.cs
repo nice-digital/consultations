@@ -267,10 +267,10 @@ namespace Comments
                 await next();
             });
 
-            //if (!env.IsDevelopment() && !env.IsIntegrationTest())
-            //{
+            if (!env.IsDevelopment() && !env.IsIntegrationTest())
+            {
                 app.UseHttpsRedirection();
-            //}
+            }
             
 
             app.UseEndpoints(endpoints =>
