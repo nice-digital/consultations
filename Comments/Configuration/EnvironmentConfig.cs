@@ -14,6 +14,6 @@ namespace Comments.Configuration
 
         public string AccountsEnvironment { get; set; } = "Live";
 
-
+        public string SsrPort { get; set; }
     }
 }
