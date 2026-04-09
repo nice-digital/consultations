@@ -1,17 +1,18 @@
 Write-Host "Starting SSR..."
 
-$node = "node"
-$pm2 = ".\node_modules\pm2\bin\pm2"
+$pm2 = ".\node_modules\.bin\pm2.cmd"
 
-# ensure env is passed to PM2 
 $env:DOTENV_CONFIG_PATH = ".env.production"
 
-& $node $pm2 restart ssr --update-env
+# Kill existing
+Start-Process $pm2 -ArgumentList "kill" -NoNewWindow -Wait
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "SSR not running, starting..."
-    & $node $pm2 start src/server/ssr-server.js --name ssr --node-args="-r dotenv/config" --update-env
-}
+# Start SSR fully detached
+Start-Process $pm2 `
+  -ArgumentList "start src/server/ssr-server.js --name ssr --node-args=""-r dotenv/config"" --update-env" `
+  -WindowStyle Hidden
 
 Write-Host "SSR ready"
-exit 0
+
+# Force exit cleanly
+[Environment]::Exit(0)
