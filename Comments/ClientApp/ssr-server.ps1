@@ -3,7 +3,7 @@ Write-Host "Starting SSR..."
 $node = "node"
 $pm2 = ".\node_modules\pm2\bin\pm2"
 
-# ensure env is passed to PM2
+# ensure env is passed to PM2 
 $env:DOTENV_CONFIG_PATH = ".env.production"
 
 & $node $pm2 restart ssr --update-env
