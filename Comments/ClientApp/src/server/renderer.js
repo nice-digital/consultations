@@ -82,7 +82,7 @@ export const serverRenderer = (params): Promise => {
 				loaders: [], // List of promises where we track preloading data
 			},
 			analyticsGlobals: {},
-			baseUrl: params.origin + BaseUrlRelative,
+			baseUrl: (process.env.API_URL || params.origin) + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 		const authData = {

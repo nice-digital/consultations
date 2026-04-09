@@ -99,11 +99,11 @@ You can find the most recent version of this guide [here](https://github.com/fac
 ## Net 10 Upgrade Update
 Server side rendering was previously entirely handled by .NET but this was removed in later versions of .NET. With .NET 10 framework we call the react app via http://localhost:port and post the JSON properties such as `isAuthorised`, `displayName`, `isAdminUser` etc we then render this server side.
 
-PM2 is deployed on staging environments, locally you can use
+PM2 is deployed on staging environments, locally you can use `npm run start:ssr`
 
 `"start:ssr": "dotenv -e .env node src/server/ssr-server.js"`
 
-Once the noder server is running you can open the site in Visual Studio.
+Once the noder server is running you can open the site in Visual Studio, just make sure the value for `  "AppSettings:Environment:SsrPort"`in your secrets matches with the port number in .env.
 
 .env and .env.production are used to control which port to assign.
 
