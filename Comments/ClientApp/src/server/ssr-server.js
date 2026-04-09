@@ -7,7 +7,9 @@ require("ignore-styles");
 const path = require('path');
 
 require('dotenv').config({
-  path: path.resolve(__dirname, '../../.env')
+  path: process.env.DOTENV_CONFIG_PATH
+    ? path.resolve(__dirname, '../../', process.env.DOTENV_CONFIG_PATH)
+    : path.resolve(__dirname, '../../.env')
 });
 
 const express = require("express");
@@ -29,7 +31,7 @@ app.post("/render", async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 5000
 
 app.listen(port, () => {
   console.log(`React SSR running on port ${port}`);
