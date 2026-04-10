@@ -15,4 +15,4 @@ Start-Process $pm2 `
 Write-Host "SSR ready"
 
 # Force exit cleanly
-#[Environment]::Exit(0)
+[Environment]::Exit(0)
