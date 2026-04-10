@@ -47,7 +47,7 @@
     "classlist-polyfill": "^1.2.0",
     "dotenv": "^17.4.1",
     "dotenv-cli": "^11.0.0",
-    "express": "^5.2.1",
+    "express": "^4.17.1",
     "ie9-oninput-polyfill": "^1.1.1",
     "ignore-styles": "^5.0.1",
     "js-cookie": "^2.2.0",
