@@ -261,4 +261,3 @@ ClientApp/public/*.css.map
 .vscode
 /Comments/ClientApp/.vscode
 Comments/ClientApp/todo.md
-/Comments/ClientApp/src/index.js

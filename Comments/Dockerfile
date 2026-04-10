@@ -1,7 +1,7 @@
 # Runs the Comment Collection webapp.
 # Assumes you've published the app to ./published-app
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 ENV ASPNETCORE_URLS http://+:8080
 
@@ -29,7 +29,7 @@ RUN node -v
 RUN npm -v
 
 # Install replace globally for index.html replacement
-RUN npm ci -g replace
+RUN npm i -g replace
 
 # Install jq for JSON file replacement and nc for checking sql port is available
 RUN apt-get update && apt-get install jq -y \
@@ -53,7 +53,7 @@ COPY ./published-app/ClientApp/package.json ./app/ClientApp/
 # COPY ./wwwroot/Media/Default/html/HtmlWidget/Footer.html ./app/wwwroot/Media/Default/html/HtmlWidget/
 #COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
 WORKDIR /app/ClientApp
-RUN npm ci --production
+RUN npm i --production
 
 # Copy .net app to a location on container and run application
 WORKDIR /app
