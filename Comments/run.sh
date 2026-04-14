@@ -87,6 +87,8 @@ replace "#{GlobalNav:Script}" "$REACT_APP_GLOBAL_NAV_SCRIPT" ClientApp/build/ind
 replace "#{GlobalNav:ScriptIE8}" "$REACT_APP_GLOBAL_NAV_SCRIPT_IE8" ClientApp/build/index.html
 replace "#{AppSettings:Environment:AccountsEnvironment}" "$REACT_APP_ACCOUNTS_ENVIRONMENT" ClientApp/build/index.html
 
+(cd ClientApp && API_URL="http://localhost:8080" npm run dotenv -e .env -- node src/server/ssr-server.js) &
+
 dotnet Comments.dll
 
 # See https://stackoverflow.com/questions/39082768/what-does-set-e-and-exec-do-for-docker-entrypoint-scripts
