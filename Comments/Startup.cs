@@ -163,7 +163,7 @@ namespace Comments
             {
                 services.AddHttpClient("ssr", client =>
                 {
-                    client.BaseAddress = new Uri("http://localhost:" + AppSettings.Environment.SsrPort);
+                    client.BaseAddress = new Uri(AppSettings.Environment.SsrHost + ':' + AppSettings.Environment.SsrPort);
                 });
             }
         }
