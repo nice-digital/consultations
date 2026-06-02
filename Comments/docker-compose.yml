@@ -5,7 +5,7 @@ services:
     volumes:
       - ./docker_ssl_proxy:/etc/nginx
     ports:
-      - 80:80
+      - 8080:80
       - 443:443
     depends_on:
       - comments
@@ -40,10 +40,6 @@ services:
       context: ./ClientApp
     ports:
       - "5000:5000"
-    environment:
-      - REACT_APP_ACCOUNTS_ENVIRONMENT
-      - REACT_APP_GLOBAL_NAV_SCRIPT
-      - REACT_APP_GLOBAL_NAV_SCRIPT_IE8
   comments:
     build:
       context: .
@@ -53,50 +49,49 @@ services:
       - redis
       - nodeapp
     ports:
-      - "8080:8080"
+      - "80:80"
     environment:
-      - DEFAULT_CONNECTION
-      - LOGGING_LOG_FILE_PATH=logs/Serilog-{Date}.json
-      - APPSETTINGS_ENVIRONMENT_NAME=DockerTests
-      - APPSETTINGS_ENVIRONMENT_SECURESITE=false
-      - APPSETTINGS_ENVIRONMENT_REALM=niceorg
-      - INDEV_APIKEY
-      - INDEV_BASEPATH
-      - INDEV_PUBLISHED_CHAPTER
-      - INDEV_DRAFT_PREVIEW_CHAPTER
-      - INDEV_PUBLISHED_DETAIL
-      - INDEV_DRAFT_PREVIEW_DETAIL
-      - INDEV_PUBLISHED_PREVIEW_DETAIL
-      - INDEV_LIST
-      - GILLIAM_CLIENT_CERTIFICATE_BASE64
-      - GILLIAM_BASE_PATH
-      - GILLIAM_GET_CLAIMS_URL
-      - GILLIAM_REALM
-      - ENCRYPTION_KEY
-      - ENCRYPTION_IV
-      - ACCOUNTS_ENVIRONMENT
-      - REACT_APP_ACCOUNTS_ENVIRONMENT
-      - REACT_APP_GLOBAL_NAV_SCRIPT
-      - REACT_APP_GLOBAL_NAV_SCRIPT_IE8
-      - WEBAPP_DOMAIN
-      - WEBAPP_CLIENTID
-      - WEBAPP_CLIENTSECRECT
-      - WEBAPP_REDIRECT_URI
-      - WEBAPP_LOGOUT_REDIRECT_URI
-      - WEBAPP_API_IDENTIFIER
-      - WEBAPP_AUTH_SERVICE_URI
-      - WEBAPP_GOOGLE_TRACKING_ID
-      - ADMINROLE
-      - TEAMROLES
-      - TEAMROLES1
-      - TEAMROLES2
-      - TEAMROLES3
-      - ORG_COMMENTING
-      - CODE_EMAIL1
-      - REDIS_CONNECTION_STRING
-      - INDEV_IDAM_CONFIG_APIIDENTIFIER
-      - INDEV_IDAM_CONFIG_CLIENTID
-      - INDEV_IDAM_CONFIG_CLIENTSECRET
-      - INDEV_IDAM_CONFIG_DOMAIN
-      - AUTH_ADMIN_ID
-      - AUTH_ADMIN_ID_5
+      - AppSettings__Environment__AccountsEnvironment=${AppSettings__Environment__AccountsEnvironment}
+      - AppSettings__Environment__Name=${AppSettings__Environment__Name}
+      - AppSettings__Environment__SsrPort=${AppSettings__Environment__SsrPort}
+      - AppSettings__Environment__SsrHost=${AppSettings__Environment__SsrHost}
+      - AppSettings__Environment__CorsOrigin=${AppSettings__Environment__CorsOrigin}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - ConsultationList__DownloadRoles__AdminRoles=${ConsultationList__DownloadRoles__AdminRoles}
+      - ConsultationList__DownloadRoles__TeamRoles=${ConsultationList__DownloadRoles__TeamRoles}
+      - Encryption__IV=${Encryption__IV}
+      - Encryption__Key=${Encryption__Key}
+      - Feeds__CacheDurationSeconds=${Feeds__CacheDurationSeconds}
+      - Feeds__IndevApiKey=${Feeds__IndevApiKey}
+      - Feeds__IndevBasePath=${Feeds__IndevBasePath}
+      - Feeds__IndevDraftPreviewChapterFeedPath=${Feeds__IndevDraftPreviewChapterFeedPath}
+      - Feeds__IndevDraftPreviewDetailFeedPath=${Feeds__IndevDraftPreviewDetailFeedPath}
+      - Feeds__IndevIDAMConfig__APIIdentifier=${Feeds__IndevIDAMConfig__APIIdentifier}
+      - Feeds__IndevIDAMConfig__ClientId=${Feeds__IndevIDAMConfig__ClientId}
+      - Feeds__IndevIDAMConfig__ClientSecret=${Feeds__IndevIDAMConfig__ClientSecret}
+      - Feeds__IndevIDAMConfig__Domain=${Feeds__IndevIDAMConfig__Domain}
+      - Feeds__IndevListFeedPath=${Feeds__IndevListFeedPath}
+      - Feeds__IndevPublishedChapterFeedPath=${Feeds__IndevPublishedChapterFeedPath}
+      - Feeds__IndevPublishedDetailFeedPath=${Feeds__IndevPublishedDetailFeedPath}
+      - Feeds__IndevPublishedPreviewDetailFeedPath=${Feeds__IndevPublishedPreviewDetailFeedPath}
+      - Gilliam__GetClaimsUrl=${Gilliam__GetClaimsUrl}
+      - Gilliam__GilliamBasePath=${Gilliam__GilliamBasePath}
+      - Gilliam__GilliamClientCertificateBase64=${Gilliam__GilliamClientCertificateBase64}
+      - GlobalNav__CookieBannerScript=${GlobalNav__CookieBannerScript}
+      - GlobalNav__Script=${GlobalNav__Script}
+      - GlobalNav__ScriptIE8=${GlobalNav__ScriptIE8}
+      - IndevDraftPreviewDetailFeedPath=${IndevDraftPreviewDetailFeedPath}
+      - Logging__SerilogMinLevel=${Logging__SerilogMinLevel}
+      - Status__APIKey=${Status__APIKey}
+      - WebAppConfiguration__ApiIdentifier=${WebAppConfiguration__ApiIdentifier}
+      - WebAppConfiguration__AuthorisationServiceUri=${WebAppConfiguration__AuthorisationServiceUri}
+      - WebAppConfiguration__RedirectUri=${WebAppConfiguration__RedirectUri}
+      - WebAppConfiguration__PostLogoutRedirectUri=${WebAppConfiguration__PostLogoutRedirectUri}
+      - WebAppConfiguration__ClientId=${WebAppConfiguration__ClientId}
+      - WebAppConfiguration__ClientSecret=${WebAppConfiguration__ClientSecret}
+      - WebAppConfiguration__Domain=${WebAppConfiguration__Domain}
+      - WebAppConfiguration__GoogleTrackingId=${WebAppConfiguration__GoogleTrackingId}
+      - WebAppConfiguration__RedisServiceConfiguration__ConnectionString=${WebAppConfiguration__RedisServiceConfiguration__ConnectionString}
+      - WebAppConfiguration__RedisServiceConfiguration__Enabled=${WebAppConfiguration__RedisServiceConfiguration__Enabled}
+
+      

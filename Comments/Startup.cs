@@ -254,45 +254,36 @@ namespace Comments
                 {
                     endpoints.Map("{*path:nonfile}", async context =>
                     {
-                        var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
-                        var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
+                        var httpClientFactory = context.RequestServices
+                            .GetRequiredService<IHttpClientFactory>();
+
+                        var linkGenerator = context.RequestServices
+                            .GetRequiredService<LinkGenerator>();
 
                         var client = httpClientFactory.CreateClient("ssr");
 
-                        var htmlTemplate = await File.ReadAllTextAsync("ClientApp/build/index.html");
-
-                        try
+                        var payload = new
                         {
-                            var payload = new
-                            {
-                                url = context.Request.Path.ToString(),
-                                origin = $"{context.Request.Scheme}://{context.Request.Host}",
-                                data = SsrDataBuilder.Build(context, htmlTemplate, linkGenerator)
-                            };
+                            url = context.Request.Path.ToString(),
 
-                            var response = await client.PostAsJsonAsync("/render", payload);
+                            origin = $"{context.Request.Scheme}://{context.Request.Host}",
 
-                            if (!response.IsSuccessStatusCode)
-                                throw new Exception("SSR returned non-success");
+                            data = SsrDataBuilder.Build(context, linkGenerator)
+                        };
 
-                            var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+                        var response = await client.PostAsJsonAsync("/render", payload);
 
-                            if (result == null || string.IsNullOrEmpty(result.Html))
-                                throw new Exception("Invalid SSR response");
+                        response.EnsureSuccessStatusCode();
 
-                            context.Response.StatusCode = result.StatusCode;
-                            context.Response.ContentType = "text/html";
-                            await context.Response.WriteAsync(result.Html);
-                        }
-                        catch (Exception ex)
-                        {
-                            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
-                            logger.LogError(ex, "SSR failed, falling back to static HTML");
+                        var result = await response.Content.ReadFromJsonAsync<SsrResult>();
 
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "text/html";
-                            await context.Response.WriteAsync(htmlTemplate);
-                        }
+                        if (result == null || string.IsNullOrWhiteSpace(result.Html))
+                            throw new Exception("Invalid SSR response");
+
+                        context.Response.StatusCode = result.StatusCode;
+                        context.Response.ContentType = "text/html";
+
+                        await context.Response.WriteAsync(result.Html);
                     });
                 }
 

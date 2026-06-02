@@ -12,7 +12,7 @@ namespace Comments
 {
     public static class SsrDataBuilder
     {
-        public static object Build(HttpContext httpContext, string htmlTemplate, LinkGenerator linkGenerator)
+        public static object Build(HttpContext httpContext, LinkGenerator linkGenerator)
         {
             var user = new User(httpContext.User);
 
@@ -27,7 +27,9 @@ namespace Comments
                 : null;
 
             var host = httpContext.Request.Host.Host;
-            var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();
+
+            var userRoles = httpContext.User?.Roles(host).ToList()
+                            ?? new List<string>();
 
             var isAdminUser = userRoles.Any(role =>
                 AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
@@ -41,13 +43,18 @@ namespace Comments
 
             return new
             {
-                originalHtml = htmlTemplate,
                 cookies,
+
                 isAuthorised = user.IsAuthenticatedByAccounts,
+
                 displayName = user.DisplayName,
+
                 isLead = user.OrganisationsAssignedAsLead?.Any(),
+
                 isAdminUser,
+
                 isTeamUser,
+
                 signInURL = linkGenerator.GetPathByAction(
                     httpContext,
                     Constants.Auth.LoginAction,
@@ -63,9 +70,14 @@ namespace Comments
                     httpContext,
                     Constants.Auth.LoginAction,
                     Constants.Auth.ControllerName,
-                    new { returnUrl = httpContext.Request.Path, goToRegisterPage = true }),
+                    new
+                    {
+                        returnUrl = httpContext.Request.Path,
+                        goToRegisterPage = true
+                    }),
 
                 requestURL = httpContext.Request.Path.ToString(),
+
                 accountsEnvironment = AppSettings.Environment.AccountsEnvironment
             };
         }

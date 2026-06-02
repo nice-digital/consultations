@@ -12,6 +12,13 @@ import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
 import { Error } from "./../components/Error/Error";
 import serialize from "serialize-javascript";
+import fs from "fs";
+import path from "path";
+
+const htmlTemplate = fs.readFileSync(
+    path.resolve(__dirname, "../../build/index.html"),
+    "utf8"
+);
 
 const BaseUrlRelative: string = "/consultations";
 
@@ -121,7 +128,7 @@ export const serverRenderer = (params): Promise => {
 				return;
 			}
 			const helmet = Helmet.renderStatic();
-			const html = processHtml(params.data.originalHtml,
+			const html = processHtml(htmlTemplate,
 				{
 					htmlAttributes: helmet.htmlAttributes.toString(),
 					bodyAttributes: helmet.bodyAttributes.toString(),
@@ -144,11 +151,11 @@ export const serverRenderer = (params): Promise => {
 			}
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e}/>;
-			let html = params.data.originalHtml;
+			let html = htmlTemplate;
 			if (typeof(html) !== "undefined"){
 				const errorAsString = renderToString(error);
 				try{
-					html = processHtml(params.data.originalHtml,
+					html = processHtml(htmlTemplate,
 						{
 							rootContent: errorAsString,
 							accountsEnvironment: params.data.accountsEnvironment,

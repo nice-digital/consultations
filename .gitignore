@@ -261,3 +261,11 @@ ClientApp/public/*.css.map
 .vscode
 /Comments/ClientApp/.vscode
 Comments/ClientApp/todo.md
+
+# Terraform local development files
+terraform/dev.s3.tfbackend
+terraform/dev.tfvars
+terraform/.terraform
+terraform/tfplan
+
+.env
