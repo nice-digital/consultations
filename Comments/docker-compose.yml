@@ -29,11 +29,9 @@ services:
     image: "redis:alpine3.15"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    #command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - "6379:6379"
     command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    #command: ["redis-server", "--bind", "redis", "--port", "6379"]
   nodeapp:
     container_name: nodeapp
     build:
@@ -50,48 +48,6 @@ services:
       - nodeapp
     ports:
       - "80:80"
-    environment:
-      - AppSettings__Environment__AccountsEnvironment=${AppSettings__Environment__AccountsEnvironment}
-      - AppSettings__Environment__Name=${AppSettings__Environment__Name}
-      - AppSettings__Environment__SsrPort=${AppSettings__Environment__SsrPort}
-      - AppSettings__Environment__SsrHost=${AppSettings__Environment__SsrHost}
-      - AppSettings__Environment__CorsOrigin=${AppSettings__Environment__CorsOrigin}
-      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
-      - ConsultationList__DownloadRoles__AdminRoles=${ConsultationList__DownloadRoles__AdminRoles}
-      - ConsultationList__DownloadRoles__TeamRoles=${ConsultationList__DownloadRoles__TeamRoles}
-      - Encryption__IV=${Encryption__IV}
-      - Encryption__Key=${Encryption__Key}
-      - Feeds__CacheDurationSeconds=${Feeds__CacheDurationSeconds}
-      - Feeds__IndevApiKey=${Feeds__IndevApiKey}
-      - Feeds__IndevBasePath=${Feeds__IndevBasePath}
-      - Feeds__IndevDraftPreviewChapterFeedPath=${Feeds__IndevDraftPreviewChapterFeedPath}
-      - Feeds__IndevDraftPreviewDetailFeedPath=${Feeds__IndevDraftPreviewDetailFeedPath}
-      - Feeds__IndevIDAMConfig__APIIdentifier=${Feeds__IndevIDAMConfig__APIIdentifier}
-      - Feeds__IndevIDAMConfig__ClientId=${Feeds__IndevIDAMConfig__ClientId}
-      - Feeds__IndevIDAMConfig__ClientSecret=${Feeds__IndevIDAMConfig__ClientSecret}
-      - Feeds__IndevIDAMConfig__Domain=${Feeds__IndevIDAMConfig__Domain}
-      - Feeds__IndevListFeedPath=${Feeds__IndevListFeedPath}
-      - Feeds__IndevPublishedChapterFeedPath=${Feeds__IndevPublishedChapterFeedPath}
-      - Feeds__IndevPublishedDetailFeedPath=${Feeds__IndevPublishedDetailFeedPath}
-      - Feeds__IndevPublishedPreviewDetailFeedPath=${Feeds__IndevPublishedPreviewDetailFeedPath}
-      - Gilliam__GetClaimsUrl=${Gilliam__GetClaimsUrl}
-      - Gilliam__GilliamBasePath=${Gilliam__GilliamBasePath}
-      - Gilliam__GilliamClientCertificateBase64=${Gilliam__GilliamClientCertificateBase64}
-      - GlobalNav__CookieBannerScript=${GlobalNav__CookieBannerScript}
-      - GlobalNav__Script=${GlobalNav__Script}
-      - GlobalNav__ScriptIE8=${GlobalNav__ScriptIE8}
-      - IndevDraftPreviewDetailFeedPath=${IndevDraftPreviewDetailFeedPath}
-      - Logging__SerilogMinLevel=${Logging__SerilogMinLevel}
-      - Status__APIKey=${Status__APIKey}
-      - WebAppConfiguration__ApiIdentifier=${WebAppConfiguration__ApiIdentifier}
-      - WebAppConfiguration__AuthorisationServiceUri=${WebAppConfiguration__AuthorisationServiceUri}
-      - WebAppConfiguration__RedirectUri=${WebAppConfiguration__RedirectUri}
-      - WebAppConfiguration__PostLogoutRedirectUri=${WebAppConfiguration__PostLogoutRedirectUri}
-      - WebAppConfiguration__ClientId=${WebAppConfiguration__ClientId}
-      - WebAppConfiguration__ClientSecret=${WebAppConfiguration__ClientSecret}
-      - WebAppConfiguration__Domain=${WebAppConfiguration__Domain}
-      - WebAppConfiguration__GoogleTrackingId=${WebAppConfiguration__GoogleTrackingId}
-      - WebAppConfiguration__RedisServiceConfiguration__ConnectionString=${WebAppConfiguration__RedisServiceConfiguration__ConnectionString}
-      - WebAppConfiguration__RedisServiceConfiguration__Enabled=${WebAppConfiguration__RedisServiceConfiguration__Enabled}
+    env_file: ".env"
 
       

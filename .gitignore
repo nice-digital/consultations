@@ -263,9 +263,9 @@ ClientApp/public/*.css.map
 Comments/ClientApp/todo.md
 
 # Terraform local development files
-terraform/dev.s3.tfbackend
-terraform/dev.tfvars
-terraform/.terraform
-terraform/tfplan
+terraform/environments/dev/dev.s3.tfbackend
+terraform/environments/dev/dev.tfvars
+terraform/environments/dev/.terraform
+terraform/environments/dev/tfplan
 
 .env

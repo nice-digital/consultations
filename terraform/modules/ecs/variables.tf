@@ -1,6 +1,13 @@
 variable "aws_region" {
   type    = string
-  default = "eu-west-2"
+}
+
+variable "environment" {
+  type    = string
+  validation {
+    condition= contains(["dev", "production"], var.environment)
+    error_message = "Invalid environment value."
+  }
 }
 
 variable "backend_config" {
@@ -9,7 +16,6 @@ variable "backend_config" {
     ecr_repository_name = string
     ecr_image_tag       = string
     container_port      = number
-    host_port           = number
 
     appsettings_environment_accountsenvironment = string
     appsettings_environment_name                = string
@@ -89,5 +95,19 @@ variable "networking_config" {
     load_balancer_subnets         = list(string)
     load_balancer_security_groups = list(string)
     target_group_vpc_id           = string
+    certificate_arn               = string
+    hosted_zone_id                = string
+    hostname                      = string
   })
 }
+
+variable "iam_role_arn" {
+  description = "iAM Role"
+  type = string
+}
+variable "target_group_arn" {
+  description = "target group arn"
+  type = string
+}
+
+
