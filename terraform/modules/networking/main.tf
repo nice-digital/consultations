@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "consultations_tg" {
     enabled  = true
     interval = 180
     timeout  = 120
-    matcher = "200-302"
+    matcher  = "200-302"
   }
 }
 

@@ -1,7 +1,7 @@
 variable "backend_config" {
   description = "Backend configuration"
   type = object({
-    container_port      = number
+    container_port = number
   })
 }
 

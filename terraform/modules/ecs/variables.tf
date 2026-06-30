@@ -1,11 +1,11 @@
 variable "aws_region" {
-  type    = string
+  type = string
 }
 
 variable "environment" {
-  type    = string
+  type = string
   validation {
-    condition= contains(["dev", "production"], var.environment)
+    condition     = contains(["dev", "production"], var.environment)
     error_message = "Invalid environment value."
   }
 }
@@ -103,11 +103,11 @@ variable "networking_config" {
 
 variable "iam_role_arn" {
   description = "iAM Role"
-  type = string
+  type        = string
 }
 variable "target_group_arn" {
   description = "target group arn"
-  type = string
+  type        = string
 }
 
 
