@@ -11,7 +11,7 @@ describe("Server renderer", () => {
 			process.env.NODE_ENV = "production";
 
 			serverRenderer(null).catch((e) => {
-				expect(e.message).toEqual("Cannot read property 'data' of null");
+				expect(e.message).toEqual("Cannot read properties of null (reading 'data')");
 				done();
 			});
 		});

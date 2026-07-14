@@ -4,6 +4,7 @@
 // See https://medium.com/@cereallarceny/server-side-rendering-with-create-react-app-fiber-react-router-v4-helmet-redux-and-thunk-275cb25ca972
 // and https://github.com/cereallarceny/cra-ssr/blob/master/server/universal.js
 
+import { createServerRenderer } from "aspnet-prerendering";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
@@ -12,13 +13,6 @@ import { processHtml } from "./html-processor";
 import App from "./../components/App/App";
 import { Error } from "./../components/Error/Error";
 import serialize from "serialize-javascript";
-import fs from "fs";
-import path from "path";
-
-const htmlTemplate = fs.readFileSync(
-    path.resolve(__dirname, "../../build/index.html"),
-    "utf8"
-);
 
 const BaseUrlRelative: string = "/consultations";
 
@@ -89,7 +83,7 @@ export const serverRenderer = (params): Promise => {
 				loaders: [], // List of promises where we track preloading data
 			},
 			analyticsGlobals: {},
-			baseUrl: (process.env.API_URL || params.origin) + BaseUrlRelative,
+			baseUrl: params.origin + BaseUrlRelative,
 			// Base url is used for 'server' ajax requests so we can hit the .NET instance from the Node process
 		};
 		const authData = {
@@ -128,7 +122,7 @@ export const serverRenderer = (params): Promise => {
 				return;
 			}
 			const helmet = Helmet.renderStatic();
-			const html = processHtml(htmlTemplate,
+			const html = processHtml(params.data.originalHtml,
 				{
 					htmlAttributes: helmet.htmlAttributes.toString(),
 					bodyAttributes: helmet.bodyAttributes.toString(),
@@ -151,11 +145,11 @@ export const serverRenderer = (params): Promise => {
 			}
 			// In development show a nice YSOD to devs with the error message
 			const error = <Error error={e}/>;
-			let html = htmlTemplate;
+			let html = params.data.originalHtml;
 			if (typeof(html) !== "undefined"){
 				const errorAsString = renderToString(error);
 				try{
-					html = processHtml(htmlTemplate,
+					html = processHtml(params.data.originalHtml,
 						{
 							rootContent: errorAsString,
 							accountsEnvironment: params.data.accountsEnvironment,
@@ -176,4 +170,4 @@ export const serverRenderer = (params): Promise => {
 };
 
 // `createServerRenderer` is what the DotNetCore SpaServices requires for SSR
-export default serverRenderer;
+export default createServerRenderer(serverRenderer);
