@@ -77,7 +77,7 @@ exports[`should match snapshot with supplied data 1`] = `
             class="page-header__heading mt--0"
             data-qa-sel="changeable-page-header"
           >
-            Warren's Project
+            DRAFT_Appendices_A-T_CLEAN.docx
           </h1>
           <div
             class="mb--d"
