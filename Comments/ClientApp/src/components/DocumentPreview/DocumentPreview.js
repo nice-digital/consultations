@@ -297,16 +297,28 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 		this.setState({ chapterData });
 	};
 
+	getCurrentDocumentTitle = () => {
+		const documents = this.state.documentsData;
+		const documentId = parseInt(this.props.match.params.documentId, 0);
+		const matchCurrentDocument = d => d.documentId === parseInt(documentId, 0);
+		const currentDocumentDetails = documents.filter(matchCurrentDocument)[0];
+		return currentDocumentDetails.title;
+	};
+
+	getPageTitle = () => {
+		return `${this.getCurrentDocumentTitle()} | ${this.state.consultationData.title}`;
+	};
+
 	render() {
 		if (this.state.error.hasError) { throw new Error(this.state.error.message); }
 		if (!this.state.hasInitialData && this.state.isAuthorised) return <h1>Loading...</h1>;
-		const { title, reference } = this.state.consultationData || {};
+		const { reference } = this.state.consultationData || {};
 		const { content } = this.state.chapterData || {};
 		const documentId = parseInt(this.props.match.params.documentId, 0);
 		return (
 			<Fragment>
 				<Helmet>
-					<title>{title}</title>
+					<title>{this.getPageTitle()}</title>
 				</Helmet>
 				<UserContext.Consumer>
 					{(contextValue: any) => !contextValue.isAuthorised ?
@@ -327,7 +339,7 @@ export class DocumentPreview extends Component<PropsType, StateType> {
 									}
 									<main role="main">
 										<Header
-											title={title}
+											title={this.getCurrentDocumentTitle()}
 											reference={reference}
 											consultationState={this.state.consultationData.consultationState}/>
 										<div className="grid">
