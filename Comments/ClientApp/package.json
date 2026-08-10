@@ -39,7 +39,7 @@
     "@nice-digital/design-system": "^4.0.0",
     "@nice-digital/global-nav": "^5.0.890",
     "aspnet-prerendering": "^3.0.1",
-    "axios": "^0.27.2",
+    "axios": "^0.28.0",
     "babel-preset-react-app": "^9.1.2",
     "bless": "^3.0.3",
     "classlist-polyfill": "^1.2.0",
