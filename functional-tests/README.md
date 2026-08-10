@@ -50,7 +50,7 @@ Once you've installed Node:
 1. Open a terminal of your choice.
 2. You need [publish the webapp](#publish) and set some [environment variables](#environment-variables).
 3. `cd` into the _functional-tests_ directory: `cd functional-tests`
-4. install package dependencies from npm by running `npm i`. You only need to do this the first time you run the test: you can skip this step on subsequent sessions.
+4. install package dependencies from npm by running `npm ci`. You only need to do this the first time you run the test: you can skip this step on subsequent sessions.
 5. run the app in docker but running `./docker-dev.sh`. This will exec out on the test folder once everything is set up.
 6. run ctrl + d and you will appear back on the terminal but the application is now running on your machine ready to test
 
