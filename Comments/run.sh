@@ -11,6 +11,8 @@ jq \
     --arg appSettingsEnvironmentSecureSite "$APPSETTINGS_ENVIRONMENT_SECURESITE" \
     --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
     --arg appSettingsEnvironmentAccountsEnv "$ACCOUNTS_ENVIRONMENT" \
+    --arg appSettingsEnvironmentSsrPort "$APPSETTINGS_ENVIRONMENT_SSRPORT" \
+    --arg appSettingsEnvironmentSsrHost "$APPSETTINGS_ENVIRONMENT_SSRHOST" \
     --arg indevApiKey "$INDEV_APIKEY" \
     --arg indevBasePath "$INDEV_BASEPATH" \
     --arg indevPublishedChapterFeedPath "$INDEV_PUBLISHED_CHAPTER" \
@@ -48,6 +50,8 @@ jq \
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
+    .AppSettings.Environment.SsrPort = $appSettingsEnvironmentSsrPort |
+    .AppSettings.Environment.SsrHost = $appSettingsEnvironmentSsrHost |
     .Feeds.ApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
