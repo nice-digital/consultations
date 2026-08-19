@@ -11,11 +11,11 @@ RUN apt-get update \
 	jq \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Add corporate / proxy CA certificate
-COPY ./certificates/company-ca.crt.cer \
-	/usr/local/share/ca-certificates/corporate-root-ca.crt
+# # Add corporate / proxy CA certificate
+# COPY ./certificates/company-ca.crt.cer \
+# 	/usr/local/share/ca-certificates/corporate-root-ca.crt
 
-RUN update-ca-certificates
+# RUN update-ca-certificates
 
 # Install Java (for Allure) see https://stackoverflow.com/a/44154721/486434
 RUN apt-get update && \
@@ -50,7 +50,7 @@ WORKDIR /tests
 COPY package.json /tests
 COPY package-lock.json /tests
 
-ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
+# ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
 
 RUN npm ci
 

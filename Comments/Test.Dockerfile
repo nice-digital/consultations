@@ -15,10 +15,12 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Add corporate / proxy CA certificate
-COPY ./certificates/company-ca.crt.cer \
-  /usr/local/share/ca-certificates/corporate-root-ca.crt
+# COPY ./certificates/company-ca.crt.cer \
+#   /usr/local/share/ca-certificates/corporate-root-ca.crt
 
-RUN update-ca-certificates
+# RUN update-ca-certificates
+
+# ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
 
 RUN git --version
 
