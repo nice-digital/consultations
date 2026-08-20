@@ -1,7 +1,7 @@
 # Runs the Comment Collection webapp.
 # Assumes you've published the app to ./published-app
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.7-resolute-amd64
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.11-resolute-amd64
 
 ENV ASPNETCORE_URLS="http://+:8080"
 
@@ -15,12 +15,12 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Add corporate / proxy CA certificate
-# COPY ./certificates/company-ca.crt.cer \
-#   /usr/local/share/ca-certificates/corporate-root-ca.crt
+COPY ./certificates/company-ca.crt.cer \
+  /usr/local/share/ca-certificates/corporate-root-ca.crt
 
-# RUN update-ca-certificates
+RUN update-ca-certificates
 
-# ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
 
 RUN git --version
 
