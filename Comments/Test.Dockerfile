@@ -11,10 +11,11 @@ RUN apt-get update \
   git \
   curl \
   ca-certificates \
-  jq \
-  # && rm -rf /var/lib/apt/lists/*
-  # Add corporate / proxy CA certificate
-  COPY ./certificates/company-ca.crt.cer \
+  jq
+# && rm -rf /var/lib/apt/lists/*
+
+# Add corporate / proxy CA certificate
+COPY ./certificates/company-ca.crt.cer \
   /usr/local/share/ca-certificates/corporate-root-ca.crt
 
 RUN update-ca-certificates
