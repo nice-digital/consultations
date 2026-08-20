@@ -6,7 +6,7 @@ Feature: Answer Question on a Consultation
 	Background:
 		Given I open the url "398/1/recommendations"
 		When I log into accounts with username "IDAM_EMAIL1" and password "IDAM_PASSWORD"
-		Given I add questions to Consultation "398/1/recommendations"
+		Given I add questions to Consultation "398" and navigate back to "398/1/recommendations"
 
 	Scenario: I answer a Consultation and Document level question
 		When I open question panel
