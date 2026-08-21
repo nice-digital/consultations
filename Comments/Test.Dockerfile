@@ -6,12 +6,18 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0.11-resolute-amd64
 ENV ASPNETCORE_URLS="http://+:8080"
 
 # Install required packages
+RUN apt-get update && apt-get install git -y
+RUN git --version
+
+# Install curl
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-  git \
-  curl \
-  # ca-certificates \
-  jq
+  && apt-get install -y curl
+# RUN apt-get update \
+#   && apt-get install -y --no-install-recommends \
+#   git \
+#   curl \
+#   # ca-certificates \
+#   jq
 # && rm -rf /var/lib/apt/lists/*
 
 # Add corporate / proxy CA certificate
