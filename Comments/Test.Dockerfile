@@ -6,8 +6,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0.11-resolute-amd64
 ENV ASPNETCORE_URLS="http://+:8080"
 
 # Install required packages
-RUN apt-get update && apt-get install git -y
-RUN git --version
+# RUN apt-get update && apt-get install git -y
+# RUN git --version
 
 # Install curl
 RUN apt-get update \
@@ -28,7 +28,7 @@ RUN apt-get update \
 
 # ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
 
-RUN git --version
+# RUN git --version
 
 # Install node and npm
 # Latest Nodejs LTS as of 03/05/2018
