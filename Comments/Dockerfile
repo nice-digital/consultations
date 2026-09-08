@@ -6,8 +6,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble
 ENV ASPNETCORE_URLS http://+:8080
 
 # Install Git
-# RUN apt-get update && apt-get install git -y
-# RUN git --version
+RUN apt-get update && apt-get install git -y
+RUN git --version
 
 # Install curl
 RUN apt-get update \

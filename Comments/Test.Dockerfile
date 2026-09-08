@@ -11,7 +11,8 @@ ENV ASPNETCORE_URLS="http://+:8080"
 
 # Install curl
 RUN apt-get update \
-  && apt-get install -y curl
+  && apt-get install -y \
+  curl
 # RUN apt-get update \
 #   && apt-get install -y --no-install-recommends \
 #   git \
