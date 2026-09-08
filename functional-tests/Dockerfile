@@ -3,15 +3,15 @@ FROM node:24.13.0-bullseye
 ENV IN_DOCKER=true
 
 # Install required packages
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-	git \
-	curl \
-	ca-certificates \
-	jq \
-	&& rm -rf /var/lib/apt/lists/*
+# RUN apt-get update \
+# 	&& apt-get install -y --no-install-recommends \
+# 	git \
+# 	curl \
+# 	ca-certificates \
+# 	jq \
+# 	&& rm -rf /var/lib/apt/lists/*
 
-# # Add corporate / proxy CA certificate
+# Add corporate / proxy CA certificate
 # COPY ./certificates/company-ca.crt.cer \
 # 	/usr/local/share/ca-certificates/corporate-root-ca.crt
 
@@ -50,7 +50,7 @@ WORKDIR /tests
 COPY package.json /tests
 COPY package-lock.json /tests
 
-# ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
 
 RUN npm ci
 
