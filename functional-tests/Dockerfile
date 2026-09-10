@@ -18,10 +18,14 @@ ENV IN_DOCKER=true
 # RUN update-ca-certificates
 
 # Install Java (for Allure) see https://stackoverflow.com/a/44154721/486434
-# RUN apt-get update && \
-# 	DEBIAN_FRONTEND=noninteractive \
-# 	#apt-get install -y software-properties-common && \
-# 	apt-get install -y default-jre-headless
+RUN \
+	apt-get update && \
+	DEBIAN_FRONTEND=noninteractive \
+	apt-get -y install \
+	default-jre-headless \
+	&& \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/*
 
 # Install Allure for generating a report
 RUN curl -o allure-2.13.2.tgz -Ls https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.13.2/allure-commandline-2.13.2.tgz \
