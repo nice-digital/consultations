@@ -13,8 +13,8 @@ import { validateConsultationIsClosed } from "../support/check/validateConsultat
 import { validateConsultationClosedMessage } from "../support/check/validateConsultationIsCLosed.js";
 
 Given(
-    /^I open the (url|site) "([^"]*)?"$/,
-    openWebsite
+	/^I open the (url|site) "([^"]*)?"$/,
+	openWebsite
 );
 
 Given(/^I delete all comments on the page$/, deleteCommentsOnReviewPage);
@@ -77,11 +77,11 @@ Given(/^I comment on a Sub-section$/, async () => {
 Given(/^I delete submissions for userid "([A-Z0-9_]+)" and navigate to review page "([^"]*)?"$/, deleteSubmissionUser);
 
 Given(
-	/^I add questions to Consultation "([^"]*)?"$/, addQuestionsToConsultation);
+	/^I add questions to Consultation "([^"]*)?" and navigate back to "([^"]*)?"$/, addQuestionsToConsultation);
 
 Given(/^I select open and closed status filter$/, validateStatusFilterChecked);
 
-Given(/^I click on the request commenting lead permision link$/,  clickLeadInfoLink);
+Given(/^I click on the request commenting lead permision link$/, clickLeadInfoLink);
 
 Given(/^I appear on a closed consultation$/, validateConsultationIsClosed);
 
