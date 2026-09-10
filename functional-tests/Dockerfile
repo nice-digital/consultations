@@ -1,4 +1,4 @@
-FROM node:24.13.1-bullseye
+FROM node:24.13.1-trixie
 
 ENV IN_DOCKER=true
 
