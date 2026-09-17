@@ -16,7 +16,7 @@ locals {
 }
 
 resource "aws_ecs_task_definition" "consultations_td" {
-  family                   = "consultations"
+  family                   = "${var.networking_config.application_name}-${var.networking_config.environment_name}-taskdef"
   requires_compatibilities = ["FARGATE"]
   runtime_platform {
     operating_system_family = "LINUX"
@@ -87,7 +87,7 @@ resource "aws_ecs_task_definition" "consultations_td" {
 }
 
 resource "aws_ecs_cluster" "consulations_cluster" {
-  name = "consultations-cluster"
+  name = "${var.networking_config.application_name}-${var.networking_config.environment_name}-cluster"
 
   setting {
     name  = "containerInsights"
@@ -96,7 +96,7 @@ resource "aws_ecs_cluster" "consulations_cluster" {
 }
 
 resource "aws_ecs_service" "consultations" {
-  name                 = "consulations-service"
+  name                 = "${var.networking_config.application_name}-${var.networking_config.environment_name}-service"
   cluster              = aws_ecs_cluster.consulations_cluster.arn
   force_new_deployment = true
   triggers = {
@@ -120,7 +120,7 @@ resource "aws_ecs_service" "consultations" {
     rollback = true
   }
   network_configuration {
-    assign_public_ip = true
+    assign_public_ip = var.networking_config.assign_public_ip
     subnets          = var.networking_config.load_balancer_subnets
     security_groups  = var.networking_config.load_balancer_security_groups
   }

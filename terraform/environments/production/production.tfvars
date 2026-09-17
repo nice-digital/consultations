@@ -75,10 +75,13 @@ frontend_config = {
 }
 
 networking_config = {
+	assign_public_ip              = #{networking_config_assign_public_ip}
   load_balancer_subnets         = #{networking_config_load_balancer_subnets}
   load_balancer_security_groups = #{networking_config_load_balancer_security_groups}
   target_group_vpc_id           = "#{networking_config_target_group_vpc_id}"
   certificate_arn               = "#{networking_config_certificate_arn}"
   hosted_zone_id                = "#{networking_config_hosted_zone_id}"
   hostname                      = "#{networking_config_hostname}"
+  environment_name              = "#{networking_config_environment_name}"
+  application_name              = "#{networking_config_application_name}"
 }

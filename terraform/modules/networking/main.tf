@@ -1,13 +1,13 @@
 # networking
 resource "aws_lb" "consulations_lb" {
-  name               = "consultations-lb"
-  load_balancer_type = "application"
+  name               = "${var.networking_config.application_name}-${var.networking_config.environment_name}-lb"
+  load_balancer_type = "network"
   subnets            = var.networking_config.load_balancer_subnets
   security_groups    = var.networking_config.load_balancer_security_groups
 }
 
 resource "aws_lb_target_group" "consultations_tg" {
-  name             = "consultations-tg"
+  name             = "${var.networking_config.application_name}-${var.networking_config.environment_name}-tg"
   target_type      = "ip"
   protocol         = "HTTP"
   port             = var.backend_config.container_port
