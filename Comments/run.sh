@@ -4,6 +4,8 @@
 
 set -e
 
+ls .
+pwd
 jq \
     --arg defaultConnection "$DEFAULT_CONNECTION" \
     --arg loggingLogFilePath "$LOGGING_LOG_FILE_PATH" \
