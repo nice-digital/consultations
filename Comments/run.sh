@@ -4,6 +4,8 @@
 
 set -e
 
+cd Comments/published-app
+
 jq \
     --arg defaultConnection "$DEFAULT_CONNECTION" \
     --arg loggingLogFilePath "$LOGGING_LOG_FILE_PATH" \
@@ -11,6 +13,8 @@ jq \
     --arg appSettingsEnvironmentSecureSite "$APPSETTINGS_ENVIRONMENT_SECURESITE" \
     --arg appSettingsEnvironmentRealm "$APPSETTINGS_ENVIRONMENT_REALM" \
     --arg appSettingsEnvironmentAccountsEnv "$ACCOUNTS_ENVIRONMENT" \
+    --arg appSettingsEnvironmentSsrPort "$APPSETTINGS_ENVIRONMENT_SSRPORT" \
+    --arg appSettingsEnvironmentSsrHost "$APPSETTINGS_ENVIRONMENT_SSRHOST" \
     --arg indevApiKey "$INDEV_APIKEY" \
     --arg indevBasePath "$INDEV_BASEPATH" \
     --arg indevPublishedChapterFeedPath "$INDEV_PUBLISHED_CHAPTER" \
@@ -48,6 +52,8 @@ jq \
     .AppSettings.Environment.SecureSite = $appSettingsEnvironmentSecureSite |
     .AppSettings.Environment.Realm = $appSettingsEnvironmentRealm |
     .AppSettings.Environment.AccountsEnvironment = $appSettingsEnvironmentAccountsEnv |
+    .AppSettings.Environment.SsrPort = $appSettingsEnvironmentSsrPort |
+    .AppSettings.Environment.SsrHost = $appSettingsEnvironmentSsrHost |
     .Feeds.ApiKey = $indevApiKey |
     .Feeds.IndevBasePath = $indevBasePath |
     .Feeds.IndevPublishedChapterFeedPath = $indevPublishedChapterFeedPath |
@@ -86,6 +92,8 @@ jq \
 replace "#{GlobalNav:Script}" "$REACT_APP_GLOBAL_NAV_SCRIPT" ClientApp/build/index.html
 replace "#{GlobalNav:ScriptIE8}" "$REACT_APP_GLOBAL_NAV_SCRIPT_IE8" ClientApp/build/index.html
 replace "#{AppSettings:Environment:AccountsEnvironment}" "$REACT_APP_ACCOUNTS_ENVIRONMENT" ClientApp/build/index.html
+
+(cd ClientApp && API_URL="http://localhost:8080" npm run dotenv -e .env -- node src/server/ssr-server.js) &
 
 dotnet Comments.dll
 

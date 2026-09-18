@@ -156,7 +156,7 @@ exports[`should match snapshot with supplied data 1`] = `
                    Open until
                    
                   <time
-                    datetime="1874937600000"
+                    datetime="1874941200000"
                   >
                     31 May 2029
                   </time>

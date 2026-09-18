@@ -86,15 +86,28 @@ services:
       default:
         aliases:
           - tests
+  nodeapp:
+    container_name: nodeapp
+    build:
+      context: ./../Comments/ClientApp/
+    ports:
+      - "5000:5000"
+    networks:
+      default:
+        aliases:
+          - nodeapp
 
   # Comment Collection dotnet core web app
   comments:
     container_name: functional-tests_comments_1
-    build: ./../Comments/
+    build:
+      context: ./../Comments/
+      dockerfile: Test.Dockerfile
     depends_on:
       - database
       - redis
       - api
+      - nodeapp
     # Enable browsing from the host machine on http://localhost:8080/consultations
     ports:
       - 8080:8080
@@ -104,6 +117,8 @@ services:
       - APPSETTINGS_ENVIRONMENT_NAME=DockerTests
       - APPSETTINGS_ENVIRONMENT_SECURESITE=false
       - APPSETTINGS_ENVIRONMENT_REALM=niceorg
+      - APPSETTINGS_ENVIRONMENT_SSRPORT
+      - APPSETTINGS_ENVIRONMENT_SSRHOST=http://nodeapp
       - INDEV_APIKEY
       - INDEV_BASEPATH
       - INDEV_PUBLISHED_CHAPTER

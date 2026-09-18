@@ -20,7 +20,7 @@ namespace Comments.Test.IntegrationTests.API.Organisation
 
 			var sourceURI = $"consultations://./consultation/{consultationId}";
 
-			TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, null, "123412341234");
+			TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, consultationId, context, userId: "Carl", "123412341234");
 
 			//Act
 			var locations = context.GetAllCommentsAndQuestionsForDocument(new List<string>() {sourceURI}, true);
