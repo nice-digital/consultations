@@ -3,8 +3,8 @@
 # And run .NET webapp
 
 set -e
-
-cd Comments/published-app
+# Uncomment line 7 to run locally
+# cd Comments/published-app
 
 jq \
     --arg defaultConnection "$DEFAULT_CONNECTION" \

@@ -6,7 +6,23 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0.11-resolute-amd64
 ENV ASPNETCORE_URLS="http://+:8080"
 
 # Install required packages
-RUN apt-get update && apt-get install git -y
+# To Run locally uncomment lines 10-24
+# RUN apt-get update \
+#   && apt-get install -y --no-install-recommends \
+#   git \
+#   curl \
+#   ca-certificates \
+#   jq \
+#   && rm -rf /var/lib/apt/lists/*
+
+# # Add corporate / proxy CA certificate
+# COPY ./certificates/company-ca.crt.cer \
+#   /usr/local/share/ca-certificates/corporate-root-ca.crt
+
+# RUN update-ca-certificates
+
+# ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/corporate-root-ca.crt
+# RUN apt-get update && apt-get install git -y
 RUN git --version
 
 # Install curl
@@ -49,10 +65,10 @@ RUN curl -SL "$WAITFORIT_DOWNLOAD_URL" --output waitforit.tar.gz \
   && rm -rf /usr/local/waitforit
 
 # Install frontend packages with node
-#COPY ./published-app/ClientApp/package.json ./app/ClientApp/
+# COPY ./published-app/ClientApp/package.json ./app/ClientApp/
 # COPY ./wwwroot/Media/Default/html/HtmlWidget/Footer.html ./app/wwwroot/Media/Default/html/HtmlWidget/
 #COPY ./published-app/ClientApp/package-lock.json ./app/ClientApp/
-#WORKDIR /app/ClientApp
+# WORKDIR /app/ClientApp
 #RUN npm i --production
 
 # Copy .net app to a location on container and run application

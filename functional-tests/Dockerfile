@@ -2,7 +2,7 @@ FROM node:24.13.1-trixie
 
 ENV IN_DOCKER=true
 
-# Install required packages
+# Uncomment line 6-12 to run locally
 # RUN apt-get update \
 # 	&& apt-get install -y --no-install-recommends \
 # 	git \
@@ -11,7 +11,7 @@ ENV IN_DOCKER=true
 # 	jq \
 # 	&& rm -rf /var/lib/apt/lists/*
 
-# Add corporate / proxy CA certificate
+# Uncomment line 15-18 to run locally
 # COPY ./certificates/company-ca.crt.cer \
 # 	/usr/local/share/ca-certificates/corporate-root-ca.crt
 
