@@ -19,6 +19,7 @@ namespace Comments
             // Read Logging configuration
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false)
+                .AddEnvironmentVariables()
                 .AddUserSecrets<Startup>()
                 .Build();
             var logCfg = configuration.GetSection("Logging");

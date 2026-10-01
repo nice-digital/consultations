@@ -1,0 +1,53 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./docker_ssl_proxy:/etc/nginx
+    ports:
+      - 8080:80
+      - 443:443
+    depends_on:
+      - comments
+    networks:
+      default:
+        aliases:
+          - niceorg
+  database:
+    container_name: database
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=ABcd1234#
+      - SA_USERNAME=sa
+      - COMPOSE_HTTP_TIMEOUT=1000
+    ports:
+      - 1434:1433
+  redis:
+    container_name: redis
+    image: "redis:alpine3.15"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+  nodeapp:
+    container_name: nodeapp
+    build:
+      context: ./ClientApp
+    ports:
+      - "5000:5000"
+  comments:
+    build:
+      context: .
+      dockerfile: Prod.Dockerfile
+    depends_on:
+      - database
+      - redis
+      - nodeapp
+    ports:
+      - "80:80"
+    env_file: ".env"
+
+      

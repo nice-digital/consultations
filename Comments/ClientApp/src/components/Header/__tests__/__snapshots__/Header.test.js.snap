@@ -85,7 +85,7 @@ exports[`should display correctly when consulation hasn't started 1`] = `
         <time
           datetime="1660032000000"
         >
-          09:00
+          08:00
         </time>
       </span>
         

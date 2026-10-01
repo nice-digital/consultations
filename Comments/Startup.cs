@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Comments.Common;
@@ -18,12 +21,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
@@ -45,7 +48,7 @@ namespace Comments
             Configuration = configuration;
             Environment = env;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
@@ -53,9 +56,9 @@ namespace Comments
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			if (Environment.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
-                AppSettings.Configure(services, Configuration, @"c:\"); 
+                AppSettings.Configure(services, Configuration, @"c:\");
             }
             else
             {
@@ -64,11 +67,11 @@ namespace Comments
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			services.AddHttpClient();
+            services.AddHttpClient();
 
-			services.TryAddTransient<IUserService, UserService>();
+            services.TryAddTransient<IUserService, UserService>();
 
-			var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
+            var contextOptionsBuilder = new DbContextOptionsBuilder<ConsultationsContext>();
             services.TryAddSingleton<IDbContextOptionsBuilderInfrastructure>(contextOptionsBuilder);
 
             services.AddDbContext<ConsultationsContext>(options =>
@@ -80,151 +83,136 @@ namespace Comments
             // Add authentication before adding the FeedReaderService
             var authConfiguration = AppSettings.AuthenticationConfig.GetAuthConfiguration();
             services.AddAuthentication(authConfiguration, allowNonSecureCookie: Environment.IsDevelopment())
-	            .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
+                .AddScheme<OrganisationCookieAuthenticationOptions, OrganisationCookieAuthenticationHandler>(OrganisationCookieAuthenticationOptions.DefaultScheme, options => { });
             services.AddAuthorisation(authConfiguration);
 
             services.AddFeatureManagement();
 
-			services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
-			services.TryAddTransient<ICacheService, MemoryCacheService>();
-			services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
-            services.TryAddTransient<IRemoteSystemReader>(ServiceProvider => 
+            services.TryAddSingleton<IIndevFeedConfig>(provider => AppSettings.Feed);
+            services.TryAddTransient<ICacheService, MemoryCacheService>();
+            services.TryAddTransient<IIndevFeedReaderService, IndevFeedReaderService>();
+            services.TryAddTransient<IRemoteSystemReader>(ServiceProvider =>
                 new RemoteSystemReader(apiTokenClient: ServiceProvider.GetRequiredService<IApiTokenClient>()));
             services.TryAddTransient<IIndevFeedService, IndevFeedService>();
 
-			services.TryAddTransient<IAnswerService, AnswerService>();
+            services.TryAddTransient<IAnswerService, AnswerService>();
             services.TryAddTransient<IQuestionService, QuestionService>();
-	        services.TryAddTransient<ISubmitService, SubmitService>();
-			services.TryAddTransient<IAdminService, AdminService>();
-	        services.TryAddTransient<IExportService, ExportService>();
-			services.TryAddSingleton<IEncryption, Encryption>();
-	        services.TryAddTransient<IExportToExcel, ExportToExcel>();
-	        services.TryAddTransient<IStatusService, StatusService>();
-			services.TryAddTransient<IConsultationListService, ConsultationListService>();
-			services.TryAddTransient<IOrganisationService, OrganisationService>();
+            services.TryAddTransient<ISubmitService, SubmitService>();
+            services.TryAddTransient<IAdminService, AdminService>();
+            services.TryAddTransient<IExportService, ExportService>();
+            services.TryAddSingleton<IEncryption, Encryption>();
+            services.TryAddTransient<IExportToExcel, ExportToExcel>();
+            services.TryAddTransient<IStatusService, StatusService>();
+            services.TryAddTransient<IConsultationListService, ConsultationListService>();
+            services.TryAddTransient<IOrganisationService, OrganisationService>();
 
-			services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddControllersWithViews(options =>
-                {
-                    options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
-                    options.EnableEndpointRouting = false;
-                })
+            {
+                options.Filters.Add(new ResponseCacheAttribute() { NoStore = true, Location = ResponseCacheLocation.None });
+                options.EnableEndpointRouting = false;
+            })
                 .AddNewtonsoftJson();
 
-            // In production, static files are served from the pre-built files, rather than proxied via react dev server
-            services.AddSpaStaticFiles(configuration =>
+            // Uncomment this if you want to debug server node
+            //if (Environment.IsDevelopment())
+            //{
+            //    services.AddNodeServices(options =>
+            //    {
+            //        options.LaunchWithDebugging = true;
+            //        options.DebuggingPort = 9229;
+            //    });
+            //}
+
+            //if (!Environment.IsDevelopment()) //this breaks the tests.
+            //{
+            //    services.Configure<MvcOptions>(options =>
+            //    {
+            //        options.Filters.Add(new RequireHttpsAttribute());
+            //    });
+            //}
+
+
+            /*if (!Environment.IsDevelopment())
             {
-                configuration.RootPath = "ClientApp/build";
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
+            */
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+                options.KnownProxies.Clear();
             });
-
-			// Uncomment this if you want to debug server node
-			//if (Environment.IsDevelopment())
-			//{
-			//    services.AddNodeServices(options =>
-			//    {
-			//        options.LaunchWithDebugging = true;
-			//        options.DebuggingPort = 9229;
-			//    });
-			//}
-
-			//if (!Environment.IsDevelopment()) //this breaks the tests.
-			//{
-			//    services.Configure<MvcOptions>(options =>
-			//    {
-			//        options.Filters.Add(new RequireHttpsAttribute());
-			//    });
-			//}
-
-
-	        if (!Environment.IsDevelopment())
-	        {
-		        services.AddHttpsRedirection(options =>
-		        {
-			        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-			        options.HttpsPort = 443;
-		        });
-	        }
-
-	        services.Configure<ForwardedHeadersOptions>(options =>
-			{
-				options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
-				options.KnownProxies.Clear();
-			});
 
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicyName,
-                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin) 
+                    builder => builder.WithOrigins(AppSettings.Environment.CorsOrigin)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
 
             services.AddOptions();
-
-            
+            if (!Environment.IsIntegrationTest())
+            {
+                services.AddHttpClient("ssr", client =>
+                {
+                    client.BaseAddress = new Uri(AppSettings.Environment.SsrHost + ':' + AppSettings.Environment.SsrPort);
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [Obsolete("the reason for the obselete flag here is UseSpaPrerendering has been marked as obselete in 3.1 and dropped in 5.x")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IUrlHelperFactory urlHelperFactory, IFeatureManager featureManager, LinkGenerator linkGenerator)
         {
+            app.UseForwardedHeaders();
+            app.Use((context, next) =>
+            {
+                context.Request.Scheme = "https";
+                return next();
+            });
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "ClientApp", "build")),
+                RequestPath = "/consultations"
+            });
             app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
                 {
-                    context.Response.OnStarting(() =>
-                    {
-                        context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
-                        return Task.FromResult(0);
-                    });
-                    await next();
-                }
+                    context.Response.Headers.Add("Permissions-Policy", "interest-cohort=()");
+                    return Task.FromResult(0);
+                });
+                await next();
+            }
             );
 
             if (env.IsDevelopment())
             {
-	            app.UseDeveloperExceptionPage();
-				app.UseExceptionHandler(Constants.ErrorPath);
+                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler(Constants.ErrorPath);
 
-                app.UseStaticFiles(); //uses the wwwroot folder, only for dev. on other service the root is varnish
-			}
+            }
             else
             {
-	            app.UseExceptionHandler(Constants.ErrorPath);
+                app.UseExceptionHandler(Constants.ErrorPath);
 
-	            app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
-			}
-
-	        app.UseCors(CorsPolicyName);
-
-            // Because in dev mode we proxy to a react dev server (which has to run in the root e.g. http://localhost:3000)
-            // we re-write paths for static files to map them to the root
-            if (env.IsDevelopment())
-            {
-                app.Use((context, next) =>
-                {
-                    var reqPath = context.Request.Path;
-                    if (reqPath.HasValue && reqPath.Value.Contains("."))
-                    {
-                        // Map static files paths to the root, for use within the 
-                        //if (reqPath.Value.Contains("/consultations"))
-                        //{
-                        //	context.Request.Path = reqPath.Value.Replace("/consultations", "");
-                        //}
-                        //else if (reqPath.Value.IndexOf("favicon.ico", StringComparison.OrdinalIgnoreCase) == -1 && reqPath.Value.IndexOf("hot-update", StringComparison.OrdinalIgnoreCase) == -1)
-                        //{
-                        //	context.Response.StatusCode = 404;
-                        //	throw new FileNotFoundException($"Path {reqPath.Value} could not be found. Did you mean to load '/consultations{context.Request.Path.Value  }' instead?");
-                        //}
-                    }
-
-                    return next();
-                });
+                app.UseStatusCodePagesWithReExecute(Constants.ErrorPath + "/{0}");
             }
+
+            app.UseCors(CorsPolicyName);
 
             app.UseRouting();
 
-	        app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -254,19 +242,55 @@ namespace Comments
                 await next();
             });
 
-            app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/consultations" });
-
-		    if (!env.IsDevelopment() && !env.IsIntegrationTest())
-		    {
-			    app.UseHttpsRedirection();
-		    }
+            if (!env.IsDevelopment() && !env.IsIntegrationTest())
+            {
+                app.UseHttpsRedirection();
+            }
+            
 
             app.UseEndpoints(endpoints =>
             {
-               endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument", 
-                                             pattern: "consultations/{consultationId:int}",
-                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
-                
+                if (!env.IsIntegrationTest())
+                {
+                    endpoints.Map("{*path:nonfile}", async context =>
+                    {
+                        var httpClientFactory = context.RequestServices
+                            .GetRequiredService<IHttpClientFactory>();
+
+                        var linkGenerator = context.RequestServices
+                            .GetRequiredService<LinkGenerator>();
+
+                        var client = httpClientFactory.CreateClient("ssr");
+
+                        var payload = new
+                        {
+                            url = context.Request.Path.ToString(),
+
+                            origin = $"{context.Request.Scheme}://{context.Request.Host}",
+
+                            data = SsrDataBuilder.Build(context, linkGenerator)
+                        };
+
+                        var response = await client.PostAsJsonAsync("/render", payload);
+
+                        response.EnsureSuccessStatusCode();
+
+                        var result = await response.Content.ReadFromJsonAsync<SsrResult>();
+
+                        if (result == null || string.IsNullOrWhiteSpace(result.Html))
+                            throw new Exception("Invalid SSR response");
+
+                        context.Response.StatusCode = result.StatusCode;
+                        context.Response.ContentType = "text/html";
+
+                        await context.Response.WriteAsync(result.Html);
+                    });
+                }
+
+                endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument",
+                                                             pattern: "consultations/{consultationId:int}",
+                                                             defaults: new { controller = "Redirect", action = "PublishedRedirectWithoutDocument" });
+
                 endpoints.MapControllerRoute(name: "PublishedRedirect",
                                              pattern: "consultations/{consultationId:int}/{documentId:int}",
                                              defaults: new { controller = "Redirect", action = "PublishedDocumentWithoutChapter" });
@@ -277,9 +301,9 @@ namespace Comments
 
                 endpoints.MapControllerRoute(name: "default",
                                              pattern: "{controller}/{action=Index}/{id?}");
-                
+
                 // endpoints.MapHealthChecks("/health"); //TODO: replace the custom health check controller with this package, which is now supported since the upgrade.
-                
+
 
             });
 
@@ -308,73 +332,7 @@ namespace Comments
             });
 
 
-			app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                spa.UseSpaPrerendering(options =>
-                {
-                    options.ExcludeUrls = new[] { "/sockjs-node" };
-                    // Pass data in from .NET into the SSR. These come through as `params` within `createServerRenderer` within the server side JS code.
-                    // See https://docs.microsoft.com/en-us/aspnet/core/spa/angular?tabs=visual-studio#pass-data-from-net-code-into-typescript-code
-                    options.SupplyData = async (httpContext, data) =>
-                    {
-                        data["isHttpsRequest"] = httpContext.Request.IsHttps;
-                        var cookiesForSSR = httpContext.Request.Cookies.Where(cookie => cookie.Key.StartsWith(AuthenticationConstants.CookieName) || cookie.Key.StartsWith(Constants.SessionCookieName)).ToList();
-                        if (cookiesForSSR.Any())
-                        {
-                            data["cookies"] = $"{string.Join("; ", cookiesForSSR.Select(cookie => $"{cookie.Key}={cookie.Value}"))};";
-                        }
-						var user = new User(httpContext.User);
-						var isAuthorised = user.IsAuthenticatedByAccounts;
-						if (!isAuthorised)
-						{
-							var pathNoQuery = httpContext.Request.GetUri().AbsolutePath.StripConsultationsFromPath();
-							if (ConsultationsUri.IsDocumentPageRelativeUrl(pathNoQuery) || ConsultationsUri.IsReviewPageRelativeUrl(pathNoQuery))
-							{
-								var consultationUriParts = ConsultationsUri.ParseRelativeUrl(pathNoQuery);
-								isAuthorised = user.IsAuthorisedByConsultationId(consultationUriParts.ConsultationId);
-							}
-						}
-						data["isAuthorised"] = isAuthorised;
-						data["displayName"] = user.DisplayName;
-						data["isLead"] = user.OrganisationsAssignedAsLead?.Any();
-
-						var host = httpContext.Request.Host.Host;
-						var userRoles = httpContext.User?.Roles(host).ToList() ?? new List<string>();
-
-						var isAdminUser = userRoles.Any(role => AppSettings.ConsultationListConfig.DownloadRoles.AdminRoles.Contains(role));
-						var teamRoles = userRoles.Where(role => AppSettings.ConsultationListConfig.DownloadRoles.TeamRoles.Contains(role)).Select(role => role).ToList();
-						var isTeamUser = !isAdminUser && teamRoles.Any(); //an admin with team roles is still just considered an admin.
-						data["isAdminUser"] = isAdminUser;
-						data["isTeamUser"] = isTeamUser;
-
-                        
-                        data["signInURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path });
-						data["signOutURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LogoutAction, Constants.Auth.ControllerName); //auth0 needs logout urls configured. it won't let you redirect dynamically.
-						data["registerURL"] = linkGenerator.GetPathByAction(httpContext, Constants.Auth.LoginAction, Constants.Auth.ControllerName, new { returnUrl = httpContext.Request.Path, goToRegisterPage = true });
-						data["requestURL"] = httpContext.Request.Path;
-	                    data["accountsEnvironment"] = AppSettings.Environment.AccountsEnvironment;
-                        
-						//data["user"] = context.User; - possible security implications here, surfacing claims to the front end. might be ok, if just server-side.
-						// Pass further data in e.g. user/authentication data
-					};
-                    options.BootModulePath = $"{spa.Options.SourcePath}/src/server/index.js";
-                });
-
-                if (env.IsDevelopment())
-                {
-                    // Default timeout is 30 seconds so extend it in dev mode because sometimes the react server can take a while to start up
-                    spa.Options.StartupTimeout = TimeSpan.FromMinutes(1);
-
-                    // If you have trouble with the react server in dev mode (sometime in can be slow and you get timeout error, then use
-                    // `UseProxyToSpaDevelopmentServer` below rather than `UseReactDevelopmentServer`.
-                    // This proxies to a manual CRA server (run `npm start` from the ClientApp folder) instead of DotNetCore launching one automatically.
-                    // This can be quicker. See https://docs.microsoft.com/en-us/aspnet/core/spa/react?tabs=visual-studio#run-the-cra-server-independently
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            app.UseStaticFiles();
 
             //try
             //{
@@ -387,6 +345,6 @@ namespace Comments
             //{
             //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
             //}
-		}
+        }
     }
 }

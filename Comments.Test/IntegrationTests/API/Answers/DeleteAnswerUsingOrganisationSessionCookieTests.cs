@@ -28,16 +28,16 @@ namespace Comments.Test.IntegrationTests.API.Answers
 			//Arrange
 			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: OrganisationUserId), new FakeEncryption());
 			context.Database.EnsureDeleted();
+			var (server, client) = InitialiseServerAndClient(context);
 
 			var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1/chapter/introduction";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, null, "123412341234");
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, "NotAuthorised", "123412341234");
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, SessionId, null, OrganisationUserId);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 			var existingAnswerId = TestBaseDBHelpers.AddAnswer(context, questionId, statusId: StatusId, organisationUserId: OrganisationUserId);
-			var (server, client) = InitialiseServerAndClient(context);
 
 			var updatedAnswerText = Guid.NewGuid().ToString();
 			var updatedAnswer = new ViewModels.Answer(existingAnswerId, updatedAnswerText, false, DateTime.UtcNow, "Carl Spackler", questionId, StatusId);
@@ -64,16 +64,16 @@ namespace Comments.Test.IntegrationTests.API.Answers
 			//Arrange
 			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: OrganisationUserId), new FakeEncryption());
 			context.Database.EnsureDeleted();
+			var (server, client) = InitialiseServerAndClient(context);
 
 			var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1/chapter/introduction";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, null, "123412341234");
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, "NotAuthorised", "123412341234");
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, SessionId, null, OrganisationUserId);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 			var existingAnswerId = TestBaseDBHelpers.AddAnswer(context, questionId, statusId: StatusId, organisationUserId: OrganisationUserId);
-			var (server, client) = InitialiseServerAndClient(context);
 
 			var updatedAnswerText = Guid.NewGuid().ToString();
 			var updatedAnswer = new ViewModels.Answer(existingAnswerId, updatedAnswerText, false, DateTime.UtcNow, "Carl Spackler", questionId, StatusId);
@@ -98,16 +98,16 @@ namespace Comments.Test.IntegrationTests.API.Answers
 			//Arrange
 			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: OrganisationUserId), new FakeEncryption());
 			context.Database.EnsureDeleted();
+			var (server, client) = InitialiseServerAndClient(context);
 
 			var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1/chapter/introduction";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, null, "123412341234");
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, "NotAuthorised", "123412341234");
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, SessionId, null, OrganisationUserId);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 			var existingAnswerId = TestBaseDBHelpers.AddAnswer(context, questionId, statusId: StatusId, organisationUserId: OrganisationUserId);
-			var (server, client) = InitialiseServerAndClient(context);
 
 			var updatedAnswerText = Guid.NewGuid().ToString();
 			var updatedAnswer = new ViewModels.Answer(existingAnswerId, updatedAnswerText, false, DateTime.UtcNow, "Carl Spackler", questionId, StatusId);
