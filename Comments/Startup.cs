@@ -115,34 +115,6 @@ namespace Comments
             })
                 .AddNewtonsoftJson();
 
-            // Uncomment this if you want to debug server node
-            //if (Environment.IsDevelopment())
-            //{
-            //    services.AddNodeServices(options =>
-            //    {
-            //        options.LaunchWithDebugging = true;
-            //        options.DebuggingPort = 9229;
-            //    });
-            //}
-
-            //if (!Environment.IsDevelopment()) //this breaks the tests.
-            //{
-            //    services.Configure<MvcOptions>(options =>
-            //    {
-            //        options.Filters.Add(new RequireHttpsAttribute());
-            //    });
-            //}
-
-
-            /*if (!Environment.IsDevelopment())
-            {
-                services.AddHttpsRedirection(options =>
-                {
-                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                    options.HttpsPort = 443;
-                });
-            }
-            */
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
@@ -246,7 +218,6 @@ namespace Comments
             {
                 app.UseHttpsRedirection();
             }
-            
 
             app.UseEndpoints(endpoints =>
             {
@@ -302,25 +273,8 @@ namespace Comments
                 endpoints.MapControllerRoute(name: "default",
                                              pattern: "{controller}/{action=Index}/{id?}");
 
-                // endpoints.MapHealthChecks("/health"); //TODO: replace the custom health check controller with this package, which is now supported since the upgrade.
-
-
             });
 
-
-            //// here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
-            //app.MapWhen(x => !x.Request.Path.Value.StartsWith("/consultations/api", StringComparison.OrdinalIgnoreCase), builder =>
-            //{
-            //    builder.UseMvc(routes =>
-            //    {
-            //        routes.MapSpaFallbackRoute(
-            //            name: "spa-fallback",
-            //            defaults: new { controller = "Error", action = "Index" });
-            //    });
-            //});
-
-            // DotNetCore SpaServices requires RawTarget property, which isn't set on a TestServer.
-            // So set it here to allow integration tests to work with SSR via SpaServices
             app.Use((context, next) =>
             {
                 var httpRequestFeature = context.Features.Get<IHttpRequestFeature>();
@@ -333,18 +287,6 @@ namespace Comments
 
 
             app.UseStaticFiles();
-
-            //try
-            //{
-            //    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //    {
-            //         serviceScope.ServiceProvider.GetService<ConsultationsContext>().Database.Migrate();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    startupLogger.LogError(String.Format("EF Migrations Error: {0}", ex));
-            //}
         }
     }
 }
