@@ -20,7 +20,7 @@ resource "aws_iam_role" "consultations_role" {
 }
 
 resource "aws_iam_role_policy" "consultations_ecs_task_execution" {
-  name = "consultations-ecs-task-execution"
+  name = "${var.networking_config.application_name}-${var.networking_config.environment_name}-ecs-task-execution"
   role = aws_iam_role.consultations_role.id
 
   policy = jsonencode({
