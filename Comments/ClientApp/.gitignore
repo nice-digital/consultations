@@ -29,3 +29,8 @@ yarn-error.log*
 # Generated css
 public/**/*.css
 public/**/*.css.map
+
+#certificates
+./certificates/
+Comments/certificates
+

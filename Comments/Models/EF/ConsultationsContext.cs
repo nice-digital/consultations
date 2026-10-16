@@ -48,12 +48,19 @@ namespace Comments.Models
 
                 entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
 
-				entity.Property(e => e.AnswerText)
-					.HasConversion(
-						v => _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
-						v => _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)));
+                entity.Property(e => e.AnswerText)
+                    .HasConversion(
+                        v => v == null
+                            ? null
+                            : _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key),
+                                Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
+                        v => v == null
+                            ? null
+                            : _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key),
+                                Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)));
 
-				entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").IsRequired();
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())").IsRequired();
 
                 entity.Property(e => e.LastModifiedByUserId).HasColumnName("LastModifiedByUserID");
 
@@ -117,8 +124,8 @@ namespace Comments.Models
 
 				entity.Property(e => e.CommentText)
 					.HasConversion(
-						v => _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
-						v => _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)))
+						v => v == null ? null : _encryption.EncryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)),
+						v => v == null ? null : _encryption.DecryptString(v, Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.Key), Encoding.ASCII.GetBytes(AppSettings.EncryptionConfig.IV)))
 					.IsRequired();
 
 				entity.Property(e => e.CreatedByUserId).HasColumnName("CreatedByUserID");
