@@ -1,5 +1,5 @@
 resource "aws_iam_role" "consultations_role" {
-  name        = "consultations-execution-role"
+  name        = "${var.networking_config.application_name}-${var.networking_config.environment_name}-execution-role"
   description = "Consultations execution role"
   path        = "/service-role/"
   assume_role_policy = jsonencode(
