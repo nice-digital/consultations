@@ -1,5 +1,6 @@
 module "iam" {
   source = "../../modules/iam"
+	networking_config = var.networking_config
 }
 
 module "networking" {
