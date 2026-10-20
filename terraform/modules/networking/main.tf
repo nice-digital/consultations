@@ -9,7 +9,7 @@ resource "aws_lb" "consulations_lb" {
 resource "aws_lb_target_group" "consultations_tg" {
   name             = "${var.networking_config.application_name}-${var.networking_config.environment_name}-tg"
   target_type      = "ip"
-  protocol         = "HTTP"
+  protocol         = "TCP"
   port             = var.backend_config.container_port
   ip_address_type  = "ipv4"
   vpc_id           = var.networking_config.target_group_vpc_id
@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "consultations_tg" {
 resource "aws_lb_listener" "consultations_http_listener" {
   load_balancer_arn = aws_lb.consulations_lb.arn
   port              = "80"
-  protocol          = "HTTP"
+  protocol          = "TCP"
 
   default_action {
     target_group_arn = aws_lb_target_group.consultations_tg.arn
@@ -40,7 +40,7 @@ resource "aws_lb_listener" "consultations_http_listener" {
 resource "aws_lb_listener" "consultations_https_listener" {
   load_balancer_arn = aws_lb.consulations_lb.arn
   port              = "443"
-  protocol          = "HTTPS"
+  protocol          = "TLS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = var.networking_config.certificate_arn
 
