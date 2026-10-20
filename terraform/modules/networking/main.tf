@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "consultations_tg" {
   protocol_version = "HTTP1"
   stickiness {
     enabled = true
-    type    = "lb_cookie"
+    type    = "source_ip"
   }
   health_check {
     enabled  = true
