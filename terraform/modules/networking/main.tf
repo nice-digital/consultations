@@ -2,6 +2,7 @@
 resource "aws_lb" "consulations_lb" {
   name               = "${var.networking_config.application_name}-${var.networking_config.environment_name}-lb"
   load_balancer_type = "network"
+	internal = true
   subnets            = var.networking_config.load_balancer_subnets
   security_groups    = var.networking_config.load_balancer_security_groups
 }
