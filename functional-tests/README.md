@@ -69,6 +69,15 @@ You can add and remove tests from the spec section of the capabilities of each b
 
 ## Docker
 
+Due to issues with self signed Iboss certificates we now have to create certificates in the following locations and uncomment the comments in 
+Test.Dockerfile in Comments, Dockerfile in functional-tests and Dockerfile in Indev.MockApi:
+
+- Comments\certificates
+- functional-tests\certificates
+- Indev.MockApi\certificates
+
+You will also need to comment line 7 from Comments\run.sh
+
 Running tests on Docker is a good option as it means you don't need browsers installed on the host machine, and the Selenium grid is automatically created for you. This is useful on a TeamCity build agent where you can't rely on Chrome and Firefox being installed.
 
 We recommend running the tests via [Docker Compose](#docker-compose) which handles everything for you.
