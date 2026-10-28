@@ -26,10 +26,9 @@ const preload = (staticContext, endpoint,  urlParameters = [], query = {}, prelo
 	if (staticContext.preload.data[endpoint]) {
 		return staticContext.preload.data[endpoint];
 	}
-	let cookies = "";
-	if (preloadData && preloadData.cookies) {
-		cookies = preloadData.cookies;
-	}
+    
+	const cookies = staticContext.serverAuth?.cookies || "";
+    
 	// Load fresh data on the server
 	const promise = load(endpoint, staticContext.baseUrl, urlParameters, query,  method, content, isJson, cookies, headers)
 		.then(response => {

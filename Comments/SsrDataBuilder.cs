@@ -16,6 +16,16 @@ namespace Comments
         {
             var user = new User(httpContext.User);
 
+            var cookiesForSSR = httpContext.Request.Cookies
+                .Where(cookie =>
+                    cookie.Key.StartsWith(AuthenticationConstants.CookieName) ||
+                    cookie.Key.StartsWith(Constants.SessionCookieName))
+                .ToList();
+
+            var cookies = cookiesForSSR.Any()
+                ? $"{string.Join("; ", cookiesForSSR.Select(c => $"{c.Key}={c.Value}"))};"
+                : null;
+
             var host = httpContext.Request.Host.Host;
 
             var userRoles = httpContext.User?.Roles(host).ToList()
@@ -33,6 +43,8 @@ namespace Comments
 
             return new
             {
+                cookies,
+
                 isAuthorised = user.IsAuthenticatedByAccounts,
 
                 displayName = user.DisplayName,
