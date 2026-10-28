@@ -79,7 +79,7 @@ namespace Comments.Test.IntegrationTests.API.Comments
 				var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1";
 				TestBaseDBHelpers.AddStatus(context, "Draft", 1);
 
-				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, ConsultationId, context, null, "123412341234");
+				var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(organisationId, ConsultationId, context, "TheJudge", "123412341234");
 				TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, _sessionId, null, organisationUserId);
 
 				var (_server, _client) = InitialiseServerAndClient(context, fakeUserService);

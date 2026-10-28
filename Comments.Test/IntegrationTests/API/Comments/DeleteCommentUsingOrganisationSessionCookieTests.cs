@@ -28,16 +28,15 @@ namespace Comments.Test.IntegrationTests.API.Comments
 			const int organisationUserId = 1;
 			var context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: organisationUserId), new FakeEncryption());
 			context.Database.EnsureDeleted();
+			(_server, _) = InitialiseServerAndClient(context);
 
 			var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1/chapter/introduction";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, null, "123412341234");
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, "UserName", "123412341234");
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, _sessionId, null, organisationUserId);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			var commentId = TestBaseDBHelpers.AddComment(context, locationId, "comment text", createdByUserId: null, organisationUserId: organisationUserId);
-
-			(_server, _) = InitialiseServerAndClient(context);
 
 			_comment = new ViewModels.Comment(locationId, sourceURI, null, null, null, null, null, null, null, 0,
 					DateTime.Now, Guid.Empty.ToString(), "comment text", 1, show: true, sectionHeader: null, sectionNumber: null)

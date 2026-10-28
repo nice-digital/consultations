@@ -69,7 +69,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsCorrectFormat()
 		{
 			//Arrange
-			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
+			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", userId: "TheJudge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
 			var serviceUnderTest = new OrganisationService(_context, fakeUserService, null, null, null, null);
 			var regex = new Regex(Constants.CollationCode.RegExChunkedWithSpaces);
 
@@ -84,7 +84,7 @@ namespace Comments.Test.UnitTests
 		public void CollationCodeIsReturnedDifferentInRepeatedCalls()
 		{
 			//Arrange
-			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
+			var fakeUserService = FakeUserService.Get(isAuthenticated: true, displayName: "The Judge", userId: "TheJudge", testUserType: TestUserType.Authenticated, organisationUserId: null, organisationIdUserIsLeadOf: 1);
 			var serviceUnderTest = new OrganisationService(_context, fakeUserService, null, null, null, null);
 			const int numberOfTimesToGetCollationCode = 100;
 
