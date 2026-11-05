@@ -235,7 +235,7 @@ namespace Comments
 
                         var payload = new
                         {
-                            url = context.Request.Path.ToString(),
+                            url = context.User.Identity.IsAuthenticated != null ? context.Request.Path.ToString() : "/",
 
                             origin = $"{context.Request.Scheme}://{context.Request.Host}",
 
