@@ -233,9 +233,10 @@ namespace Comments
 
                         var client = httpClientFactory.CreateClient("ssr");
 
+                        
                         var payload = new
                         {
-                            url = context.User.Identity.IsAuthenticated != null ? context.Request.Path.ToString() : "/",
+                            url = context.Request.Path.ToString(),
 
                             origin = $"{context.Request.Scheme}://{context.Request.Host}",
 
