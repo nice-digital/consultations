@@ -58,6 +58,8 @@ backend_config = {
   webappconfiguration_googletrackingid                           = "#{backend_config_webappconfiguration_googletrackingid}"
   webappconfiguration_redisserviceconfiguration_connectionstring = "#{backend_config_webappconfiguration_redisserviceconfiguration_connectionstring}"
   webappconfiguration_redisserviceconfiguration_enabled          = "#{backend_config_webappconfiguration_redisserviceconfiguration_enabled}"
+
+  node_env                                                       = "#{backend_config_node_env}"
 }
 
 frontend_config = {

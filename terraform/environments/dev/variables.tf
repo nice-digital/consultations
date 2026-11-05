@@ -70,6 +70,8 @@ variable "backend_config" {
     webappconfiguration_googletrackingid                           = string
     webappconfiguration_redisserviceconfiguration_connectionstring = string
     webappconfiguration_redisserviceconfiguration_enabled          = string
+
+    node_env = string
   })
 }
 

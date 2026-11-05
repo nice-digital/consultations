@@ -179,7 +179,11 @@
         {
           "name"  : "WebAppConfiguration__RedisServiceConfiguration__Enabled",
           "value" : "${backend_env_webappconfiguration_redisserviceconfiguration_enabled}"
-        }
+        },
+        {
+          "name"  : "node_env",
+          "value" : "${backend_env_node_env}"
+        } 
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
