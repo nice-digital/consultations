@@ -182,7 +182,7 @@
         "value": "${backend_env_webappconfiguration_redisserviceconfiguration_enabled}"
       },
       {
-        "name": "node_env",
+        "name": "NODE_ENV",
         "value": "${backend_env_node_env}"
       }
     ],
