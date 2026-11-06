@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -51,13 +52,15 @@ namespace Comments.Controllers.Web
 
 			var ehpFeat = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 	        Exception exception = null;
+            string stackTrace = null;
 	        if (ehpFeat != null)
 	        {
 		        exception = ehpFeat.Error;
+                stackTrace = ehpFeat.Error.StackTrace;
 		        requestedPath = requestedPath ?? ehpFeat.Path;
 	        }
 
-	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}");
+	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}, stackTrace: {stackTrace}");
 
 	        var signInURL = Url.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName);
 	        var signOutURL = Url.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName);
