@@ -1,19 +1,18 @@
 ﻿{
     "requestedPath":"/consultations/api/Chapter",
     "errorException":{
-        "ClassName":"System.ArgumentNullException",
-        "Message":"Value cannot be null.",
+        "ClassName":"System.Exception",
+        "Message":"An unexpected error occurred.",
         "Data":null,
         "InnerException":null,
         "HelpURL":null,
-        "StackTraceString":"scrubbed by ScrubStackTraceString",
+        "StackTraceString":null,
         "RemoteStackTraceString":null,
         "RemoteStackIndex":0,
         "ExceptionMethod":null,
-        "HResult":-2147467261,
-        "Source":"Comments",
-        "WatsonBuckets":null,
-        "ParamName":"chapterSlug"
+        "HResult":-2146233088,
+        "Source":null,
+        "WatsonBuckets":null
     },
     "isAuthenticated":true,
     "accountsEnvironment":"live",

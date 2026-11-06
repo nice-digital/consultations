@@ -35,16 +35,17 @@ namespace Comments.Test.IntegrationTests.API.Answers
 			
 			context = new ConsultationsContext(GetContextOptions(), FakeUserService.Get(isAuthenticated: false, testUserType: TestUserType.NotAuthenticated, organisationUserId: organisationUserId), new FakeEncryption());
 			context.Database.EnsureDeleted();
+			(_server, _) = InitialiseServerAndClient(context);
 
 			var sourceURI = $"consultations://./consultation/{ConsultationId}/document/1/chapter/introduction";
 
-			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, null, "123412341234");
+			var organisationAuthorisationId = TestBaseDBHelpers.AddOrganisationAuthorisationWithLocation(1, ConsultationId, context, "UserName", "123412341234");
 			TestBaseDBHelpers.AddOrganisationUser(context, organisationAuthorisationId, _sessionId, null, organisationUserId);
 
 			var locationId = TestBaseDBHelpers.AddLocation(context, sourceURI);
 			_questionId = TestBaseDBHelpers.AddQuestion(context, locationId);
 			_existingAnswerId = TestBaseDBHelpers.AddAnswer(context, _questionId, statusId: StatusId, organisationUserId: organisationUserId);
-			(_server, _) = InitialiseServerAndClient(context);
+
 		}
 
 		[Fact]

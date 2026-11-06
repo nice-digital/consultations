@@ -255,9 +255,18 @@ ClientApp/public/*.css.map
 .DS_Store
 /Comments/Serilog-*.json
 /Comments/ClientApp/.idea.bak
+/Comments/certificates/
 
 /Comments/published-app
 
 .vscode
 /Comments/ClientApp/.vscode
 Comments/ClientApp/todo.md
+
+# Terraform local development files
+terraform/environments/dev/dev.s3.tfbackend
+terraform/environments/dev/dev.tfvars
+terraform/environments/dev/.terraform
+terraform/environments/dev/tfplan
+
+.env

@@ -1,15 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Comments.Common;
 using Comments.ViewModels;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Comments.Controllers.Web
@@ -22,18 +25,20 @@ namespace Comments.Controllers.Web
     {
 	    private readonly ILogger _logger;
 	    private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWebHostEnvironment _env;
 
-	    public ErrorController(ILogger<ErrorController> logger, IHttpContextAccessor httpContextAccessor)
+        public ErrorController(ILogger<ErrorController> logger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
 	    {
 		    _logger = logger;
 		    _httpContextAccessor = httpContextAccessor;
-	    }
+            _env = env;
+        }
 
 	    [Route(Constants.ErrorPath)]
 	    [Route(Constants.ErrorPath + "/{statusCode}")]
 		public ActionResult Index(int statusCode)
         {
-	        var reFeat = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            var reFeat = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
 	        string requestedPath = null;
 	        if (reFeat != null)
 	        {
@@ -47,13 +52,15 @@ namespace Comments.Controllers.Web
 
 			var ehpFeat = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 	        Exception exception = null;
+            string stackTrace = null;
 	        if (ehpFeat != null)
 	        {
 		        exception = ehpFeat.Error;
+                stackTrace = ehpFeat.Error.StackTrace;
 		        requestedPath = requestedPath ?? ehpFeat.Path;
 	        }
 
-	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}");
+	        _logger.LogError($"Exception for Url: {requestedPath}, Exception: {exception}, stackTrace: {stackTrace}");
 
 	        var signInURL = Url.Action(Constants.Auth.LoginAction, Constants.Auth.ControllerName);
 	        var signOutURL = Url.Action(Constants.Auth.LogoutAction, Constants.Auth.ControllerName);
@@ -62,11 +69,22 @@ namespace Comments.Controllers.Web
 
 			var errorCallingAPISoShouldReturnJson = (!string.IsNullOrEmpty(requestedPath) && requestedPath.StartsWith(Constants.ConsultationAPIBasePath));
 
-			if (errorCallingAPISoShouldReturnJson)
-			{
-				return Json(errorModel);
-			}
-			return View(errorModel);
+            if (errorCallingAPISoShouldReturnJson)
+            {
+                if(_env.IsDevelopment())
+                {
+                    return Json(errorModel);
+                }
+
+                var customException = new Exception("An unexpected error occurred.");
+                var secureErrorModel = new Error(requestedPath, customException, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
+                
+                if (statusCode == 0)
+                    statusCode = 500;
+                return StatusCode(statusCode, secureErrorModel);
+            }
+
+            return View(errorModel);
         }
     }
 }
