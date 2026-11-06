@@ -69,8 +69,6 @@ variable "backend_config" {
     webappconfiguration_googletrackingid                           = string
     webappconfiguration_redisserviceconfiguration_connectionstring = string
     webappconfiguration_redisserviceconfiguration_enabled          = string
-
-    node_env = string
   })
 }
 
@@ -88,6 +86,7 @@ variable "frontend_config" {
     env_react_app_global_nav_script     = string,
     env_react_app_global_nav_script_ie8 = string
     env_react_app_cookie_banner_script  = string
+    env_node_env                        = string
   })
 }
 

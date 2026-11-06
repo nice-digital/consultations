@@ -72,7 +72,7 @@ resource "aws_ecs_task_definition" "consultations_td" {
       backend_env_webappconfiguration_googletrackingid                           = var.backend_config.webappconfiguration_googletrackingid
       backend_env_webappconfiguration_redisserviceconfiguration_connectionstring = var.backend_config.webappconfiguration_redisserviceconfiguration_connectionstring
       backend_env_webappconfiguration_redisserviceconfiguration_enabled          = var.backend_config.webappconfiguration_redisserviceconfiguration_enabled
-      backend_env_node_env                                                       = var.backend_config.node_env
+      frontend_env_node_env                                                      = var.frontend_config.env_node_env
       frontend_image_uri                                                         = data.aws_ecr_image.consultations_frontend.image_uri
       frontend_container_port                                                    = var.frontend_config.container_port
       frontend_env_api_url                                                       = var.frontend_config.env_api_url

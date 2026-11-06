@@ -180,10 +180,6 @@
       {
         "name": "WebAppConfiguration__RedisServiceConfiguration__Enabled",
         "value": "${backend_env_webappconfiguration_redisserviceconfiguration_enabled}"
-      },
-      {
-        "name": "NODE_ENV",
-        "value": "${backend_env_node_env}"
       }
     ],
     "logConfiguration": {
@@ -258,6 +254,10 @@
       {
         "name": "REACT_APP_COOKIE_BANNER_SCRIPT",
         "value": "${frontend_env_react_app_cookie_banner_script}"
+      },
+      {
+        "name": "NODE_ENV",
+        "value": "${frontend_env_node_env}"
       }
     ],
     "logConfiguration": {

@@ -58,8 +58,6 @@ backend_config = {
   webappconfiguration_googletrackingid                           = "#{backend_config_webappconfiguration_googletrackingid}"
   webappconfiguration_redisserviceconfiguration_connectionstring = "#{backend_config_webappconfiguration_redisserviceconfiguration_connectionstring}"
   webappconfiguration_redisserviceconfiguration_enabled          = "#{backend_config_webappconfiguration_redisserviceconfiguration_enabled}"
-
-  node_env                                                       = "#{backend_config_node_env}"
 }
 
 frontend_config = {
@@ -74,6 +72,7 @@ frontend_config = {
   env_react_app_global_nav_script     = "#{frontend_config_env_react_app_global_nav_script}"
   env_react_app_global_nav_script_ie8 = "#{frontend_config_env_react_app_global_nav_script_ie8}"
   env_react_app_hotjarid              = "#{frontend_config_env_react_app_hotjarid}"
+  env_node_env                        = "#{frontend_config_env_node_env}"
 }
 
 networking_config = {
