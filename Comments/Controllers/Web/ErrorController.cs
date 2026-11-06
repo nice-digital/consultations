@@ -68,15 +68,17 @@ namespace Comments.Controllers.Web
 
             if (errorCallingAPISoShouldReturnJson)
             {
-                if(!_env.IsDevelopment())
+                if(_env.IsDevelopment())
                 {
                     return Json(errorModel);
                 }
 
                 var customException = new Exception("An unexpected error occurred.");
-                errorModel = new Error(requestedPath, exception, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
+                var secureErrorModel = new Error(requestedPath, customException, _httpContextAccessor.HttpContext.User, signInURL, signOutURL);
                 
-                return StatusCode(500, errorModel);
+                if (statusCode == 0)
+                    statusCode = 500;
+                return StatusCode(statusCode, secureErrorModel);
             }
 
             return View(errorModel);
