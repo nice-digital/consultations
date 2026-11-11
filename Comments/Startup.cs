@@ -256,7 +256,7 @@ namespace Comments
                         context.Response.ContentType = "text/html";
 
                         await context.Response.WriteAsync(result.Html);
-                    });
+                    }).WithOrder(100); ;
                 }
 
                 endpoints.MapControllerRoute(name: "PublishedRedirectWithoutDocument",
