@@ -36,8 +36,8 @@ resource "aws_ecs_task_definition" "consultations_td" {
       backend_env_appsettings_environment_ssrhost                                = var.backend_config.appsettings_environment_ssrhost
       backend_env_appsettings_environment_corsorigin                             = var.backend_config.appsettings_environment_corsorigin
       backend_env_connectionstrings_defaultconnection                            = var.backend_config.connectionstrings_defaultconnection
-      backend_env_consultationlist_downloadroles_adminroles                      = var.backend_config.consultationlist_downloadroles_adminroles
-      backend_env_consultationlist_downloadroles_teamroles                       = var.backend_config.consultationlist_downloadroles_teamroles
+  backend_env_consultationlist_downloadroles_adminroles                          = jsondecode(var.backend_config.consultationlist_downloadroles_adminroles)
+  backend_env_consultationlist_downloadroles_teamroles                           = jsondecode(var.backend_config.consultationlist_downloadroles_teamroles)
       backend_env_encryption_iv                                                  = var.backend_config.encryption_iv
       backend_env_encryption_key                                                 = var.backend_config.encryption_key
       backend_env_feeds_cachedurationseconds                                     = var.backend_config.feeds_cachedurationseconds
