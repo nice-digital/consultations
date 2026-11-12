@@ -37,14 +37,18 @@
         "name": "ConnectionStrings__DefaultConnection",
         "value": "${backend_env_connectionstrings_defaultconnection}"
       },
+      %{ for index, role in backend_env_consultationlist_downloadroles_adminroles ~}
       {
-        "name": "ConsultationList__DownloadRoles__AdminRoles__0",
-        "value": "${backend_env_consultationlist_downloadroles_adminroles}"
+        "name": "ConsultationList__DownloadRoles__AdminRoles__${index}",
+        "value": ${jsonencode(role)}
       },
+      %{ endfor ~}
+      %{ for index, role in jsondecode(backend_env_consultationlist_downloadroles_teamroles) ~}
       {
-        "name": "ConsultationList__DownloadRoles__TeamRoles__0",
-        "value": "${backend_env_consultationlist_downloadroles_teamroles}"
+        "name": "ConsultationList__DownloadRoles__TeamRoles__${index}",
+        "value": ${jsonencode(role)}
       },
+      %{ endfor ~}
       {
         "name": "Encryption__IV",
         "value": "${backend_env_encryption_iv}"
