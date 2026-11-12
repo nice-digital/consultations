@@ -66,9 +66,11 @@ export const serverRenderer = (params): Promise => {
 		//      if (staticContext) staticContext.status = 404;
 		//      return null; }} />
 		let staticContext = {
+            serverAuth: {
+                cookies: params.data.cookies
+            },
 			preload: {
 				data: {
-					cookies: params.data.cookies,
 					isAuthorised: params.data.isAuthorised,
 					isAdminUser: params.data.isAdminUser,
 					isTeamUser: params.data.isTeamUser,

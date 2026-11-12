@@ -5,13 +5,15 @@ namespace Comments.Test.Infrastructure
     public class FakeEncryption : IEncryption
     {
 	    public string EncryptString(string stringToEncrypt, byte[] key, byte[] iv)
-		{
-		    throw new NotImplementedException();
+	    {
+		    return stringToEncrypt;
+
 	    }
 
 		public string DecryptString(string stringToDecrypt, byte[] key, byte[] iv)
 		{
-		    throw new NotImplementedException();
-	    }
+			return stringToDecrypt;
+
+		}
 	}
 }
