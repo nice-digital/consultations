@@ -43,7 +43,8 @@
         "value": ${jsonencode(role)}
       },
       %{ endfor ~}
-      %{ for index, role in jsondecode(backend_env_consultationlist_downloadroles_teamroles) ~}
+
+      %{ for index, role in backend_env_consultationlist_downloadroles_teamroles ~}
       {
         "name": "ConsultationList__DownloadRoles__TeamRoles__${index}",
         "value": ${jsonencode(role)}
